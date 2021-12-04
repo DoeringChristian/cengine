@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/usr/include/SDL2 -g -std=gnu11 -o CMakeFiles/cengine.dir/src/gl_util.c.o -c /home/doeringc/Projects/cengine/src/gl_util.c",
+  "file": "/home/doeringc/Projects/cengine/src/gl_util.c"
+},
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/usr/include/SDL2 -g -std=gnu11 -o CMakeFiles/cengine.dir/src/main.c.o -c /home/doeringc/Projects/cengine/src/main.c",
+  "file": "/home/doeringc/Projects/cengine/src/main.c"
+},
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/usr/include/SDL2 -g -std=gnu11 -o CMakeFiles/cengine.dir/src/sdl_ctx.c.o -c /home/doeringc/Projects/cengine/src/sdl_ctx.c",
+  "file": "/home/doeringc/Projects/cengine/src/sdl_ctx.c"
+},
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/usr/include/SDL2 -g -std=gnu11 -o CMakeFiles/cengine.dir/src/shader.c.o -c /home/doeringc/Projects/cengine/src/shader.c",
+  "file": "/home/doeringc/Projects/cengine/src/shader.c"
+},
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/usr/include/SDL2 -g -std=gnu11 -o CMakeFiles/cengine.dir/src/window.c.o -c /home/doeringc/Projects/cengine/src/window.c",
+  "file": "/home/doeringc/Projects/cengine/src/window.c"
+}
+]
