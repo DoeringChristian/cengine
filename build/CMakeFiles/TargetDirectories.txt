@@ -1,3 +1,0 @@
-/home/doeringc/Projects/cengine/build/CMakeFiles/rebuild_cache.dir
-/home/doeringc/Projects/cengine/build/CMakeFiles/edit_cache.dir
-/home/doeringc/Projects/cengine/build/CMakeFiles/cengine.dir
