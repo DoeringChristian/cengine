@@ -148,5 +148,23 @@ CMakeFiles/cengine.dir/src/main.c.o: \
  /usr/include/SDL2/SDL_version.h /usr/include/SDL2/SDL_locale.h \
  /usr/include/SDL2/SDL_misc.h \
  /home/doeringc/Projects/cengine/include/window.h \
- /usr/include/SDL2/SDL_opengl.h /usr/include/SDL2/SDL_opengl_glext.h \
- /usr/include/GL/gl.h /home/doeringc/Projects/cengine/include/sdl_ctx.h
+ /home/doeringc/Projects/cengine/include/renderer.h \
+ /home/doeringc/Projects/cengine/lib/darray/darray.h \
+ /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h \
+ /home/doeringc/Projects/cengine/include/mesh.h \
+ /home/doeringc/Projects/cengine/lib/mathc/mathc.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdbool.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h \
+ /home/doeringc/Projects/cengine/include/mathc_ext.h \
+ /home/doeringc/Projects/cengine/include/gl_util.h \
+ /home/doeringc/Projects/cengine/include/texture.h \
+ /home/doeringc/Projects/cengine/lib/stb/stb_image.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h \
+ /home/doeringc/Projects/cengine/include/shader.h \
+ /usr/include/SDL2/SDL_opengl.h \
+ /home/doeringc/Projects/cengine/include/sdl_ctx.h \
+ /home/doeringc/Projects/cengine/include/mesh.h

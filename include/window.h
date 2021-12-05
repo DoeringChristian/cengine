@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <stdint.h>
+#include "renderer.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <GL/gl.h>
@@ -14,6 +15,8 @@ struct window{
     int running;
 
     int x, y, w, h;
+
+    struct renderer renderer;
 };
 
 int window_init(struct window *dst, int x, int y, int w, int h, const char *title);

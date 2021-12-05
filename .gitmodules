@@ -1,0 +1,9 @@
+[submodule "lib/darray"]
+	path = lib/darray
+	url = https://github.com/DoeringChristian/darray.git
+[submodule "lib/mathc"]
+	path = lib/mathc
+	url = https://github.com/felselva/mathc.git
+[submodule "lib/stb"]
+	path = lib/stb
+	url = https://github.com/nothings/stb.git

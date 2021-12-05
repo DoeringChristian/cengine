@@ -129,6 +129,30 @@ cengine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/build
 .PHONY : cengine/fast
 
+lib/mathc/mathc.o: lib/mathc/mathc.c.o
+.PHONY : lib/mathc/mathc.o
+
+# target to build an object file
+lib/mathc/mathc.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/lib/mathc/mathc.c.o
+.PHONY : lib/mathc/mathc.c.o
+
+lib/mathc/mathc.i: lib/mathc/mathc.c.i
+.PHONY : lib/mathc/mathc.i
+
+# target to preprocess a source file
+lib/mathc/mathc.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/lib/mathc/mathc.c.i
+.PHONY : lib/mathc/mathc.c.i
+
+lib/mathc/mathc.s: lib/mathc/mathc.c.s
+.PHONY : lib/mathc/mathc.s
+
+# target to generate assembly for a file
+lib/mathc/mathc.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/lib/mathc/mathc.c.s
+.PHONY : lib/mathc/mathc.c.s
+
 src/gl_util.o: src/gl_util.c.o
 .PHONY : src/gl_util.o
 
@@ -176,6 +200,78 @@ src/main.s: src/main.c.s
 src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/main.c.s
 .PHONY : src/main.c.s
+
+src/mathc_ext.o: src/mathc_ext.c.o
+.PHONY : src/mathc_ext.o
+
+# target to build an object file
+src/mathc_ext.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/mathc_ext.c.o
+.PHONY : src/mathc_ext.c.o
+
+src/mathc_ext.i: src/mathc_ext.c.i
+.PHONY : src/mathc_ext.i
+
+# target to preprocess a source file
+src/mathc_ext.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/mathc_ext.c.i
+.PHONY : src/mathc_ext.c.i
+
+src/mathc_ext.s: src/mathc_ext.c.s
+.PHONY : src/mathc_ext.s
+
+# target to generate assembly for a file
+src/mathc_ext.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/mathc_ext.c.s
+.PHONY : src/mathc_ext.c.s
+
+src/mesh.o: src/mesh.c.o
+.PHONY : src/mesh.o
+
+# target to build an object file
+src/mesh.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/mesh.c.o
+.PHONY : src/mesh.c.o
+
+src/mesh.i: src/mesh.c.i
+.PHONY : src/mesh.i
+
+# target to preprocess a source file
+src/mesh.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/mesh.c.i
+.PHONY : src/mesh.c.i
+
+src/mesh.s: src/mesh.c.s
+.PHONY : src/mesh.s
+
+# target to generate assembly for a file
+src/mesh.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/mesh.c.s
+.PHONY : src/mesh.c.s
+
+src/renderer.o: src/renderer.c.o
+.PHONY : src/renderer.o
+
+# target to build an object file
+src/renderer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/renderer.c.o
+.PHONY : src/renderer.c.o
+
+src/renderer.i: src/renderer.c.i
+.PHONY : src/renderer.i
+
+# target to preprocess a source file
+src/renderer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/renderer.c.i
+.PHONY : src/renderer.c.i
+
+src/renderer.s: src/renderer.c.s
+.PHONY : src/renderer.s
+
+# target to generate assembly for a file
+src/renderer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/renderer.c.s
+.PHONY : src/renderer.c.s
 
 src/sdl_ctx.o: src/sdl_ctx.c.o
 .PHONY : src/sdl_ctx.o
@@ -225,6 +321,30 @@ src/shader.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/shader.c.s
 .PHONY : src/shader.c.s
 
+src/texture.o: src/texture.c.o
+.PHONY : src/texture.o
+
+# target to build an object file
+src/texture.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/texture.c.o
+.PHONY : src/texture.c.o
+
+src/texture.i: src/texture.c.i
+.PHONY : src/texture.i
+
+# target to preprocess a source file
+src/texture.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/texture.c.i
+.PHONY : src/texture.c.i
+
+src/texture.s: src/texture.c.s
+.PHONY : src/texture.s
+
+# target to generate assembly for a file
+src/texture.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/texture.c.s
+.PHONY : src/texture.c.s
+
 src/window.o: src/window.c.o
 .PHONY : src/window.o
 
@@ -258,18 +378,33 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... cengine"
+	@echo "... lib/mathc/mathc.o"
+	@echo "... lib/mathc/mathc.i"
+	@echo "... lib/mathc/mathc.s"
 	@echo "... src/gl_util.o"
 	@echo "... src/gl_util.i"
 	@echo "... src/gl_util.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/mathc_ext.o"
+	@echo "... src/mathc_ext.i"
+	@echo "... src/mathc_ext.s"
+	@echo "... src/mesh.o"
+	@echo "... src/mesh.i"
+	@echo "... src/mesh.s"
+	@echo "... src/renderer.o"
+	@echo "... src/renderer.i"
+	@echo "... src/renderer.s"
 	@echo "... src/sdl_ctx.o"
 	@echo "... src/sdl_ctx.i"
 	@echo "... src/sdl_ctx.s"
 	@echo "... src/shader.o"
 	@echo "... src/shader.i"
 	@echo "... src/shader.s"
+	@echo "... src/texture.o"
+	@echo "... src/texture.i"
+	@echo "... src/texture.s"
 	@echo "... src/window.o"
 	@echo "... src/window.i"
 	@echo "... src/window.s"

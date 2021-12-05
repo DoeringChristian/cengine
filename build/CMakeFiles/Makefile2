@@ -81,12 +81,12 @@ clean: CMakeFiles/cengine.dir/clean
 CMakeFiles/cengine.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target cengine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target cengine"
 .PHONY : CMakeFiles/cengine.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cengine.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/doeringc/Projects/cengine/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/doeringc/Projects/cengine/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cengine.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/doeringc/Projects/cengine/build/CMakeFiles 0
 .PHONY : CMakeFiles/cengine.dir/rule

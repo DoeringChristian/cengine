@@ -3,7 +3,7 @@
 int _shader_load(GLuint *dst, const char *path, int shader_type){
     FILE *fp = fopen(path, "r");
     if(fp == NULL){
-        printf("[Error opening shader] type: %i\n", shader_type);
+        printf("[Error opening shader] type: %i\n path: %s\n", shader_type, path);
         return 0;
     }
 
@@ -24,8 +24,8 @@ int _shader_load(GLuint *dst, const char *path, int shader_type){
     const char *tmp = src;
 
     *dst = glCreateShader(shader_type);
-    glShaderSource(*dst, 1, &tmp, (int *)&src_size);
-    glCompileShader(*dst);
+    GLCall(glShaderSource(*dst, 1, &tmp, (int *)&src_size));
+    GLCall(glCompileShader(*dst));
 
     glGetShaderiv(*dst, GL_COMPILE_STATUS, &status);
     if(status == GL_FALSE){
@@ -35,7 +35,7 @@ int _shader_load(GLuint *dst, const char *path, int shader_type){
         char buf[log_len + 1];
         glGetShaderInfoLog(*dst, log_len, NULL, buf);
 
-        printf("[Error compiling shader] type: %i, log: %s", shader_type, buf);
+        printf("[Error compiling shader] type: %i, log: %spath: %s\n", shader_type, buf, path);
 
         glDeleteShader(*dst);
         *dst = 0;
@@ -133,5 +133,27 @@ int shader_attach(struct shader *dst, const char *path, int shader_type){
     glDetachShader(dst->program, shader);
 
     glDeleteShader(shader);
+    return 0;
+}
+
+int shader_uniform_i(struct shader *dst, const char *name, const int src){
+    GLCall(glUseProgram(dst->program));
+    int location;
+    GLCall(location = glGetUniformLocation(dst->program, name));
+    GLCall(glUniform1i(location, src));
+    return 0;
+}
+int shader_uniform_f(struct shader *dst, const char *name, const float src){
+    GLCall(glUseProgram(dst->program));
+    int location;
+    GLCall(location = glGetUniformLocation(dst->program, name));
+    GLCall(glUniform1f(location, src));
+    return 0;
+}
+int shader_uniform_mat4f(struct shader *dst, const char *name, const float *src){
+    GLCall(glUseProgram(dst->program));
+    int location;
+    GLCall(location = glGetUniformLocation(dst->program, name));
+    GLCall(glUniformMatrix4fv(location, 1, GL_FALSE, src));
     return 0;
 }

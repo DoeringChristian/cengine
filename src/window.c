@@ -15,13 +15,26 @@ int window_init(struct window *dst, int x, int y, int w, int h, const char *titl
 
     dst->gl_ctx = SDL_GL_CreateContext(dst->window);
 
+    GLenum err = glewInit();
+    if(err != GLEW_OK)
+        exit(1);
+    if(!GLEW_VERSION_2_1)
+        exit(1);
+
+    glEnable(GL_DEBUG_OUTPUT);
+
     dst->running = 0;
+
+    glViewport(0, 0, dst->w, dst->h);
+
+    renderer_init(&dst->renderer);
 
     return 0;
 }
 void window_free(struct window *dst){
     SDL_DestroyWindow(dst->window);
     sdl_ctx_deinit();
+    renderer_free(&dst->renderer);
 }
 
 int window_main(struct window *dst){
@@ -43,12 +56,11 @@ int window_main(struct window *dst){
                 dst->running = 0;
             }
         }
-        glViewport(0, 0, dst->w, dst->h);
-        glClearColor(1.f, 0.f, 1.f, 0.f);
-        glClear(GL_COLOR_BUFFER_BIT);
 
+        renderer_render(&dst->renderer);
 
         SDL_GL_SwapWindow(dst->window);
     }
+
     return 0;
 }

@@ -12,13 +12,20 @@ find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
-file(GLOB SRC_FILES "src/*.c")
+file(GLOB SRC_FILES "src/*.c" "lib/mathc/mathc.c")
+file(COPY "shaders" DESTINATION "./")
+file(COPY "res" DESTINATION "./")
+
 include_directories("include/")
+include_directories("lib/stb/")
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIRS})
+include_directories("lib/darray/")
+include_directories("lib/mathc/")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 target_link_libraries(${PROJECT_NAME} OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} m)

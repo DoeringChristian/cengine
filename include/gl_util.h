@@ -7,7 +7,7 @@
 #define GLCall(_x){\
     gl_err_clear();\
     _x;\
-    gl_err_print(__FILE__, #_x, __LINE__);\
+    gl_err_print(__FILE__, __func__, __LINE__);\
 }
 
 void gl_err_clear();

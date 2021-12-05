@@ -248,9 +248,6 @@ OPENGL_opengl_LIBRARY:FILEPATH=/usr/lib/libOpenGL.so
 //Path to a file.
 OPENGL_xmesa_INCLUDE_DIR:PATH=OPENGL_xmesa_INCLUDE_DIR-NOTFOUND
 
-//The directory containing a CMake configuration file for OpengGL.
-OpengGL_DIR:PATH=OpengGL_DIR-NOTFOUND
-
 //The directory containing a CMake configuration file for SDL2.
 SDL2_DIR:PATH=/usr/lib64/cmake/SDL2
 
@@ -262,9 +259,6 @@ cengine_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 cengine_SOURCE_DIR:STATIC=/home/doeringc/Projects/cengine
-
-//The directory containing a CMake configuration file for glfw3.
-glfw3_DIR:PATH=/usr/lib64/cmake/glfw3
 
 
 ########################

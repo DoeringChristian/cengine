@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/doeringc/Projects/cengine/include -I/usr/include/SDL2
+C_INCLUDES = -I/home/doeringc/Projects/cengine/include -I/home/doeringc/Projects/cengine/lib/stb -I/usr/include/SDL2 -I/home/doeringc/Projects/cengine/lib/darray -I/home/doeringc/Projects/cengine/lib/mathc
 
 C_FLAGS = -g -std=gnu11
 

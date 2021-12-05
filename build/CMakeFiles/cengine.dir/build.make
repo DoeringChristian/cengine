@@ -69,10 +69,24 @@ include CMakeFiles/cengine.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/cengine.dir/flags.make
 
+CMakeFiles/cengine.dir/lib/mathc/mathc.c.o: CMakeFiles/cengine.dir/flags.make
+CMakeFiles/cengine.dir/lib/mathc/mathc.c.o: ../lib/mathc/mathc.c
+CMakeFiles/cengine.dir/lib/mathc/mathc.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/cengine.dir/lib/mathc/mathc.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/lib/mathc/mathc.c.o -MF CMakeFiles/cengine.dir/lib/mathc/mathc.c.o.d -o CMakeFiles/cengine.dir/lib/mathc/mathc.c.o -c /home/doeringc/Projects/cengine/lib/mathc/mathc.c
+
+CMakeFiles/cengine.dir/lib/mathc/mathc.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cengine.dir/lib/mathc/mathc.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/doeringc/Projects/cengine/lib/mathc/mathc.c > CMakeFiles/cengine.dir/lib/mathc/mathc.c.i
+
+CMakeFiles/cengine.dir/lib/mathc/mathc.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/lib/mathc/mathc.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/lib/mathc/mathc.c -o CMakeFiles/cengine.dir/lib/mathc/mathc.c.s
+
 CMakeFiles/cengine.dir/src/gl_util.c.o: CMakeFiles/cengine.dir/flags.make
 CMakeFiles/cengine.dir/src/gl_util.c.o: ../src/gl_util.c
 CMakeFiles/cengine.dir/src/gl_util.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/cengine.dir/src/gl_util.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/cengine.dir/src/gl_util.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/gl_util.c.o -MF CMakeFiles/cengine.dir/src/gl_util.c.o.d -o CMakeFiles/cengine.dir/src/gl_util.c.o -c /home/doeringc/Projects/cengine/src/gl_util.c
 
 CMakeFiles/cengine.dir/src/gl_util.c.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/cengine.dir/src/gl_util.c.s: cmake_force
 CMakeFiles/cengine.dir/src/main.c.o: CMakeFiles/cengine.dir/flags.make
 CMakeFiles/cengine.dir/src/main.c.o: ../src/main.c
 CMakeFiles/cengine.dir/src/main.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/cengine.dir/src/main.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/cengine.dir/src/main.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/main.c.o -MF CMakeFiles/cengine.dir/src/main.c.o.d -o CMakeFiles/cengine.dir/src/main.c.o -c /home/doeringc/Projects/cengine/src/main.c
 
 CMakeFiles/cengine.dir/src/main.c.i: cmake_force
@@ -97,10 +111,52 @@ CMakeFiles/cengine.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/src/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/src/main.c -o CMakeFiles/cengine.dir/src/main.c.s
 
+CMakeFiles/cengine.dir/src/mathc_ext.c.o: CMakeFiles/cengine.dir/flags.make
+CMakeFiles/cengine.dir/src/mathc_ext.c.o: ../src/mathc_ext.c
+CMakeFiles/cengine.dir/src/mathc_ext.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/cengine.dir/src/mathc_ext.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/mathc_ext.c.o -MF CMakeFiles/cengine.dir/src/mathc_ext.c.o.d -o CMakeFiles/cengine.dir/src/mathc_ext.c.o -c /home/doeringc/Projects/cengine/src/mathc_ext.c
+
+CMakeFiles/cengine.dir/src/mathc_ext.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cengine.dir/src/mathc_ext.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/doeringc/Projects/cengine/src/mathc_ext.c > CMakeFiles/cengine.dir/src/mathc_ext.c.i
+
+CMakeFiles/cengine.dir/src/mathc_ext.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/src/mathc_ext.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/src/mathc_ext.c -o CMakeFiles/cengine.dir/src/mathc_ext.c.s
+
+CMakeFiles/cengine.dir/src/mesh.c.o: CMakeFiles/cengine.dir/flags.make
+CMakeFiles/cengine.dir/src/mesh.c.o: ../src/mesh.c
+CMakeFiles/cengine.dir/src/mesh.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/cengine.dir/src/mesh.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/mesh.c.o -MF CMakeFiles/cengine.dir/src/mesh.c.o.d -o CMakeFiles/cengine.dir/src/mesh.c.o -c /home/doeringc/Projects/cengine/src/mesh.c
+
+CMakeFiles/cengine.dir/src/mesh.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cengine.dir/src/mesh.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/doeringc/Projects/cengine/src/mesh.c > CMakeFiles/cengine.dir/src/mesh.c.i
+
+CMakeFiles/cengine.dir/src/mesh.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/src/mesh.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/src/mesh.c -o CMakeFiles/cengine.dir/src/mesh.c.s
+
+CMakeFiles/cengine.dir/src/renderer.c.o: CMakeFiles/cengine.dir/flags.make
+CMakeFiles/cengine.dir/src/renderer.c.o: ../src/renderer.c
+CMakeFiles/cengine.dir/src/renderer.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/cengine.dir/src/renderer.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/renderer.c.o -MF CMakeFiles/cengine.dir/src/renderer.c.o.d -o CMakeFiles/cengine.dir/src/renderer.c.o -c /home/doeringc/Projects/cengine/src/renderer.c
+
+CMakeFiles/cengine.dir/src/renderer.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cengine.dir/src/renderer.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/doeringc/Projects/cengine/src/renderer.c > CMakeFiles/cengine.dir/src/renderer.c.i
+
+CMakeFiles/cengine.dir/src/renderer.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/src/renderer.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/src/renderer.c -o CMakeFiles/cengine.dir/src/renderer.c.s
+
 CMakeFiles/cengine.dir/src/sdl_ctx.c.o: CMakeFiles/cengine.dir/flags.make
 CMakeFiles/cengine.dir/src/sdl_ctx.c.o: ../src/sdl_ctx.c
 CMakeFiles/cengine.dir/src/sdl_ctx.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/cengine.dir/src/sdl_ctx.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/cengine.dir/src/sdl_ctx.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/sdl_ctx.c.o -MF CMakeFiles/cengine.dir/src/sdl_ctx.c.o.d -o CMakeFiles/cengine.dir/src/sdl_ctx.c.o -c /home/doeringc/Projects/cengine/src/sdl_ctx.c
 
 CMakeFiles/cengine.dir/src/sdl_ctx.c.i: cmake_force
@@ -114,7 +170,7 @@ CMakeFiles/cengine.dir/src/sdl_ctx.c.s: cmake_force
 CMakeFiles/cengine.dir/src/shader.c.o: CMakeFiles/cengine.dir/flags.make
 CMakeFiles/cengine.dir/src/shader.c.o: ../src/shader.c
 CMakeFiles/cengine.dir/src/shader.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/cengine.dir/src/shader.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/cengine.dir/src/shader.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/shader.c.o -MF CMakeFiles/cengine.dir/src/shader.c.o.d -o CMakeFiles/cengine.dir/src/shader.c.o -c /home/doeringc/Projects/cengine/src/shader.c
 
 CMakeFiles/cengine.dir/src/shader.c.i: cmake_force
@@ -125,10 +181,24 @@ CMakeFiles/cengine.dir/src/shader.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/src/shader.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/src/shader.c -o CMakeFiles/cengine.dir/src/shader.c.s
 
+CMakeFiles/cengine.dir/src/texture.c.o: CMakeFiles/cengine.dir/flags.make
+CMakeFiles/cengine.dir/src/texture.c.o: ../src/texture.c
+CMakeFiles/cengine.dir/src/texture.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/cengine.dir/src/texture.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/texture.c.o -MF CMakeFiles/cengine.dir/src/texture.c.o.d -o CMakeFiles/cengine.dir/src/texture.c.o -c /home/doeringc/Projects/cengine/src/texture.c
+
+CMakeFiles/cengine.dir/src/texture.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cengine.dir/src/texture.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/doeringc/Projects/cengine/src/texture.c > CMakeFiles/cengine.dir/src/texture.c.i
+
+CMakeFiles/cengine.dir/src/texture.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cengine.dir/src/texture.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/doeringc/Projects/cengine/src/texture.c -o CMakeFiles/cengine.dir/src/texture.c.s
+
 CMakeFiles/cengine.dir/src/window.c.o: CMakeFiles/cengine.dir/flags.make
 CMakeFiles/cengine.dir/src/window.c.o: ../src/window.c
 CMakeFiles/cengine.dir/src/window.c.o: CMakeFiles/cengine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/cengine.dir/src/window.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/cengine.dir/src/window.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/cengine.dir/src/window.c.o -MF CMakeFiles/cengine.dir/src/window.c.o.d -o CMakeFiles/cengine.dir/src/window.c.o -c /home/doeringc/Projects/cengine/src/window.c
 
 CMakeFiles/cengine.dir/src/window.c.i: cmake_force
@@ -141,19 +211,29 @@ CMakeFiles/cengine.dir/src/window.c.s: cmake_force
 
 # Object files for target cengine
 cengine_OBJECTS = \
+"CMakeFiles/cengine.dir/lib/mathc/mathc.c.o" \
 "CMakeFiles/cengine.dir/src/gl_util.c.o" \
 "CMakeFiles/cengine.dir/src/main.c.o" \
+"CMakeFiles/cengine.dir/src/mathc_ext.c.o" \
+"CMakeFiles/cengine.dir/src/mesh.c.o" \
+"CMakeFiles/cengine.dir/src/renderer.c.o" \
 "CMakeFiles/cengine.dir/src/sdl_ctx.c.o" \
 "CMakeFiles/cengine.dir/src/shader.c.o" \
+"CMakeFiles/cengine.dir/src/texture.c.o" \
 "CMakeFiles/cengine.dir/src/window.c.o"
 
 # External object files for target cengine
 cengine_EXTERNAL_OBJECTS =
 
+cengine: CMakeFiles/cengine.dir/lib/mathc/mathc.c.o
 cengine: CMakeFiles/cengine.dir/src/gl_util.c.o
 cengine: CMakeFiles/cengine.dir/src/main.c.o
+cengine: CMakeFiles/cengine.dir/src/mathc_ext.c.o
+cengine: CMakeFiles/cengine.dir/src/mesh.c.o
+cengine: CMakeFiles/cengine.dir/src/renderer.c.o
 cengine: CMakeFiles/cengine.dir/src/sdl_ctx.c.o
 cengine: CMakeFiles/cengine.dir/src/shader.c.o
+cengine: CMakeFiles/cengine.dir/src/texture.c.o
 cengine: CMakeFiles/cengine.dir/src/window.c.o
 cengine: CMakeFiles/cengine.dir/build.make
 cengine: /usr/lib/libSDL2main.a
@@ -162,7 +242,7 @@ cengine: /usr/lib/libGLEW.so
 cengine: /usr/lib/libGLX.so
 cengine: /usr/lib/libOpenGL.so
 cengine: CMakeFiles/cengine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable cengine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/doeringc/Projects/cengine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C executable cengine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cengine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

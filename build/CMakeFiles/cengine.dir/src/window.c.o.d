@@ -9,42 +9,63 @@ CMakeFiles/cengine.dir/src/window.c.o: \
  /usr/include/bits/types.h /usr/include/bits/timesize.h \
  /usr/include/bits/typesizes.h /usr/include/bits/time64.h \
  /usr/include/bits/wchar.h /usr/include/bits/stdint-intn.h \
- /usr/include/bits/stdint-uintn.h /usr/include/SDL2/SDL.h \
- /usr/include/SDL2/SDL_main.h /usr/include/SDL2/SDL_stdinc.h \
- /usr/include/SDL2/SDL_config.h /usr/include/SDL2/SDL_platform.h \
- /usr/include/SDL2/begin_code.h /usr/include/SDL2/close_code.h \
+ /usr/include/bits/stdint-uintn.h \
+ /home/doeringc/Projects/cengine/include/renderer.h \
+ /home/doeringc/Projects/cengine/lib/darray/darray.h \
+ /usr/include/stdlib.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/bits/floatn.h /usr/include/bits/floatn-common.h \
  /usr/include/sys/types.h /usr/include/bits/types/clock_t.h \
  /usr/include/bits/types/clockid_t.h /usr/include/bits/types/time_t.h \
- /usr/include/bits/types/timer_t.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h \
- /usr/include/endian.h /usr/include/bits/endian.h \
- /usr/include/bits/endianness.h /usr/include/bits/byteswap.h \
- /usr/include/bits/uintn-identity.h /usr/include/sys/select.h \
- /usr/include/bits/select.h /usr/include/bits/types/sigset_t.h \
- /usr/include/bits/types/__sigset_t.h \
+ /usr/include/bits/types/timer_t.h /usr/include/endian.h \
+ /usr/include/bits/endian.h /usr/include/bits/endianness.h \
+ /usr/include/bits/byteswap.h /usr/include/bits/uintn-identity.h \
+ /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/types/sigset_t.h /usr/include/bits/types/__sigset_t.h \
  /usr/include/bits/types/struct_timeval.h \
  /usr/include/bits/types/struct_timespec.h \
  /usr/include/bits/pthreadtypes.h /usr/include/bits/thread-shared-types.h \
  /usr/include/bits/pthreadtypes-arch.h /usr/include/bits/struct_mutex.h \
- /usr/include/bits/struct_rwlock.h /usr/include/stdio.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h \
- /usr/include/bits/types/__fpos_t.h /usr/include/bits/types/__mbstate_t.h \
- /usr/include/bits/types/__fpos64_t.h /usr/include/bits/types/__FILE.h \
- /usr/include/bits/types/FILE.h /usr/include/bits/types/struct_FILE.h \
- /usr/include/bits/stdio_lim.h /usr/include/bits/floatn.h \
- /usr/include/bits/floatn-common.h /usr/include/stdlib.h \
- /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
- /usr/include/alloca.h /usr/include/bits/stdlib-float.h \
- /usr/include/string.h /usr/include/bits/types/locale_t.h \
- /usr/include/bits/types/__locale_t.h /usr/include/strings.h \
- /usr/include/wchar.h /usr/include/bits/types/wint_t.h \
- /usr/include/bits/types/mbstate_t.h /usr/include/inttypes.h \
- /usr/include/ctype.h /usr/include/math.h /usr/include/bits/math-vector.h \
+ /usr/include/bits/struct_rwlock.h /usr/include/alloca.h \
+ /usr/include/bits/stdlib-float.h /usr/include/string.h \
+ /usr/include/bits/types/locale_t.h /usr/include/bits/types/__locale_t.h \
+ /usr/include/strings.h /usr/include/GL/glew.h /usr/include/GL/glu.h \
+ /usr/include/GL/gl.h /home/doeringc/Projects/cengine/include/mesh.h \
+ /home/doeringc/Projects/cengine/lib/mathc/mathc.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdbool.h \
+ /usr/include/math.h /usr/include/bits/math-vector.h \
  /usr/include/bits/libm-simd-decl-stubs.h \
  /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
  /usr/include/bits/fp-fast.h \
  /usr/include/bits/mathcalls-helper-functions.h \
- /usr/include/bits/mathcalls.h /usr/include/SDL2/SDL_assert.h \
+ /usr/include/bits/mathcalls.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h \
+ /home/doeringc/Projects/cengine/include/mathc_ext.h \
+ /home/doeringc/Projects/cengine/include/gl_util.h /usr/include/stdio.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h \
+ /usr/include/bits/types/__fpos_t.h /usr/include/bits/types/__mbstate_t.h \
+ /usr/include/bits/types/__fpos64_t.h /usr/include/bits/types/__FILE.h \
+ /usr/include/bits/types/FILE.h /usr/include/bits/types/struct_FILE.h \
+ /usr/include/bits/stdio_lim.h \
+ /home/doeringc/Projects/cengine/include/texture.h \
+ /home/doeringc/Projects/cengine/lib/stb/stb_image.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h /usr/include/assert.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/emmintrin.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
+ /home/doeringc/Projects/cengine/include/shader.h /usr/include/SDL2/SDL.h \
+ /usr/include/SDL2/SDL_main.h /usr/include/SDL2/SDL_stdinc.h \
+ /usr/include/SDL2/SDL_config.h /usr/include/SDL2/SDL_platform.h \
+ /usr/include/SDL2/begin_code.h /usr/include/SDL2/close_code.h \
+ /usr/include/wchar.h /usr/include/bits/types/wint_t.h \
+ /usr/include/bits/types/mbstate_t.h /usr/include/inttypes.h \
+ /usr/include/ctype.h /usr/include/SDL2/SDL_assert.h \
  /usr/include/SDL2/SDL_atomic.h /usr/include/SDL2/SDL_audio.h \
  /usr/include/SDL2/SDL_error.h /usr/include/SDL2/SDL_endian.h \
  /usr/include/SDL2/SDL_mutex.h /usr/include/SDL2/SDL_thread.h \
@@ -85,10 +106,6 @@ CMakeFiles/cengine.dir/src/window.c.o: \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsavesintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xtestintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/hresetintrin.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/emmintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/pmmintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tmmintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/smmintrin.h \
@@ -149,5 +166,4 @@ CMakeFiles/cengine.dir/src/window.c.o: \
  /usr/include/SDL2/SDL_system.h /usr/include/SDL2/SDL_timer.h \
  /usr/include/SDL2/SDL_version.h /usr/include/SDL2/SDL_locale.h \
  /usr/include/SDL2/SDL_misc.h /usr/include/SDL2/SDL_opengl.h \
- /usr/include/SDL2/SDL_opengl_glext.h /usr/include/GL/gl.h \
  /home/doeringc/Projects/cengine/include/sdl_ctx.h
