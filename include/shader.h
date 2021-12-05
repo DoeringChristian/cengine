@@ -6,7 +6,6 @@
 #include "gl_util.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "attr_arr.h"
 
 #define shader_attr_push_s(_dst_p, _type, _normalized, _struct, _element){\
     _struct _tmp;\
@@ -38,5 +37,8 @@ int shader_uniform_mat4f(struct shader *dst, const char *name, const float *src)
 int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset);
 int shader_attr_push_mat4f(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset);
 int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset);
+
+
+size_t attr_size(GLenum type);
 
 #endif //SHADER_H

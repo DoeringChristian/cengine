@@ -211,3 +211,29 @@ int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei
 
     return 0;
 }
+
+size_t attr_size(GLenum type){
+    switch(type){
+    case GL_BYTE:
+        return 1;
+    case GL_UNSIGNED_BYTE:
+        return 1;
+    case GL_SHORT:
+        return 2;
+    case GL_UNSIGNED_SHORT:
+        return 2;
+    case GL_INT:
+        return 4;
+    case GL_UNSIGNED_INT:
+        return 4;
+    case GL_FIXED:
+        return 4;
+    case GL_HALF_FLOAT:
+        return 2;
+    case GL_FLOAT:
+        return 4;
+    case GL_DOUBLE:
+        return 8;
+    }
+    return 0;
+}

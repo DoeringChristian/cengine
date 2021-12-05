@@ -9,7 +9,6 @@
 #include "gl_util.h"
 #include "texture.h"
 #include "shader.h"
-#include "attr_arr.h"
 
 #define MAX_TEXTURES 10
 
