@@ -22,6 +22,7 @@ int window_init(struct window *dst, int x, int y, int w, int h, const char *titl
         exit(1);
 
     glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEPTH_TEST);
 
     dst->running = 0;
 
