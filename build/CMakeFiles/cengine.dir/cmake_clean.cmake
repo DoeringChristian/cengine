@@ -1,8 +1,12 @@
 file(REMOVE_RECURSE
   "CMakeFiles/cengine.dir/lib/mathc/mathc.c.o"
   "CMakeFiles/cengine.dir/lib/mathc/mathc.c.o.d"
+  "CMakeFiles/cengine.dir/src/attr_arr.c.o"
+  "CMakeFiles/cengine.dir/src/attr_arr.c.o.d"
   "CMakeFiles/cengine.dir/src/gl_util.c.o"
   "CMakeFiles/cengine.dir/src/gl_util.c.o.d"
+  "CMakeFiles/cengine.dir/src/instancer.c.o"
+  "CMakeFiles/cengine.dir/src/instancer.c.o.d"
   "CMakeFiles/cengine.dir/src/main.c.o"
   "CMakeFiles/cengine.dir/src/main.c.o.d"
   "CMakeFiles/cengine.dir/src/mathc_ext.c.o"

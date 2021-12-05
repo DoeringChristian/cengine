@@ -3,6 +3,7 @@
 
 #include <GL/gl.h>
 #include <stdio.h>
+#include <signal.h>
 
 #define GLCall(_x){\
     gl_err_clear();\

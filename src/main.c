@@ -26,6 +26,17 @@ int main(){
     quat_from_axis_angle(quat, axis, 1);
     memcpy(mesh.rot, quat, sizeof(quat));
 
+    //instance
+
+#if 0
+    struct instance i2;
+    mat4_rotation_axis(i2.trans, (float []){0, 0, 1}, 1);
+    i2.tex_idx_offset = 0;
+
+    mesh_instance_push_back(&mesh, i2);
+#endif
+
+    // texture
     struct texture tex1;
     texture_load(&tex1, "res/img/test02.jpg");
 

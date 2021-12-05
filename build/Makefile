@@ -153,6 +153,30 @@ lib/mathc/mathc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/lib/mathc/mathc.c.s
 .PHONY : lib/mathc/mathc.c.s
 
+src/attr_arr.o: src/attr_arr.c.o
+.PHONY : src/attr_arr.o
+
+# target to build an object file
+src/attr_arr.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/attr_arr.c.o
+.PHONY : src/attr_arr.c.o
+
+src/attr_arr.i: src/attr_arr.c.i
+.PHONY : src/attr_arr.i
+
+# target to preprocess a source file
+src/attr_arr.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/attr_arr.c.i
+.PHONY : src/attr_arr.c.i
+
+src/attr_arr.s: src/attr_arr.c.s
+.PHONY : src/attr_arr.s
+
+# target to generate assembly for a file
+src/attr_arr.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/attr_arr.c.s
+.PHONY : src/attr_arr.c.s
+
 src/gl_util.o: src/gl_util.c.o
 .PHONY : src/gl_util.o
 
@@ -176,6 +200,30 @@ src/gl_util.s: src/gl_util.c.s
 src/gl_util.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/gl_util.c.s
 .PHONY : src/gl_util.c.s
+
+src/instancer.o: src/instancer.c.o
+.PHONY : src/instancer.o
+
+# target to build an object file
+src/instancer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/instancer.c.o
+.PHONY : src/instancer.c.o
+
+src/instancer.i: src/instancer.c.i
+.PHONY : src/instancer.i
+
+# target to preprocess a source file
+src/instancer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/instancer.c.i
+.PHONY : src/instancer.c.i
+
+src/instancer.s: src/instancer.c.s
+.PHONY : src/instancer.s
+
+# target to generate assembly for a file
+src/instancer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/instancer.c.s
+.PHONY : src/instancer.c.s
 
 src/main.o: src/main.c.o
 .PHONY : src/main.o
@@ -381,9 +429,15 @@ help:
 	@echo "... lib/mathc/mathc.o"
 	@echo "... lib/mathc/mathc.i"
 	@echo "... lib/mathc/mathc.s"
+	@echo "... src/attr_arr.o"
+	@echo "... src/attr_arr.i"
+	@echo "... src/attr_arr.s"
 	@echo "... src/gl_util.o"
 	@echo "... src/gl_util.i"
 	@echo "... src/gl_util.s"
+	@echo "... src/instancer.o"
+	@echo "... src/instancer.i"
+	@echo "... src/instancer.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

@@ -90,6 +90,11 @@ int shader_load(struct shader *dst, const char *vert_path, const char *frag_path
 
     glDeleteShader(vert);
     glDeleteShader(frag);
+
+
+    dst->attr_idx = 0;
+
+
     return 0;
 }
 void shader_free(struct shader *dst){
@@ -155,5 +160,54 @@ int shader_uniform_mat4f(struct shader *dst, const char *name, const float *src)
     int location;
     GLCall(location = glGetUniformLocation(dst->program, name));
     GLCall(glUniformMatrix4fv(location, 1, GL_FALSE, src));
+    return 0;
+}
+int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset){
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, num, type, normalized, stride, offset));
+    dst->attr_idx++;
+    return 0;
+}
+int shader_attr_push_mat4f(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset){
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 0 * sizeof(float)));
+    dst->attr_idx++;
+
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 4 * sizeof(float)));
+    dst->attr_idx++;
+
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 8 * sizeof(float)));
+    dst->attr_idx++;
+
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 12 * sizeof(float)));
+    dst->attr_idx++;
+
+    return 0;
+}
+
+int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset){
+    GLCall(glVertexAttribDivisor(dst->attr_idx, 1));
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 0 * sizeof(float)));
+    dst->attr_idx++;
+
+    GLCall(glVertexAttribDivisor(dst->attr_idx, 1));
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 4 * sizeof(float)));
+    dst->attr_idx++;
+
+    GLCall(glVertexAttribDivisor(dst->attr_idx, 1));
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 8 * sizeof(float)));
+    dst->attr_idx++;
+
+    GLCall(glVertexAttribDivisor(dst->attr_idx, 1));
+    GLCall(glEnableVertexAttribArray(dst->attr_idx));
+    GLCall(glVertexAttribPointer(dst->attr_idx, 4, GL_FLOAT, normalized, stride, offset + 12 * sizeof(float)));
+    dst->attr_idx++;
+
     return 0;
 }

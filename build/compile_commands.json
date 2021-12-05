@@ -6,8 +6,18 @@
 },
 {
   "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/home/doeringc/Projects/cengine/lib/stb -I/usr/include/SDL2 -I/home/doeringc/Projects/cengine/lib/darray -I/home/doeringc/Projects/cengine/lib/mathc -g -std=gnu11 -o CMakeFiles/cengine.dir/src/attr_arr.c.o -c /home/doeringc/Projects/cengine/src/attr_arr.c",
+  "file": "/home/doeringc/Projects/cengine/src/attr_arr.c"
+},
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
   "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/home/doeringc/Projects/cengine/lib/stb -I/usr/include/SDL2 -I/home/doeringc/Projects/cengine/lib/darray -I/home/doeringc/Projects/cengine/lib/mathc -g -std=gnu11 -o CMakeFiles/cengine.dir/src/gl_util.c.o -c /home/doeringc/Projects/cengine/src/gl_util.c",
   "file": "/home/doeringc/Projects/cengine/src/gl_util.c"
+},
+{
+  "directory": "/home/doeringc/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/Projects/cengine/include -I/home/doeringc/Projects/cengine/lib/stb -I/usr/include/SDL2 -I/home/doeringc/Projects/cengine/lib/darray -I/home/doeringc/Projects/cengine/lib/mathc -g -std=gnu11 -o CMakeFiles/cengine.dir/src/instancer.c.o -c /home/doeringc/Projects/cengine/src/instancer.c",
+  "file": "/home/doeringc/Projects/cengine/src/instancer.c"
 },
 {
   "directory": "/home/doeringc/Projects/cengine/build",

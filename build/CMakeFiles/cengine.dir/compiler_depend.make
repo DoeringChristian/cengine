@@ -33,6 +33,72 @@ CMakeFiles/cengine.dir/lib/mathc/mathc.c.o: ../lib/mathc/mathc.c \
   /usr/include/bits/stdint-uintn.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h
 
+CMakeFiles/cengine.dir/src/attr_arr.c.o: ../src/attr_arr.c \
+  /usr/include/stdc-predef.h \
+  ../include/attr_arr.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h \
+  /usr/include/stdint.h \
+  /usr/include/bits/libc-header-start.h \
+  /usr/include/features.h \
+  /usr/include/sys/cdefs.h \
+  /usr/include/bits/wordsize.h \
+  /usr/include/bits/long-double.h \
+  /usr/include/gnu/stubs.h \
+  /usr/include/gnu/stubs-64.h \
+  /usr/include/bits/types.h \
+  /usr/include/bits/timesize.h \
+  /usr/include/bits/typesizes.h \
+  /usr/include/bits/time64.h \
+  /usr/include/bits/wchar.h \
+  /usr/include/bits/stdint-intn.h \
+  /usr/include/bits/stdint-uintn.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h \
+  /usr/include/GL/glew.h \
+  /usr/include/GL/glu.h \
+  /usr/include/GL/gl.h \
+  ../include/gl_util.h \
+  /usr/include/stdio.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h \
+  /usr/include/bits/types/__fpos_t.h \
+  /usr/include/bits/types/__mbstate_t.h \
+  /usr/include/bits/types/__fpos64_t.h \
+  /usr/include/bits/types/__FILE.h \
+  /usr/include/bits/types/FILE.h \
+  /usr/include/bits/types/struct_FILE.h \
+  /usr/include/bits/stdio_lim.h \
+  /usr/include/bits/floatn.h \
+  /usr/include/bits/floatn-common.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/sigset_t.h \
+  /usr/include/bits/types/__sigset_t.h \
+  /usr/include/bits/types/struct_timespec.h \
+  /usr/include/bits/endian.h \
+  /usr/include/bits/endianness.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/thread-shared-types.h \
+  /usr/include/bits/pthreadtypes-arch.h \
+  /usr/include/bits/struct_mutex.h \
+  /usr/include/bits/struct_rwlock.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h
+
 CMakeFiles/cengine.dir/src/gl_util.c.o: ../src/gl_util.c \
   /usr/include/stdc-predef.h \
   ../include/gl_util.h \
@@ -66,7 +132,136 @@ CMakeFiles/cengine.dir/src/gl_util.c.o: ../src/gl_util.c \
   /usr/include/bits/types/struct_FILE.h \
   /usr/include/bits/stdio_lim.h \
   /usr/include/bits/floatn.h \
-  /usr/include/bits/floatn-common.h
+  /usr/include/bits/floatn-common.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/sigset_t.h \
+  /usr/include/bits/types/__sigset_t.h \
+  /usr/include/bits/types/struct_timespec.h \
+  /usr/include/bits/endian.h \
+  /usr/include/bits/endianness.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/thread-shared-types.h \
+  /usr/include/bits/pthreadtypes-arch.h \
+  /usr/include/bits/struct_mutex.h \
+  /usr/include/bits/struct_rwlock.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h
+
+CMakeFiles/cengine.dir/src/instancer.c.o: ../src/instancer.c \
+  /usr/include/stdc-predef.h \
+  ../include/instancer.h \
+  /usr/include/GL/glew.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h \
+  /usr/include/stdint.h \
+  /usr/include/bits/libc-header-start.h \
+  /usr/include/features.h \
+  /usr/include/sys/cdefs.h \
+  /usr/include/bits/wordsize.h \
+  /usr/include/bits/long-double.h \
+  /usr/include/gnu/stubs.h \
+  /usr/include/gnu/stubs-64.h \
+  /usr/include/bits/types.h \
+  /usr/include/bits/timesize.h \
+  /usr/include/bits/typesizes.h \
+  /usr/include/bits/time64.h \
+  /usr/include/bits/wchar.h \
+  /usr/include/bits/stdint-intn.h \
+  /usr/include/bits/stdint-uintn.h \
+  /usr/include/GL/glu.h \
+  /usr/include/GL/gl.h \
+  ../include/gl_util.h \
+  /usr/include/stdio.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h \
+  /usr/include/bits/types/__fpos_t.h \
+  /usr/include/bits/types/__mbstate_t.h \
+  /usr/include/bits/types/__fpos64_t.h \
+  /usr/include/bits/types/__FILE.h \
+  /usr/include/bits/types/FILE.h \
+  /usr/include/bits/types/struct_FILE.h \
+  /usr/include/bits/stdio_lim.h \
+  /usr/include/bits/floatn.h \
+  /usr/include/bits/floatn-common.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/sigset_t.h \
+  /usr/include/bits/types/__sigset_t.h \
+  /usr/include/bits/types/struct_timespec.h \
+  /usr/include/bits/endian.h \
+  /usr/include/bits/endianness.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/thread-shared-types.h \
+  /usr/include/bits/pthreadtypes-arch.h \
+  /usr/include/bits/struct_mutex.h \
+  /usr/include/bits/struct_rwlock.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h \
+  ../lib/darray/darray.h \
+  /usr/include/stdlib.h \
+  /usr/include/bits/waitflags.h \
+  /usr/include/bits/waitstatus.h \
+  /usr/include/sys/types.h \
+  /usr/include/bits/types/clock_t.h \
+  /usr/include/bits/types/clockid_t.h \
+  /usr/include/bits/types/time_t.h \
+  /usr/include/bits/types/timer_t.h \
+  /usr/include/endian.h \
+  /usr/include/bits/byteswap.h \
+  /usr/include/bits/uintn-identity.h \
+  /usr/include/sys/select.h \
+  /usr/include/bits/select.h \
+  /usr/include/bits/types/struct_timeval.h \
+  /usr/include/alloca.h \
+  /usr/include/bits/stdlib-float.h \
+  /usr/include/string.h \
+  /usr/include/bits/types/locale_t.h \
+  /usr/include/bits/types/__locale_t.h \
+  /usr/include/strings.h \
+  ../lib/mathc/mathc.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdbool.h \
+  /usr/include/math.h \
+  /usr/include/bits/math-vector.h \
+  /usr/include/bits/libm-simd-decl-stubs.h \
+  /usr/include/bits/flt-eval-method.h \
+  /usr/include/bits/fp-logb.h \
+  /usr/include/bits/fp-fast.h \
+  /usr/include/bits/mathcalls-helper-functions.h \
+  /usr/include/bits/mathcalls.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h \
+  ../include/attr_arr.h
 
 CMakeFiles/cengine.dir/src/main.c.o: ../src/main.c \
   /usr/include/stdc-predef.h \
@@ -285,6 +480,26 @@ CMakeFiles/cengine.dir/src/main.c.o: ../src/main.c \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h \
   ../include/mathc_ext.h \
   ../include/gl_util.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h \
   ../include/texture.h \
   ../lib/stb/stb_image.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h \
@@ -295,6 +510,7 @@ CMakeFiles/cengine.dir/src/main.c.o: ../src/main.c \
   /usr/include/linux/limits.h \
   /usr/include/bits/posix2_lim.h \
   ../include/shader.h \
+  ../include/attr_arr.h \
   /usr/include/SDL2/SDL_opengl.h \
   ../include/sdl_ctx.h \
   ../include/mesh.h
@@ -410,6 +626,26 @@ CMakeFiles/cengine.dir/src/mesh.c.o: ../src/mesh.c \
   /usr/include/bits/types/FILE.h \
   /usr/include/bits/types/struct_FILE.h \
   /usr/include/bits/stdio_lim.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h \
   ../include/texture.h \
   ../lib/stb/stb_image.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h \
@@ -424,7 +660,8 @@ CMakeFiles/cengine.dir/src/mesh.c.o: ../src/mesh.c \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
-  ../include/shader.h
+  ../include/shader.h \
+  ../include/attr_arr.h
 
 CMakeFiles/cengine.dir/src/renderer.c.o: ../src/renderer.c \
   /usr/include/stdc-predef.h \
@@ -505,6 +742,26 @@ CMakeFiles/cengine.dir/src/renderer.c.o: ../src/renderer.c \
   /usr/include/bits/types/FILE.h \
   /usr/include/bits/types/struct_FILE.h \
   /usr/include/bits/stdio_lim.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h \
   ../include/texture.h \
   ../lib/stb/stb_image.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h \
@@ -519,7 +776,8 @@ CMakeFiles/cengine.dir/src/renderer.c.o: ../src/renderer.c \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
-  ../include/shader.h
+  ../include/shader.h \
+  ../include/attr_arr.h
 
 CMakeFiles/cengine.dir/src/sdl_ctx.c.o: ../src/sdl_ctx.c \
   /usr/include/stdc-predef.h \
@@ -762,6 +1020,36 @@ CMakeFiles/cengine.dir/src/shader.c.o: ../src/shader.c \
   /usr/include/bits/stdio_lim.h \
   /usr/include/bits/floatn.h \
   /usr/include/bits/floatn-common.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/sigset_t.h \
+  /usr/include/bits/types/__sigset_t.h \
+  /usr/include/bits/types/struct_timespec.h \
+  /usr/include/bits/endian.h \
+  /usr/include/bits/endianness.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/thread-shared-types.h \
+  /usr/include/bits/pthreadtypes-arch.h \
+  /usr/include/bits/struct_mutex.h \
+  /usr/include/bits/struct_rwlock.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h \
   /usr/include/stdlib.h \
   /usr/include/bits/waitflags.h \
   /usr/include/bits/waitstatus.h \
@@ -771,23 +1059,14 @@ CMakeFiles/cengine.dir/src/shader.c.o: ../src/shader.c \
   /usr/include/bits/types/time_t.h \
   /usr/include/bits/types/timer_t.h \
   /usr/include/endian.h \
-  /usr/include/bits/endian.h \
-  /usr/include/bits/endianness.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/uintn-identity.h \
   /usr/include/sys/select.h \
   /usr/include/bits/select.h \
-  /usr/include/bits/types/sigset_t.h \
-  /usr/include/bits/types/__sigset_t.h \
   /usr/include/bits/types/struct_timeval.h \
-  /usr/include/bits/types/struct_timespec.h \
-  /usr/include/bits/pthreadtypes.h \
-  /usr/include/bits/thread-shared-types.h \
-  /usr/include/bits/pthreadtypes-arch.h \
-  /usr/include/bits/struct_mutex.h \
-  /usr/include/bits/struct_rwlock.h \
   /usr/include/alloca.h \
-  /usr/include/bits/stdlib-float.h
+  /usr/include/bits/stdlib-float.h \
+  ../include/attr_arr.h
 
 CMakeFiles/cengine.dir/src/texture.c.o: ../src/texture.c \
   /usr/include/stdc-predef.h \
@@ -874,7 +1153,27 @@ CMakeFiles/cengine.dir/src/texture.c.o: ../src/texture.c \
   /usr/include/GL/glew.h \
   /usr/include/GL/glu.h \
   /usr/include/GL/gl.h \
-  ../include/gl_util.h
+  ../include/gl_util.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h
 
 CMakeFiles/cengine.dir/src/window.c.o: ../src/window.c \
   /usr/include/stdc-predef.h \
@@ -956,6 +1255,26 @@ CMakeFiles/cengine.dir/src/window.c.o: ../src/window.c \
   /usr/include/bits/types/FILE.h \
   /usr/include/bits/types/struct_FILE.h \
   /usr/include/bits/stdio_lim.h \
+  /usr/include/signal.h \
+  /usr/include/bits/signum-generic.h \
+  /usr/include/bits/signum-arch.h \
+  /usr/include/bits/types/sig_atomic_t.h \
+  /usr/include/bits/types/siginfo_t.h \
+  /usr/include/bits/types/__sigval_t.h \
+  /usr/include/bits/siginfo-arch.h \
+  /usr/include/bits/siginfo-consts.h \
+  /usr/include/bits/types/sigval_t.h \
+  /usr/include/bits/types/sigevent_t.h \
+  /usr/include/bits/sigevent-consts.h \
+  /usr/include/bits/sigaction.h \
+  /usr/include/bits/sigcontext.h \
+  /usr/include/bits/types/stack_t.h \
+  /usr/include/sys/ucontext.h \
+  /usr/include/bits/sigstack.h \
+  /usr/include/bits/ss_flags.h \
+  /usr/include/bits/types/struct_sigstack.h \
+  /usr/include/bits/sigthread.h \
+  /usr/include/bits/signal_ext.h \
   ../include/texture.h \
   ../lib/stb/stb_image.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h \
@@ -971,6 +1290,7 @@ CMakeFiles/cengine.dir/src/window.c.o: ../src/window.c \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
   ../include/shader.h \
+  ../include/attr_arr.h \
   /usr/include/SDL2/SDL.h \
   /usr/include/SDL2/SDL_main.h \
   /usr/include/SDL2/SDL_stdinc.h \
@@ -1107,447 +1427,127 @@ CMakeFiles/cengine.dir/src/window.c.o: ../src/window.c \
   ../include/sdl_ctx.h
 
 
-../src/sdl_ctx.c:
-
-../src/mesh.c:
-
-../include/sdl_ctx.h:
-
-/usr/include/bits/posix2_lim.h:
-
-/usr/include/limits.h:
-
-../include/texture.h:
-
-../include/mathc_ext.h:
-
-/usr/include/GL/glew.h:
-
-../lib/darray/darray.h:
-
-/usr/include/SDL2/SDL_misc.h:
-
-/usr/include/SDL2/SDL_version.h:
-
-/usr/include/SDL2/SDL_render.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/syslimits.h:
-
-/usr/include/SDL2/SDL_power.h:
-
-/usr/include/SDL2/SDL_metal.h:
-
-/usr/include/SDL2/SDL_loadso.h:
-
-/usr/include/SDL2/SDL_filesystem.h:
-
-/usr/include/SDL2/SDL_gesture.h:
+../src/window.c:
 
 ../src/shader.c:
 
-/usr/include/SDL2/SDL_haptic.h:
-
-/usr/include/SDL2/SDL_quit.h:
-
-/usr/include/SDL2/SDL_sensor.h:
-
-/usr/include/SDL2/SDL_gamecontroller.h:
-
-/usr/include/SDL2/SDL_joystick.h:
-
-/usr/include/bits/local_lim.h:
-
-/usr/include/SDL2/SDL_blendmode.h:
-
-/usr/include/SDL2/SDL_surface.h:
-
-/usr/include/SDL2/SDL_rect.h:
-
-/usr/include/SDL2/SDL_video.h:
-
-/usr/include/SDL2/SDL_events.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/prfchwintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/amxtileintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bf16intrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/vaesintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/gfniintrin.h:
-
-/usr/include/SDL2/SDL_pixels.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/fmaintrin.h:
-
-/usr/include/SDL2/SDL_keyboard.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/shaintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vp2intersectvlintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vp2intersectintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vnnivlintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vnniintrin.h:
-
-/usr/include/SDL2/SDL_opengl.h:
-
-/usr/include/SDL2/SDL_mouse.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmi2vlintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vpopcntdqintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx5124fmapsintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmivlintrin.h:
-
-/usr/include/bits/posix1_lim.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bwintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512erintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx2intrin.h:
-
-/usr/include/SDL2/SDL_messagebox.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avxvnniintrin.h:
-
-/usr/include/SDL2/SDL_locale.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avxintrin.h:
-
-../include/renderer.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512fintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/wmmintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/smmintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tmmintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/emmintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/hresetintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xtestintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/pmmintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsavesintrin.h:
-
-/usr/include/SDL2/SDL_hints.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsaveoptintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsaveintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/wbnoinvdintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/waitpkgintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/vpclmulqdqintrin.h:
-
-/usr/include/bits/endian.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmi2intrin.h:
-
-/usr/include/SDL2/SDL_mutex.h:
-
-../src/window.c:
-
-/usr/include/bits/types/time_t.h:
-
-/usr/include/bits/struct_rwlock.h:
-
-../include/shader.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx5124vnniwintrin.h:
-
-../src/main.c:
-
-/usr/include/bits/types/__locale_t.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/cetintrin.h:
-
-/usr/include/bits/types/struct_FILE.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/f16cintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmiintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512cdintrin.h:
-
-/usr/include/bits/types/__FILE.h:
-
-/usr/include/bits/types/__fpos64_t.h:
-
-/usr/include/sys/types.h:
-
-/usr/include/SDL2/SDL_timer.h:
-
-/usr/include/bits/types/clockid_t.h:
-
-/usr/include/bits/byteswap.h:
-
-/usr/include/stdio.h:
-
-/usr/include/bits/types/timer_t.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/enqcmdintrin.h:
-
-../include/window.h:
-
-/usr/include/GL/glext.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bitalgintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h:
-
-../lib/stb/stb_image.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/uintrintrin.h:
-
-/usr/include/bits/select.h:
-
-/usr/include/bits/stdint-uintn.h:
-
-/usr/include/endian.h:
-
-/usr/include/GL/glu.h:
-
-/usr/include/bits/types.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h:
-
-/usr/include/gnu/stubs-64.h:
-
-/usr/include/bits/types/FILE.h:
-
-/usr/include/bits/flt-eval-method.h:
-
-/usr/include/SDL2/SDL_system.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/fxsrintrin.h:
-
-/usr/include/SDL2/begin_code.h:
-
-/usr/include/bits/libc-header-start.h:
-
 ../src/mathc_ext.c:
 
-/usr/include/bits/long-double.h:
+/usr/include/SDL2/SDL_cpuinfo.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/clflushoptintrin.h:
+/usr/include/SDL2/SDL_error.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vpopcntdqvlintrin.h:
+/usr/include/KHR/khrplatform.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdbool.h:
+/usr/include/stdlib.h:
 
-/usr/include/bits/types/__mbstate_t.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512ifmaintrin.h:
 
-/usr/include/bits/stdio_lim.h:
+/usr/include/inttypes.h:
 
-/usr/include/bits/types/struct_timeval.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vldqintrin.h:
 
-../include/gl_util.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tbmintrin.h:
 
-../lib/mathc/mathc.h:
+/usr/include/bits/types/wint_t.h:
 
-../src/renderer.c:
-
-/usr/include/alloca.h:
-
-/usr/include/bits/wchar.h:
-
-/usr/include/sys/cdefs.h:
-
-/usr/include/stdc-predef.h:
-
-/usr/include/gnu/stubs.h:
-
-/usr/include/bits/pthreadtypes-arch.h:
-
-/usr/include/bits/math-vector.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mwaitxintrin.h:
-
-../lib/mathc/mathc.c:
-
-/usr/include/linux/limits.h:
-
-/usr/include/stdint.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/lwpintrin.h:
-
-/usr/include/bits/stdlib-float.h:
-
-/usr/include/bits/time64.h:
-
-/usr/include/bits/mathcalls-helper-functions.h:
-
-/usr/include/string.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512ifmavlintrin.h:
-
-/usr/include/bits/timesize.h:
-
-/usr/include/bits/waitstatus.h:
-
-/usr/include/bits/fp-fast.h:
-
-/usr/include/SDL2/SDL_audio.h:
-
-/usr/include/features.h:
-
-/usr/include/bits/endianness.h:
-
-/usr/include/bits/libm-simd-decl-stubs.h:
-
-/usr/include/math.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/clwbintrin.h:
-
-/usr/include/bits/floatn.h:
-
-/usr/include/bits/stdint-intn.h:
-
-/usr/include/SDL2/SDL_shape.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h:
-
-/usr/include/SDL2/SDL_rwops.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512pfintrin.h:
-
-/usr/include/bits/floatn-common.h:
-
-/usr/include/bits/fp-logb.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/amxint8intrin.h:
-
-/usr/include/bits/types/__fpos_t.h:
-
-/usr/include/bits/types/clock_t.h:
-
-/usr/include/bits/mathcalls.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/amxbf16intrin.h:
-
-/usr/include/SDL2/SDL_endian.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h:
-
-/usr/include/sys/select.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsavecintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/pconfigintrin.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vlbwintrin.h:
-
-/usr/include/bits/types/__sigset_t.h:
-
-/usr/include/SDL2/SDL_platform.h:
-
-/usr/include/bits/types/struct_timespec.h:
-
-/usr/include/SDL2/SDL_log.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vlintrin.h:
-
-/usr/include/bits/pthreadtypes.h:
-
-/usr/include/bits/thread-shared-types.h:
-
-/usr/include/bits/struct_mutex.h:
-
-../include/mesh.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h:
-
-/usr/include/assert.h:
-
-/usr/include/SDL2/SDL_keycode.h:
-
-/usr/include/bits/wordsize.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tsxldtrkintrin.h:
-
-/usr/include/SDL2/SDL_config.h:
-
-../src/gl_util.c:
+/usr/include/bits/sigcontext.h:
 
 /usr/include/SDL2/close_code.h:
 
-/usr/include/SDL2/SDL_touch.h:
+../src/gl_util.c:
 
-/usr/include/bits/types/locale_t.h:
+/usr/include/bits/siginfo-consts.h:
 
-/usr/include/strings.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512dqintrin.h:
-
-/usr/include/bits/uintn-identity.h:
+/usr/include/SDL2/SDL_config.h:
 
 /usr/include/SDL2/SDL.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/lzcntintrin.h:
 
-/usr/include/wchar.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h:
 
-/usr/include/bits/types/wint_t.h:
+../include/mesh.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tbmintrin.h:
+../include/shader.h:
+
+/usr/include/bits/types/__locale_t.h:
+
+/usr/include/bits/types/locale_t.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/mathcalls.h:
+
+/usr/include/bits/types/sig_atomic_t.h:
+
+/usr/include/bits/types/__fpos_t.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/bits/timesize.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512ifmavlintrin.h:
+
+../include/instancer.h:
+
+/usr/include/SDL2/SDL_audio.h:
+
+../include/window.h:
+
+../lib/darray/darray.h:
 
 /usr/include/bits/types/mbstate_t.h:
 
-/usr/include/GL/gl.h:
+/usr/include/bits/signal_ext.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/immintrin.h:
+/usr/include/GL/glew.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vldqintrin.h:
+/usr/include/bits/struct_mutex.h:
 
-/usr/include/inttypes.h:
+/usr/include/bits/thread-shared-types.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vlintrin.h:
+
+/usr/include/SDL2/SDL_log.h:
+
+/usr/include/bits/ss_flags.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512dqintrin.h:
+
+/usr/include/bits/types/struct_FILE.h:
+
+/usr/include/SDL2/SDL_mutex.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmi2intrin.h:
 
 /usr/include/bits/waitflags.h:
 
-/usr/include/ctype.h:
+/usr/include/bits/types/sigevent_t.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512ifmaintrin.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/amxbf16intrin.h:
 
-/usr/include/stdlib.h:
+/usr/include/SDL2/SDL_main.h:
 
-/usr/include/SDL2/SDL_assert.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h:
 
-/usr/include/SDL2/SDL_atomic.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx5124vnniwintrin.h:
 
-/usr/include/SDL2/SDL_scancode.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/bmiintrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/serializeintrin.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bf16vlintrin.h:
 
-/usr/include/KHR/khrplatform.h:
+/usr/include/bits/fp-logb.h:
 
-/usr/include/SDL2/SDL_error.h:
+/usr/include/bits/floatn-common.h:
 
-/usr/include/SDL2/SDL_thread.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512pfintrin.h:
 
-/usr/include/SDL2/SDL_clipboard.h:
+/usr/include/SDL2/SDL_rwops.h:
 
-/usr/include/bits/typesizes.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h:
 
-/usr/include/SDL2/SDL_cpuinfo.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/ia32intrin.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h:
 
 /usr/include/SDL2/SDL_stdinc.h:
 
@@ -1555,34 +1555,402 @@ CMakeFiles/cengine.dir/src/window.c.o: ../src/window.c \
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/adxintrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bf16vlintrin.h:
+/usr/include/bits/floatn.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h:
+/usr/include/SDL2/SDL_thread.h:
 
-/usr/include/SDL2/SDL_main.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/clflushoptintrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/bmiintrin.h:
+/usr/include/bits/libm-simd-decl-stubs.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/bmi2intrin.h:
+/usr/include/GL/glu.h:
+
+../src/renderer.c:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/endianness.h:
+
+/usr/include/GL/glext.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/hresetintrin.h:
+
+/usr/include/string.h:
+
+/usr/include/bits/mathcalls-helper-functions.h:
+
+../lib/mathc/mathc.c:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tsxldtrkintrin.h:
+
+/usr/include/SDL2/SDL_keycode.h:
+
+/usr/include/bits/math-vector.h:
+
+/usr/include/bits/signum-arch.h:
+
+/usr/include/bits/pthreadtypes-arch.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/sys/ucontext.h:
+
+/usr/include/stdc-predef.h:
+
+../include/attr_arr.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/SDL2/SDL_atomic.h:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/sigthread.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vnniintrin.h:
+
+../lib/mathc/mathc.h:
+
+../include/gl_util.h:
+
+/usr/include/bits/signum-generic.h:
+
+/usr/include/bits/types/struct_timeval.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdbool.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vpopcntdqvlintrin.h:
+
+/usr/include/bits/sigstack.h:
+
+/usr/include/SDL2/SDL_shape.h:
+
+/usr/include/SDL2/SDL_quit.h:
+
+/usr/include/SDL2/SDL_haptic.h:
+
+/usr/include/bits/sigaction.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/serializeintrin.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/SDL2/SDL_scancode.h:
+
+../src/main.c:
+
+/usr/include/math.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/clwbintrin.h:
+
+/usr/include/bits/long-double.h:
+
+/usr/include/GL/gl.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/immintrin.h:
+
+/usr/include/bits/libc-header-start.h:
+
+/usr/include/bits/flt-eval-method.h:
+
+/usr/include/bits/types/FILE.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h:
+
+/usr/include/SDL2/SDL_endian.h:
+
+/usr/include/bits/types/time_t.h:
+
+/usr/include/bits/struct_rwlock.h:
+
+/usr/include/stdint.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/stdint-uintn.h:
+
+/usr/include/SDL2/SDL_clipboard.h:
+
+/usr/include/bits/types/siginfo_t.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/lwpintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/uintrintrin.h:
+
+../lib/stb/stb_image.h:
+
+/usr/include/bits/types/__mbstate_t.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bitalgintrin.h:
+
+/usr/include/bits/sigevent-consts.h:
+
+/usr/include/bits/types/stack_t.h:
+
+/usr/include/bits/posix2_lim.h:
+
+/usr/include/bits/types/struct_timespec.h:
+
+../src/attr_arr.c:
+
+/usr/include/bits/stdint-intn.h:
+
+/usr/include/bits/types/clockid_t.h:
+
+/usr/include/SDL2/SDL_timer.h:
+
+/usr/include/bits/types/timer_t.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/stdio.h:
+
+../src/instancer.c:
+
+/usr/include/bits/types/__fpos64_t.h:
+
+/usr/include/features.h:
+
+/usr/include/bits/types/__FILE.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512cdintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmiintrin.h:
+
+/usr/include/bits/types/struct_sigstack.h:
+
+/usr/include/SDL2/SDL_platform.h:
+
+/usr/include/bits/types/__sigset_t.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vlbwintrin.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/include/bits/types/__sigval_t.h:
+
+/usr/include/bits/endian.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/vpclmulqdqintrin.h:
+
+/usr/include/bits/siginfo-arch.h:
+
+../include/texture.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/x86gprintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/sgxintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/ia32intrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/cetintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/cldemoteintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/clzerointrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/movdirintrin.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/enqcmdintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/fxsrintrin.h:
+
+/usr/include/SDL2/SDL_system.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mwaitxintrin.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/pconfigintrin.h:
+
+/usr/include/SDL2/SDL_assert.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsavecintrin.h:
+
+/usr/include/bits/types/clock_t.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/popcntintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/keylockerintrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/popcntintrin.h:
+/usr/include/strings.h:
+
+/usr/include/signal.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/pkuintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/rdseedintrin.h:
 
-../src/texture.c:
-
 /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/rtmintrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/x86gprintrin.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/waitpkgintrin.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/sgxintrin.h:
+../src/sdl_ctx.c:
+
+/usr/include/bits/time64.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/wbnoinvdintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsaveintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsaveoptintrin.h:
+
+../src/mesh.c:
+
+/usr/include/SDL2/SDL_hints.h:
+
+/usr/include/SDL2/SDL_touch.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xsavesintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xtestintrin.h:
+
+/usr/include/bits/select.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/emmintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/amxint8intrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/tmmintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/smmintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/wmmintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512fintrin.h:
+
+../include/renderer.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avxintrin.h:
+
+/usr/include/SDL2/SDL_locale.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avxvnniintrin.h:
+
+/usr/include/SDL2/SDL_messagebox.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx2intrin.h:
+
+/usr/include/bits/fp-fast.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512erintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bwintrin.h:
+
+/usr/include/wchar.h:
+
+/usr/include/bits/posix1_lim.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmivlintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx5124fmapsintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vpopcntdqintrin.h:
+
+/usr/include/SDL2/SDL_mouse.h:
+
+/usr/include/SDL2/SDL_opengl.h:
+
+/usr/include/linux/limits.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vnnivlintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vp2intersectintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vp2intersectvlintrin.h:
+
+/usr/include/SDL2/SDL_keyboard.h:
+
+/usr/include/bits/types/sigval_t.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/fmaintrin.h:
+
+/usr/include/SDL2/SDL_pixels.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/gfniintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/limits.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/vaesintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512vbmi2vlintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/avx512bf16intrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/bmi2intrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/shaintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/amxtileintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/prfchwintrin.h:
+
+../src/texture.c:
+
+/usr/include/SDL2/SDL_events.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/SDL2/SDL_video.h:
+
+/usr/include/SDL2/SDL_rect.h:
+
+/usr/include/SDL2/SDL_surface.h:
+
+/usr/include/SDL2/SDL_blendmode.h:
+
+/usr/include/bits/local_lim.h:
+
+/usr/include/assert.h:
+
+/usr/include/SDL2/SDL_joystick.h:
+
+/usr/include/SDL2/SDL_gamecontroller.h:
+
+/usr/include/SDL2/SDL_sensor.h:
+
+/usr/include/ctype.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/f16cintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/movdirintrin.h:
+
+/usr/include/SDL2/SDL_gesture.h:
+
+/usr/include/SDL2/SDL_filesystem.h:
+
+/usr/include/SDL2/SDL_loadso.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/SDL2/SDL_metal.h:
+
+/usr/include/SDL2/SDL_power.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/pmmintrin.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include-fixed/syslimits.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/float.h:
+
+/usr/include/SDL2/SDL_render.h:
+
+/usr/include/bits/uintn-identity.h:
+
+/usr/include/SDL2/begin_code.h:
+
+/usr/include/SDL2/SDL_version.h:
+
+/usr/include/SDL2/SDL_misc.h:
+
+../include/mathc_ext.h:
+
+/usr/include/limits.h:
+
+../include/sdl_ctx.h:
