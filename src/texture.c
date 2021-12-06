@@ -12,7 +12,7 @@ int texture_init(struct texture *dst, int w, int h, float *src){
     GLCall(glGenTextures(1, &dst->gl_tex));
     GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, src));
 
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
@@ -59,9 +59,9 @@ int texture_resize(struct texture *dst, int w, int h){
     memset(buf, 0, w * h * dst->bpp);
 
     GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
-    GLCall(glGetnTexImage(GL_TEXTURE_2D, 0, GL_RGBA8, GL_FLOAT, buf_size, buf));
+    GLCall(glGetnTexImage(GL_TEXTURE_2D, 0, GL_RGBA32F, GL_FLOAT, buf_size, buf));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, buf));
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, buf));
 
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
