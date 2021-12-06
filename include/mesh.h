@@ -42,7 +42,6 @@ struct mesh{
     float rot[4]; //quaternion
 
     struct shader *shader;
-    //struct instancer instancer;
 
     GLuint gl_vbo, gl_ibo, gl_vao;
     GLsizei gl_vbo_size;

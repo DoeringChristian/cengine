@@ -21,10 +21,12 @@ int main(){
 
     mesh_tri_push_back(&mesh, tri(0, 1, 2));
 
+#if 0
     float axis[3] = {0, 1, 0};
     float quat[4];
-    quat_from_axis_angle(quat, axis, 1);
+    quat_from_axis_angle(quat, axis, 0);
     memcpy(mesh.rot, quat, sizeof(quat));
+#endif
 
     //instance
 

@@ -46,8 +46,14 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     dst->gl_ibo_size = 0;
     dst->gl_vboi_size = 0;
 
-    memset(dst->pos, 0, sizeof(dst->pos));
-    memset(dst->rot, 0, sizeof(dst->rot));
+    dst->rot[0] = 0.0;
+    dst->rot[1] = 0.0;
+    dst->rot[2] = 0.0;
+    dst->rot[3] = 1.0;
+
+    dst->pos[0] = 0;
+    dst->pos[1] = 0;
+    dst->pos[2] = 0;
 
     // init first instance
     struct ivert i1;
@@ -67,26 +73,6 @@ void mesh_free(struct mesh *dst){
     darray_free(&dst->instances);
 }
 
-int mesh_resize(struct mesh *dst){
-#if 0
-    GLCall(glBindVertexArray(dst->gl_vbo));
-
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->verts), dst->verts, GL_DYNAMIC_DRAW));
-
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
-    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, darray_size(&dst->tris), dst->tris, GL_DYNAMIC_DRAW));
-
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->instances), dst->instances, GL_DYNAMIC_DRAW));
-
-    dst->gl_vbo_size = darray_size(&dst->verts);
-    dst->gl_ibo_size = darray_size(&dst->tris);
-    dst->gl_vboi_size = darray_size(&dst->instances);
-
-#endif
-    return 0;
-}
 int mesh_update(struct mesh *dst){
     GLCall(glBindVertexArray(dst->gl_vao));
 
