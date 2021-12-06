@@ -74,6 +74,51 @@ int mesh_init(struct mesh *dst, struct shader *shader){
 
     return 0;
 }
+int mesh_init_quad(struct mesh *dst, struct shader *shader){
+    mesh_init(dst, shader);
+
+    struct vert verts[4] = {
+        {
+            .pos = {-1, -1, 0},
+            .normal = {0, 0, 1},
+            .color = {0, 0, 0, 1},
+            .uv = {0, 0},
+        },
+        {
+            .pos = {-1, 1, 0},
+            .normal = {0, 0, 1},
+            .color = {0, 0, 0, 1},
+            .uv = {0, 1},
+        },
+        {
+            .pos = {1, -1, 0},
+            .normal = {0, 0, 1},
+            .color = {0, 0, 0, 1},
+            .uv = {1, 0},
+        },
+        {
+            .pos = {1, 1, 0},
+            .normal = {0, 0, 1},
+            .color = {0, 0, 0, 1},
+            .uv = {1, 1},
+        },
+    };
+
+    struct tri tris[2] = {
+        {
+            0, 1, 2,
+        },
+        {
+            2, 3, 1,
+        },
+    };
+
+    mesh_vert_append(dst, verts, 4);
+    mesh_tri_append(dst, tris, 2);
+
+    return 0;
+}
+
 void mesh_free(struct mesh *dst){
     texture_free(&dst->lights);
     GLCall(glDeleteBuffers(1, &dst->gl_vboi));
@@ -169,6 +214,9 @@ int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
     }
     return 0;
 }
+int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n){
+    return darray_append(&dst->verts, src, n);
+}
 int mesh_append(struct mesh *dst, const struct mesh *src){
     size_t i = darray_len(&dst->verts);
     struct vert src_vert;
@@ -196,6 +244,9 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src){
     return darray_push_back(&dst->tris, src);
+}
+int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n){
+    return darray_append(&dst->tris, src, n);
 }
 
 int mesh_texture_push(struct mesh *dst, struct texture src){

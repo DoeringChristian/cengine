@@ -64,6 +64,7 @@ struct mesh{
 };
 
 int mesh_init(struct mesh *dst, struct shader *shader);
+int mesh_init_quad(struct mesh *dst, struct shader *shader);
 void mesh_free(struct mesh *dst);
 
 int mesh_push(struct mesh *dst);
@@ -71,6 +72,7 @@ int mesh_draw(struct mesh *src);
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src);
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);
+int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n);
 int mesh_append(struct mesh *dst, const struct mesh *src);
 
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
@@ -81,6 +83,7 @@ int mesh_lvert_push_back(struct mesh *dst, struct lvert src);
 int mesh_texture_push(struct mesh *dst, struct texture src);
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src);
+int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n);
 
 
 #endif //MESH_H

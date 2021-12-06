@@ -22,8 +22,8 @@ void main (void){
         float light_strength = light_color[3];
         float diff = max(dot(vec3(frag_normal), dir), 0);
         vec3 diff_color = diff * vec3(light_color) * light_strength;
-        //diff_color_sum += diff_color;
-        diff_color_sum += vec3(light_color);
+        diff_color_sum += diff_color;
+        //diff_color_sum += vec3(light_color);
     }
     //o_color = frag_color;
     o_color = texture(u_sampler[0], frag_uv) * vec4(diff_color_sum, 1.0);

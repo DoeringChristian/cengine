@@ -13,17 +13,37 @@ int main(){
 
     window_init(&win, 0, 0, 800, 600, "test");
 
-    mesh_init(&mesh, &win.renderer.shader);
+    mesh_init_quad(&mesh, &win.renderer.shader);
 
-    mesh_vert_push_back(&mesh, (struct vert){.pos = {0, 0, 0}, .color = {1, 0, 0, 1}, .uv = {0, 0}});
-    mesh_vert_push_back(&mesh, (struct vert){.pos = {0, 1, 0}, .color = {0, 1, 0, 1}, .uv = {0, 1}});
-    mesh_vert_push_back(&mesh, (struct vert){.pos = {1, 0, 0}, .color = {0, 0, 1, 1}, .uv = {1, 0}});
+#if 0
+    struct vert v1 = {
+        .pos = {0, 0, 0},
+        .normal = {0, 0, 1},
+        .color = {1, 0, 0, 1},
+        .uv = {0, 0},
+    };
+    struct vert v2 = {
+        .pos = {0, 1, 0},
+        .normal = {0, 0, 1},
+        .color = {0, 1, 0, 1},
+        .uv = {0, 1},
+    };
+    struct vert v3 = {
+        .pos = {1, 0, 0},
+        .normal = {0, 0, 1},
+        .color = {0, 0, 1, 1},
+        .uv = {1, 0},
+    };
+    mesh_vert_push_back(&mesh, v1); 
+    mesh_vert_push_back(&mesh, v2);
+    mesh_vert_push_back(&mesh, v3);
 
     mesh_tri_push_back(&mesh, tri(0, 1, 2));
+#endif
 
-    for(size_t i = 0;i < 10;i++){
+    for(size_t i = 0;i < 2;i++){
         struct ivert iv;
-        mat4_rotation_axis(iv.trans, (float []){1, 0, 1}, i);
+        mat4_rotation_axis(iv.trans, (float []){1, 0, 1}, i * M_PI / 2);
         iv.tex_idx_offset = 0;
         mesh_ivert_push_back(&mesh, iv);
     }
