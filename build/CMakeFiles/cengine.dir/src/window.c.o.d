@@ -73,6 +73,8 @@ CMakeFiles/cengine.dir/src/window.c.o: \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
  /home/doeringc/share/Projects/cengine/include/shader.h \
+ /home/doeringc/share/Projects/cengine/include/gbuf.h \
+ /home/doeringc/share/Projects/cengine/include/gl_util.h \
  /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_main.h \
  /usr/include/SDL2/SDL_stdinc.h /usr/include/SDL2/SDL_config.h \
  /usr/include/SDL2/SDL_platform.h /usr/include/SDL2/begin_code.h \

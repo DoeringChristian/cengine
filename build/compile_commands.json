@@ -6,6 +6,11 @@
 },
 {
   "directory": "/home/doeringc/share/Projects/cengine/build",
+  "command": "/usr/bin/cc  -I/home/doeringc/share/Projects/cengine/include -I/home/doeringc/share/Projects/cengine/lib/stb -I/usr/include/SDL2 -I/home/doeringc/share/Projects/cengine/lib/darray -I/home/doeringc/share/Projects/cengine/lib/mathc -g -std=gnu11 -o CMakeFiles/cengine.dir/src/gbuf.c.o -c /home/doeringc/share/Projects/cengine/src/gbuf.c",
+  "file": "/home/doeringc/share/Projects/cengine/src/gbuf.c"
+},
+{
+  "directory": "/home/doeringc/share/Projects/cengine/build",
   "command": "/usr/bin/cc  -I/home/doeringc/share/Projects/cengine/include -I/home/doeringc/share/Projects/cengine/lib/stb -I/usr/include/SDL2 -I/home/doeringc/share/Projects/cengine/lib/darray -I/home/doeringc/share/Projects/cengine/lib/mathc -g -std=gnu11 -o CMakeFiles/cengine.dir/src/gl_util.c.o -c /home/doeringc/share/Projects/cengine/src/gl_util.c",
   "file": "/home/doeringc/share/Projects/cengine/src/gl_util.c"
 },

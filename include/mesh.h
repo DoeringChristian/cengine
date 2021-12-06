@@ -9,6 +9,7 @@
 #include "gl_util.h"
 #include "texture.h"
 #include "shader.h"
+#include "gbuf.h"
 
 #define MAX_TEXTURES 10
 #define MAX_LIGHTS 4
@@ -43,11 +44,13 @@ static struct tri tri(size_t v1_idx, size_t v2_idx, size_t v3_idx){
 }
 
 struct mesh{
+    darray(struct texture) textures;
+#if 0
     darray(struct vert) verts;
     darray(struct tri) tris;
-    darray(struct texture) textures;
     darray(struct ivert) iverts;
     darray(struct lvert) lverts;
+#endif
 
     float pos[3]; 
     float rot[4]; //quaternion
@@ -56,14 +59,21 @@ struct mesh{
 
     struct texture lights;
 
+    struct gbuf vbo;
+    struct gbuf ibo;
+    struct gbuf vboi;
+
+    GLuint gl_vao;
+#if 0
     GLuint gl_vbo, gl_ibo, gl_vao;
     GLsizei gl_vbo_size;
     GLsizei gl_ibo_size;
     GLsizei gl_vboi_size;
     GLuint gl_vboi;
+#endif
 };
 
-int mesh_init(struct mesh *dst, struct shader *shader);
+int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len);
 int mesh_init_quad(struct mesh *dst, struct shader *shader);
 void mesh_free(struct mesh *dst);
 

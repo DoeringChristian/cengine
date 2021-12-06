@@ -70,4 +70,6 @@ CMakeFiles/cengine.dir/src/mesh.c.o: \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/xmmintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mmintrin.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/mm_malloc.h \
- /home/doeringc/share/Projects/cengine/include/shader.h
+ /home/doeringc/share/Projects/cengine/include/shader.h \
+ /home/doeringc/share/Projects/cengine/include/gbuf.h \
+ /home/doeringc/share/Projects/cengine/include/gl_util.h

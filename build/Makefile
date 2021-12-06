@@ -153,6 +153,30 @@ lib/mathc/mathc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/lib/mathc/mathc.c.s
 .PHONY : lib/mathc/mathc.c.s
 
+src/gbuf.o: src/gbuf.c.o
+.PHONY : src/gbuf.o
+
+# target to build an object file
+src/gbuf.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/gbuf.c.o
+.PHONY : src/gbuf.c.o
+
+src/gbuf.i: src/gbuf.c.i
+.PHONY : src/gbuf.i
+
+# target to preprocess a source file
+src/gbuf.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/gbuf.c.i
+.PHONY : src/gbuf.c.i
+
+src/gbuf.s: src/gbuf.c.s
+.PHONY : src/gbuf.s
+
+# target to generate assembly for a file
+src/gbuf.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cengine.dir/build.make CMakeFiles/cengine.dir/src/gbuf.c.s
+.PHONY : src/gbuf.c.s
+
 src/gl_util.o: src/gl_util.c.o
 .PHONY : src/gl_util.o
 
@@ -405,6 +429,9 @@ help:
 	@echo "... lib/mathc/mathc.o"
 	@echo "... lib/mathc/mathc.i"
 	@echo "... lib/mathc/mathc.s"
+	@echo "... src/gbuf.o"
+	@echo "... src/gbuf.i"
+	@echo "... src/gbuf.s"
 	@echo "... src/gl_util.o"
 	@echo "... src/gl_util.i"
 	@echo "... src/gl_util.s"

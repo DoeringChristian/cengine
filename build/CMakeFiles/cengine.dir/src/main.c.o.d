@@ -176,6 +176,8 @@ CMakeFiles/cengine.dir/src/main.c.o: \
  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/bits/posix2_lim.h \
  /home/doeringc/share/Projects/cengine/include/shader.h \
+ /home/doeringc/share/Projects/cengine/include/gbuf.h \
+ /home/doeringc/share/Projects/cengine/include/gl_util.h \
  /usr/include/SDL2/SDL_opengl.h \
  /home/doeringc/share/Projects/cengine/include/sdl_ctx.h \
  /home/doeringc/share/Projects/cengine/include/mesh.h

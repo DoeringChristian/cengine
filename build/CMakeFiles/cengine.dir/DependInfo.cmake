@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/doeringc/share/Projects/cengine/lib/mathc/mathc.c" "CMakeFiles/cengine.dir/lib/mathc/mathc.c.o" "gcc" "CMakeFiles/cengine.dir/lib/mathc/mathc.c.o.d"
+  "/home/doeringc/share/Projects/cengine/src/gbuf.c" "CMakeFiles/cengine.dir/src/gbuf.c.o" "gcc" "CMakeFiles/cengine.dir/src/gbuf.c.o.d"
   "/home/doeringc/share/Projects/cengine/src/gl_util.c" "CMakeFiles/cengine.dir/src/gl_util.c.o" "gcc" "CMakeFiles/cengine.dir/src/gl_util.c.o.d"
   "/home/doeringc/share/Projects/cengine/src/instance.c" "CMakeFiles/cengine.dir/src/instance.c.o" "gcc" "CMakeFiles/cengine.dir/src/instance.c.o.d"
   "/home/doeringc/share/Projects/cengine/src/main.c" "CMakeFiles/cengine.dir/src/main.c.o" "gcc" "CMakeFiles/cengine.dir/src/main.c.o.d"

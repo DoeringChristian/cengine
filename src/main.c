@@ -52,7 +52,7 @@ int main(){
 
     // texture
     struct texture tex1;
-    texture_load(&tex1, "res/img/ca-env-0105.jpg");
+    texture_load(&tex1, "res/img/test01.jpg");
 
     mesh_texture_push(&mesh, tex1);
 

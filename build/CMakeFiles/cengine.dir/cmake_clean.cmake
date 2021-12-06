@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/cengine.dir/lib/mathc/mathc.c.o"
   "CMakeFiles/cengine.dir/lib/mathc/mathc.c.o.d"
+  "CMakeFiles/cengine.dir/src/gbuf.c.o"
+  "CMakeFiles/cengine.dir/src/gbuf.c.o.d"
   "CMakeFiles/cengine.dir/src/gl_util.c.o"
   "CMakeFiles/cengine.dir/src/gl_util.c.o.d"
   "CMakeFiles/cengine.dir/src/instance.c.o"
