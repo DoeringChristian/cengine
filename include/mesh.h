@@ -23,7 +23,7 @@ struct tri{
     GLuint idxs[3];
 };
 
-struct instance{
+struct ivert{
     float trans[16];
     float tex_idx_offset;
 };
@@ -36,7 +36,7 @@ struct mesh{
     darray(struct vert) verts;
     darray(struct tri) tris;
     darray(struct texture) textures;
-    darray(struct instance) instances;
+    darray(struct ivert) instances;
 
     float pos[3]; 
     float rot[4]; //quaternion
@@ -47,14 +47,13 @@ struct mesh{
     GLuint gl_vbo, gl_ibo, gl_vao;
     GLsizei gl_vbo_size;
     GLsizei gl_ibo_size;
-    GLsizei gl_vbo_instances_size;
-    GLuint gl_vbo_instances;
+    GLsizei gl_vboi_size;
+    GLuint gl_vboi;
 };
 
 int mesh_init(struct mesh *dst, struct shader *shader);
 void mesh_free(struct mesh *dst);
 
-int mesh_resize(struct mesh *dst);
 int mesh_update(struct mesh *dst);
 int mesh_draw(struct mesh *src);
 
@@ -63,7 +62,7 @@ int mesh_vert_push_back(struct mesh *dst, struct vert src);
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);
 int mesh_append(struct mesh *dst, const struct mesh *src);
 
-int mesh_instance_push_back(struct mesh *dst, struct instance src);
+int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
 
 int mesh_texture_push(struct mesh *dst, struct texture src);
 

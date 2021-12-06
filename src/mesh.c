@@ -7,6 +7,8 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     darray_init(&dst->instances, 1);
     dst->shader = shader;
 
+    // vertex array, vertex buffer and index buffer.
+
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
@@ -29,33 +31,33 @@ int mesh_init(struct mesh *dst, struct shader *shader){
 
     // instances
 
-    GLCall(glGenBuffers(1, &dst->gl_vbo_instances));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo_instances));
+    GLCall(glGenBuffers(1, &dst->gl_vboi));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
 
 
-    shader_attr_push_mat4f_div_s(dst->shader, 0, struct instance, trans);
+    shader_attr_push_mat4f_div_s(dst->shader, 0, struct ivert, trans);
 
     GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct instance, tex_idx_offset);
+    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, tex_idx_offset);
 
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
     dst->gl_vbo_size = 0;
     dst->gl_ibo_size = 0;
-    dst->gl_vbo_instances_size = 0;
+    dst->gl_vboi_size = 0;
 
     memset(dst->pos, 0, sizeof(dst->pos));
     memset(dst->rot, 0, sizeof(dst->rot));
 
     // init first instance
-    struct instance i1;
+    struct ivert i1;
     mat4_rotation_axis(i1.trans, (float []){0, 0, 1}, 0);
-    mesh_instance_push_back(dst, i1);
+    mesh_ivert_push_back(dst, i1);
 
     return 0;
 }
 void mesh_free(struct mesh *dst){
-    GLCall(glDeleteBuffers(1, &dst->gl_vbo_instances));
+    GLCall(glDeleteBuffers(1, &dst->gl_vboi));
     GLCall(glDeleteBuffers(1, &dst->gl_vbo));
     GLCall(glDeleteBuffers(1, &dst->gl_ibo));
     GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
@@ -66,6 +68,7 @@ void mesh_free(struct mesh *dst){
 }
 
 int mesh_resize(struct mesh *dst){
+#if 0
     GLCall(glBindVertexArray(dst->gl_vbo));
 
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
@@ -74,32 +77,48 @@ int mesh_resize(struct mesh *dst){
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, darray_size(&dst->tris), dst->tris, GL_DYNAMIC_DRAW));
 
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo_instances));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
     GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->instances), dst->instances, GL_DYNAMIC_DRAW));
 
     dst->gl_vbo_size = darray_size(&dst->verts);
     dst->gl_ibo_size = darray_size(&dst->tris);
-    dst->gl_vbo_instances_size = darray_size(&dst->instances);
+    dst->gl_vboi_size = darray_size(&dst->instances);
 
+#endif
     return 0;
 }
 int mesh_update(struct mesh *dst){
-
-    if(dst->gl_vbo_size != darray_size(&dst->verts)
-            || dst->gl_ibo_size != darray_size(&dst->tris) 
-            || dst->gl_vbo_instances_size != darray_size(&dst->instances))
-        mesh_resize(dst);
-
     GLCall(glBindVertexArray(dst->gl_vao));
 
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
-    GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vbo_size, dst->verts));
+    if(dst->gl_vbo_size != darray_size(&dst->verts)){
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->verts), dst->verts, GL_DYNAMIC_DRAW));
+        dst->gl_vbo_size = darray_size(&dst->verts);
+    }
+    else{
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
+        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vbo_size, dst->verts));
+    }
 
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
-    GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, dst->gl_ibo_size, dst->tris));
+    if(dst->gl_ibo_size != darray_size(&dst->tris)){
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, darray_size(&dst->tris), dst->tris, GL_DYNAMIC_DRAW));
+        dst->gl_ibo_size = darray_size(&dst->tris);
+    }
+    else{
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
+        GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, dst->gl_ibo_size, dst->tris));
+    }
 
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo_instances));
-    GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vbo_instances_size, dst->instances));
+    if(dst->gl_vboi_size != darray_size(&dst->verts)){
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->instances), dst->instances, GL_DYNAMIC_DRAW));
+        dst->gl_vboi_size = darray_size(&dst->instances);
+    }
+    else{
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
+        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vboi_size, dst->instances));
+    }
 
     return 0;
 }
@@ -183,7 +202,7 @@ int mesh_tri_push_back(struct mesh *dst, struct tri src){
 int mesh_texture_push(struct mesh *dst, struct texture src){
     return darray_push_back(&dst->textures, src);
 }
-int mesh_instance_push_back(struct mesh *dst, struct instance src){
+int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
     return darray_push_back(&dst->instances, src);
 }
 
