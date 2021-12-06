@@ -83,6 +83,7 @@ int mesh_draw(struct mesh *src);
 int mesh_vert_push_back(struct mesh *dst, struct vert src);
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n);
+
 int mesh_append(struct mesh *dst, const struct mesh *src);
 
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src);

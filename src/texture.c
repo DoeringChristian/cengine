@@ -61,7 +61,7 @@ int texture_resize(struct texture *dst, int w, int h){
     GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
     GLCall(glGetnTexImage(GL_TEXTURE_2D, 0, GL_RGBA8, GL_FLOAT, buf_size, buf));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, dst->w, dst->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf));
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, buf));
 
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));

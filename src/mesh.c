@@ -75,7 +75,7 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
         1, 0, 0, 1,
         1, 1, 1, 1,
     };
-    texture_init(&dst->lights, 1, 2, light);
+    texture_init(&dst->lights, 0, 2, light);
 
     // init first instance
 # if 0

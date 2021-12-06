@@ -18,9 +18,9 @@ void main (void){
         vec3 light_pos = vec3(texture(u_lights, vec2(i / (u_lights_w - 1), 0 / (u_lights_h - 1))));
         vec4 light_color = vec4(texture(u_lights, vec2(i / (u_lights_w - 1), 1 / (u_lights_h - 1))));
 
-        vec3 dir = light_pos - vec3(frag_pos);
-        float light_strength = light_color[3];
+        vec3 dir = normalize(light_pos - vec3(frag_pos));
         float diff = max(dot(vec3(frag_normal), dir), 0);
+        float light_strength = light_color[3];
         vec3 diff_color = diff * vec3(light_color) * light_strength;
         diff_color_sum += diff_color;
         //diff_color_sum += vec3(light_color);

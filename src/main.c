@@ -40,13 +40,18 @@ int main(){
 
     mesh_tri_push_back(&mesh, tri(0, 1, 2));
 #endif
+    struct ivert iv;
+    mat4_rotation_axis(iv.trans, (float[]){1, 0, 0}, 0);
+    mesh_ivert_push_back(&mesh, iv);
 
+#if 0
     for(size_t i = 0;i < 2;i++){
         struct ivert iv;
         mat4_rotation_axis(iv.trans, (float []){1, 0, 1}, i * M_PI / 2);
         iv.tex_idx_offset = 0;
         mesh_ivert_push_back(&mesh, iv);
     }
+#endif
 
     renderer_push(&win.renderer);
 
@@ -56,11 +61,16 @@ int main(){
 
     mesh_texture_push(&mesh, tex1);
 
-    struct lvert light = {
-        .pos = {0, 0, -1, 0},
-        .color = {1, 1, 1, 1},
+    struct lvert light0 = {
+        .pos = {0, 0, 0, 1},
+        .color = {1, 0, 0, 1},
     };
-    //mesh_lvert_push_back(&mesh, light);
+    struct lvert light1 = {
+        .pos = {15, 0, 1, 1},
+        .color = {1, 1, 0, 1},
+    };
+    mesh_lvert_push_back(&mesh, light0);
+    mesh_lvert_push_back(&mesh, light1);
 
     renderer_mesh_push(&win.renderer, &mesh);
 
