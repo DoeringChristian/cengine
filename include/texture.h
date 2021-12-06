@@ -15,13 +15,18 @@ struct texture{
     int w, h;
     int bpp;
 
-    GLuint gl_buf;
+    //GLuint gl_buf;
     GLuint gl_tex;
 };
 
+int texture_init(struct texture *dst, int w, int h, float *src);
 int texture_load(struct texture *dst, const char *path);
 void texture_free(struct texture *dst);
 
+int texture_resize(struct texture *dst, int w, int h);
+
 void texture_bind(struct texture *dst, GLuint slot);
+
+int texture_set(struct texture *dst, int x, int y, float *src);
 
 #endif //TEXTURE_H

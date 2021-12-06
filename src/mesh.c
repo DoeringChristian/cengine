@@ -58,6 +58,13 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     dst->pos[1] = 0;
     dst->pos[2] = 0;
 
+    // init light texture
+    float light[] = {
+        1, 0, 0, 1,
+        1, 0, 0, 1,
+    };
+    texture_init(&dst->lights, 1, 2, light);
+
     // init first instance
 # if 0
     struct ivert i1;
@@ -68,6 +75,7 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     return 0;
 }
 void mesh_free(struct mesh *dst){
+    texture_free(&dst->lights);
     GLCall(glDeleteBuffers(1, &dst->gl_vboi));
     GLCall(glDeleteBuffers(1, &dst->gl_vbo));
     GLCall(glDeleteBuffers(1, &dst->gl_ibo));
@@ -124,12 +132,20 @@ int mesh_draw(struct mesh *src){
 
     shader_uniform_mat4f(src->shader, "u_trans", mat_trans);
 
-    for(size_t i = 0;i < darray_len(&src->textures) && i < MAX_TEXTURES;i++){
-        texture_bind(&src->textures[i], i);
+    size_t slot = 0;
+
+    for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){
+        texture_bind(&src->textures[slot], slot);
         char buf[100] = {0};
-        snprintf(buf, 100, "u_sampler[%zu]", i);
-        shader_uniform_i(src->shader, buf, i);
+        snprintf(buf, 100, "u_sampler[%zu]", slot);
+        shader_uniform_i(src->shader, buf, slot);
     }
+
+    // add lights as texture
+    texture_bind(&src->lights, slot);
+    shader_uniform_i(src->shader, "u_lights", slot);
+    shader_uniform_i(src->shader, "u_lights_w", src->lights.w);
+    shader_uniform_i(src->shader, "u_lights_h", src->lights.h);
 
 
     //GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
@@ -191,6 +207,12 @@ int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
 int mesh_iverts_clear(struct mesh *dst){
     darray_free(&dst->iverts);
     darray_init(&dst->iverts, 10);
+    return 0;
+}
+int mesh_lvert_push_back(struct mesh *dst, struct lvert src){
+    texture_resize(&dst->lights, dst->lights.w + 1, dst->lights.h);
+    texture_set(&dst->lights, dst->lights.w - 1, 0, src.pos);
+    texture_set(&dst->lights, dst->lights.w - 1, 1, src.color);
     return 0;
 }
 

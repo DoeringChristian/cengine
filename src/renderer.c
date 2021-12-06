@@ -2,7 +2,7 @@
 
 int renderer_init(struct renderer *dst){
     darray_init(&dst->meshes, 10);
-    darray_init(&dst->instances, 10);
+    //darray_init(&dst->instances, 10);
     
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
@@ -22,6 +22,11 @@ int renderer_push(struct renderer *dst){
     // - clear all iverts from meshes
     // - push all iverts from instances
     // - update all meshes
+    
+    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
+        mesh_push(dst->meshes[i]);
+    }
+#if 0
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
         mesh_iverts_clear(dst->meshes[i]);
     }
@@ -31,6 +36,7 @@ int renderer_push(struct renderer *dst){
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
         mesh_push(dst->meshes[i]);
     }
+#endif
     return 0;
 }
 
@@ -51,6 +57,4 @@ int renderer_render(struct renderer *src){
 int renderer_mesh_push(struct renderer *dst, struct mesh *src){
     return darray_push_back(&dst->meshes, src);
 }
-int renderer_instance_push(struct renderer *dst, struct instance *src){
-    return darray_push_back(&dst->instances, src);
-}
+

@@ -10,6 +10,8 @@ layout(location = 3) in vec2 i_uv;
 layout(location = 4) in mat4 i_trans;
 layout(location = 8) in float i_tex_idx_offset;
 
+out vec4 frag_pos;
+out vec4 frag_normal;
 out vec4 frag_color;
 out vec2 frag_uv;
 
@@ -18,6 +20,8 @@ uniform mat4 u_trans;
 
 void main (void){
     gl_Position = i_trans * u_trans * vec4(i_pos, 1.0);
+    frag_pos = i_trans * u_trans * vec4(i_pos, 1.0);
     frag_color = i_color;
+    frag_normal = vec4(mat3(i_trans) * mat3(u_trans) * i_normal, 1.0);
     frag_uv = i_uv;
 }

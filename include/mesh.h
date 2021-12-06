@@ -27,7 +27,7 @@ struct tri{
 
 // light vertex
 struct lvert{
-    float pos[3];
+    float pos[4];
     float color[4];
 };
 
@@ -47,11 +47,14 @@ struct mesh{
     darray(struct tri) tris;
     darray(struct texture) textures;
     darray(struct ivert) iverts;
+    darray(struct lvert) lverts;
 
     float pos[3]; 
     float rot[4]; //quaternion
 
     struct shader *shader;
+
+    struct texture lights;
 
     GLuint gl_vbo, gl_ibo, gl_vao;
     GLsizei gl_vbo_size;
@@ -72,6 +75,8 @@ int mesh_append(struct mesh *dst, const struct mesh *src);
 
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
 int mesh_iverts_clear(struct mesh *dst);
+
+int mesh_lvert_push_back(struct mesh *dst, struct lvert src);
 
 int mesh_texture_push(struct mesh *dst, struct texture src);
 
