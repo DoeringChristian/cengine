@@ -30,13 +30,31 @@ int main(){
 
     //instance
 
-#if 1
+#if 0
     struct ivert i2;
     mat4_rotation_axis(i2.trans, (float []){1, 0, 1}, -1);
     i2.tex_idx_offset = 0;
 
     mesh_ivert_push_back(&mesh, i2);
 #endif
+
+    struct ivert iv1;
+    mat4_rotation_axis(iv1.trans, (float []){1, 0, 1}, -1);
+    iv1.tex_idx_offset = 0;
+
+    struct instance i1;
+    instance_init(&i1, &mesh);
+    i1.ivert = iv1;
+    renderer_instance_push(&win.renderer, &i1);
+
+    struct ivert iv2;
+    mat4_rotation_axis(iv2.trans, (float []){1, 0, 0}, -1);
+    iv2.tex_idx_offset = 0;
+
+    struct instance i2;
+    instance_init(&i2, &mesh);
+    i2.ivert = iv2;
+    renderer_instance_push(&win.renderer, &i2);
 
     // texture
     struct texture tex1;
@@ -46,7 +64,8 @@ int main(){
 
     renderer_mesh_push(&win.renderer, &mesh);
 
-    mesh_update(&mesh);
+    renderer_push(&win.renderer);
+    //mesh_push(&mesh);
 
     window_main(&win);
 

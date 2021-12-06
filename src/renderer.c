@@ -2,6 +2,7 @@
 
 int renderer_init(struct renderer *dst){
     darray_init(&dst->meshes, 10);
+    darray_init(&dst->instances, 10);
     
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
@@ -15,6 +16,22 @@ void renderer_free(struct renderer *dst){
 #endif
     darray_free(&dst->meshes);
     shader_free(&dst->shader);
+}
+
+int renderer_push(struct renderer *dst){
+    // - clear all iverts from meshes
+    // - push all iverts from instances
+    // - update all meshes
+    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
+        mesh_iverts_clear(dst->meshes[i]);
+    }
+    for(size_t i = 0;i < darray_len(&dst->instances);i++){
+        instance_push(dst->instances[i]);
+    }
+    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
+        mesh_push(dst->meshes[i]);
+    }
+    return 0;
 }
 
 int renderer_render(struct renderer *src){
@@ -33,4 +50,7 @@ int renderer_render(struct renderer *src){
 
 int renderer_mesh_push(struct renderer *dst, struct mesh *src){
     return darray_push_back(&dst->meshes, src);
+}
+int renderer_instance_push(struct renderer *dst, struct instance *src){
+    return darray_push_back(&dst->instances, src);
 }

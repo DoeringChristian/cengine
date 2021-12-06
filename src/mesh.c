@@ -4,7 +4,7 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     darray_init(&dst->tris, 100);
     darray_init(&dst->verts, 100);
     darray_init(&dst->textures, 2);
-    darray_init(&dst->instances, 1);
+    darray_init(&dst->iverts, 10);
     dst->shader = shader;
 
     // vertex array, vertex buffer and index buffer.
@@ -20,7 +20,6 @@ int mesh_init(struct mesh *dst, struct shader *shader){
 
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
 
-
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, pos);
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, normal);
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, color);
@@ -34,13 +33,17 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     GLCall(glGenBuffers(1, &dst->gl_vboi));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
 
-
     shader_attr_push_mat4f_div_s(dst->shader, 0, struct ivert, trans);
 
     GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, tex_idx_offset);
 
+    GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
+    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, light_tex_idx);
+
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+
+    // set global rotation and translation.
 
     dst->gl_vbo_size = 0;
     dst->gl_ibo_size = 0;
@@ -56,9 +59,11 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     dst->pos[2] = 0;
 
     // init first instance
+# if 0
     struct ivert i1;
     mat4_rotation_axis(i1.trans, (float []){0, 0, 1}, 0);
     mesh_ivert_push_back(dst, i1);
+#endif
 
     return 0;
 }
@@ -70,10 +75,10 @@ void mesh_free(struct mesh *dst){
     darray_free(&dst->verts);
     darray_free(&dst->tris);
     darray_free(&dst->textures);
-    darray_free(&dst->instances);
+    darray_free(&dst->iverts);
 }
 
-int mesh_update(struct mesh *dst){
+int mesh_push(struct mesh *dst){
     GLCall(glBindVertexArray(dst->gl_vao));
 
     if(dst->gl_vbo_size != darray_size(&dst->verts)){
@@ -98,12 +103,12 @@ int mesh_update(struct mesh *dst){
 
     if(dst->gl_vboi_size != darray_size(&dst->verts)){
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->instances), dst->instances, GL_DYNAMIC_DRAW));
-        dst->gl_vboi_size = darray_size(&dst->instances);
+        GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->iverts), dst->iverts, GL_DYNAMIC_DRAW));
+        dst->gl_vboi_size = darray_size(&dst->iverts);
     }
     else{
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
-        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vboi_size, dst->instances));
+        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vboi_size, dst->iverts));
     }
 
     return 0;
@@ -128,15 +133,7 @@ int mesh_draw(struct mesh *src){
 
 
     //GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
-    GLCall(glDrawElementsInstanced(GL_TRIANGLES, darray_len(&src->tris) * 3, GL_UNSIGNED_INT, NULL, darray_len(&src->instances)));
-
-    return 0;
-}
-
-int mesh_attr_push(struct mesh *dst, GLsizei num, GLenum type, GLint normalized){
-    GLCall(glBindVertexArray(dst->gl_vao));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
-    //attr_arr_push(&dst->attr_arr, num, type, normalized);
+    GLCall(glDrawElementsInstanced(GL_TRIANGLES, darray_len(&src->tris) * 3, GL_UNSIGNED_INT, NULL, darray_len(&src->iverts)));
 
     return 0;
 }
@@ -189,6 +186,11 @@ int mesh_texture_push(struct mesh *dst, struct texture src){
     return darray_push_back(&dst->textures, src);
 }
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
-    return darray_push_back(&dst->instances, src);
+    return darray_push_back(&dst->iverts, src);
+}
+int mesh_iverts_clear(struct mesh *dst){
+    darray_free(&dst->iverts);
+    darray_init(&dst->iverts, 10);
+    return 0;
 }
 
