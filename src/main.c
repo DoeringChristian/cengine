@@ -58,7 +58,7 @@ int main(){
 
     struct lvert light = {
         .pos = {0, 0, -1, 0},
-        .color = {0, 0, 1, 1},
+        .color = {1, 1, 1, 1},
     };
     //mesh_lvert_push_back(&mesh, light);
 

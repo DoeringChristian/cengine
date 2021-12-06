@@ -61,7 +61,7 @@ int mesh_init(struct mesh *dst, struct shader *shader){
     // init light texture
     float light[] = {
         1, 0, 0, 1,
-        1, 0, 0, 1,
+        1, 1, 1, 1,
     };
     texture_init(&dst->lights, 1, 2, light);
 
