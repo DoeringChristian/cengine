@@ -1,5 +1,5 @@
-#ifndef TARGET_H
-#define TARGET_H
+#ifndef LAYER_H
+#define LAYER_H
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -20,8 +20,6 @@ struct layer{
     GLuint gl_rbo;
 
     struct texture texture;
-
-    struct shader shader;
 };
 
 int layer_init(struct layer *dst, int w, int h, const char *path_vert, const char *path_frag);
@@ -30,6 +28,8 @@ void layer_free(struct layer *dst);
 int layer_bind(struct layer *dst);
 int layer_unbind(struct layer *dst);
 
-int layer_draw(struct layer *dst);
+int layer_draw(struct layer *dst, struct shader *shader);
 
-#endif //TARGET_H
+int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);
+
+#endif //LAYER_H

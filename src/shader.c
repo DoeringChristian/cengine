@@ -162,6 +162,13 @@ int shader_uniform_mat4f(struct shader *dst, const char *name, const float *src)
     GLCall(glUniformMatrix4fv(location, 1, GL_FALSE, src));
     return 0;
 }
+int shader_uniform_vec4f(struct shader *dst, const char *name, const float *src){
+    GLCall(glUseProgram(dst->program));
+    int location;
+    GLCall(location = glGetUniformLocation(dst->program, name));
+    GLCall(glUniform4f(location, src[0], src[1], src[2], src[3]));
+    return 0;
+}
 int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset){
     GLCall(glEnableVertexAttribArray(dst->attr_idx));
     GLCall(glVertexAttribPointer(dst->attr_idx, num, type, normalized, stride, offset));
@@ -218,31 +225,5 @@ int shader_bind(struct shader *src){
 }
 int shader_unbind(struct shader *src){
     GLCall(glUseProgram(0));
-    return 0;
-}
-
-size_t attr_size(GLenum type){
-    switch(type){
-    case GL_BYTE:
-        return 1;
-    case GL_UNSIGNED_BYTE:
-        return 1;
-    case GL_SHORT:
-        return 2;
-    case GL_UNSIGNED_SHORT:
-        return 2;
-    case GL_INT:
-        return 4;
-    case GL_UNSIGNED_INT:
-        return 4;
-    case GL_FIXED:
-        return 4;
-    case GL_HALF_FLOAT:
-        return 2;
-    case GL_FLOAT:
-        return 4;
-    case GL_DOUBLE:
-        return 8;
-    }
     return 0;
 }

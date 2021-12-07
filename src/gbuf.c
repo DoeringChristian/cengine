@@ -1,10 +1,8 @@
 #include "gbuf.h"
 
-int gbuf_init(struct gbuf *dst, int w, int h, const char *path_vert, const char *path_frag){
+int gbuf_init(struct gbuf *dst, int w, int h){
     dst->w = w;
     dst->h = h;
-
-    shader_load(&dst->shader, path_vert, path_frag);
 
     // input side
 
@@ -53,8 +51,9 @@ int gbuf_init(struct gbuf *dst, int w, int h, const char *path_vert, const char 
 
     glbuf_bind(&dst->vbo);
 
-    shader_attr_push_s(&dst->shader, GL_FLOAT, 0, struct svert, pos);
-    shader_attr_push_s(&dst->shader, GL_FLOAT, 0, struct svert, uv);
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
 
     glbuf_unbind(&dst->vbo);
 
@@ -71,7 +70,6 @@ void gbuf_free(struct gbuf *dst){
     GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
     glbuf_free(&dst->vbo);
     glbuf_free(&dst->ibo);
-    shader_free(&dst->shader);
 }
 
 int gbuf_bind(struct gbuf *dst){
@@ -89,17 +87,20 @@ int gbuf_unbind(struct gbuf *dst){
     return 0;
 }
 
-int gbuf_draw_debug(struct gbuf *dst){
-    shader_bind(&dst->shader);
+int gbuf_draw(struct gbuf *dst, struct shader *shader, struct lvert light){
+    shader_bind(shader);
 
     texture_bind(&dst->pos, 0);
-    shader_uniform_i(&dst->shader, "u_pos", 0);
+    shader_uniform_i(shader, "u_pos", 0);
 
     texture_bind(&dst->normal, 1);
-    shader_uniform_i(&dst->shader, "u_noraml", 1);
+    shader_uniform_i(shader, "u_noraml", 1);
 
     texture_bind(&dst->color, 2);
-    shader_uniform_i(&dst->shader, "u_color", 2);
+    shader_uniform_i(shader, "u_color", 2);
+
+    shader_uniform_vec4f(shader, "u_light_pos", light.pos);
+    shader_uniform_vec4f(shader, "u_light_color", light.color);
 
     GLCall(glBindVertexArray(dst->gl_vao));
 
@@ -110,6 +111,6 @@ int gbuf_draw_debug(struct gbuf *dst){
     textures_unbind();
     glbuf_unbind(&dst->ibo);
     GLCall(glBindVertexArray(0));
-    shader_unbind(&dst->shader);
+    shader_unbind(shader);
     return 0;
 }

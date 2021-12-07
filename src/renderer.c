@@ -9,7 +9,7 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     layer_init(&dst->l1, w, h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
 
-    gbuf_init(&dst->gbuf, w, h, "shaders/gbuf/vert.glsl", "shaders/gbuf/frag.glsl");
+    gbuf_init(&dst->gbuf, w, h);
 
     dst->scene = NULL;
     return 0;
@@ -35,16 +35,35 @@ int renderer_render(struct renderer *src){
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // light test:
+    float light_pos[4] = {
+        1, 1, 1, 1,
+    };
+    float light_color[4] = {
+        1, 1, 1, 1,
+    };
+
+    struct shader light_shader;
+    shader_load(&light_shader, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+    struct lvert light = {
+        .pos = {1, 1, 1, 1},
+        .color = {1, 0, 0, 1},
+    };
+
+    struct shader layer_shader;
+    shader_load(&layer_shader, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
+
     gbuf_bind(&src->gbuf);
     scene_draw(src->scene);
     gbuf_unbind(&src->gbuf);
 
-    layer_bind(&src->l1);
-    gbuf_draw_debug(&src->gbuf);
-    layer_unbind(&src->l1);
-    
+    gbuf_draw(&src->gbuf, &light_shader, light);
 
-    layer_draw(&src->l1);
+
+    //layer_bind(&src->l1);
+    //layer_unbind(&src->l1);
+
+    layer_draw(&src->l1, &layer_shader);
 
     glBindVertexArray(0);
     glUseProgram(0);

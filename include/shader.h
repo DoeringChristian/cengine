@@ -33,6 +33,7 @@ int shader_attach(struct shader *dst, const char *path, int shader_type);
 int shader_uniform_i(struct shader *dst, const char *name, const int src);
 int shader_uniform_f(struct shader *dst, const char *name, const float src);
 int shader_uniform_mat4f(struct shader *dst, const char *name, const float *src);
+int shader_uniform_vec4f(struct shader *dst, const char *name, const float *src);
 
 int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset);
 int shader_attr_push_mat4f(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset);
@@ -40,8 +41,5 @@ int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei
 
 int shader_bind(struct shader *src);
 int shader_unbind(struct shader *src);
-
-
-size_t attr_size(GLenum type);
 
 #endif //SHADER_H

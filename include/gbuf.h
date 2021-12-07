@@ -21,15 +21,15 @@ struct gbuf{
 
     struct texture pos, normal, color;
 
-    struct shader shader;
+    //struct shader shader;
 };
 
-int gbuf_init(struct gbuf *dst, int w, int h, const char *path_vert, const char *path_frag);
+int gbuf_init(struct gbuf *dst, int w, int h);
 void gbuf_free(struct gbuf *dst);
 
 int gbuf_bind(struct gbuf *dst);
 int gbuf_unbind(struct gbuf *dst);
 
-int gbuf_draw_debug(struct gbuf *dst);
+int gbuf_draw(struct gbuf *dst, struct shader *shader, struct lvert light);
 
 #endif //GBUF_H

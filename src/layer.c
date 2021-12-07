@@ -3,7 +3,6 @@
 int layer_init(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path){
     dst->w = w;
     dst->h = h;
-    shader_load(&dst->shader, vert_path, frag_path);
 
     // input side
     
@@ -43,8 +42,9 @@ int layer_init(struct layer *dst, int w, int h, const char *vert_path, const cha
 
     glbuf_bind(&dst->vbo);
 
-    shader_attr_push_s(&dst->shader, GL_FLOAT, 0, struct svert, pos);
-    shader_attr_push_s(&dst->shader, GL_FLOAT, 0, struct svert, uv);
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
 
     glbuf_unbind(&dst->vbo);
 
@@ -59,7 +59,6 @@ void layer_free(struct layer *dst){
     GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
     glbuf_free(&dst->vbo);
     glbuf_free(&dst->ibo);
-    shader_free(&dst->shader);
 }
 int layer_bind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
@@ -75,11 +74,11 @@ int layer_unbind(struct layer *dst){
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     return 0;
 }
-int layer_draw(struct layer *dst){
-    shader_bind(&dst->shader);
+int layer_draw(struct layer *dst, struct shader *shader){
+    shader_bind(shader);
 
     texture_bind(&dst->texture, 0);
-    shader_uniform_i(&dst->shader, "u_texture", 0);
+    shader_uniform_i(shader, "u_texture", 0);
 
     GLCall(glBindVertexArray(dst->gl_vao));
 
@@ -89,6 +88,31 @@ int layer_draw(struct layer *dst){
 
     glbuf_unbind(&dst->ibo);
     GLCall(glBindVertexArray(0));
-    shader_unbind(&dst->shader);
+    shader_unbind(shader);
+    return 0;
+}
+int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader){
+    shader_bind(bshader);
+
+    layer_bind(dst);
+
+    texture_bind(&src1->texture, 0);
+    shader_uniform_i(bshader, "u_texture1", 0);
+
+    texture_bind(&src1->texture, 1);
+    shader_uniform_i(bshader, "u_texture2", 1);
+
+    GLCall(glBindVertexArray(src1->gl_vao));
+
+    glbuf_bind(&src1->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+
+    glbuf_unbind(&src1->ibo);
+    GLCall(glBindVertexArray(0));
+
+    layer_unbind(dst);
+
+    shader_unbind(bshader);
     return 0;
 }
