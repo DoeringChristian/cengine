@@ -1,8 +1,17 @@
 #include "layer.h"
 
-int layer_init(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path){
+int layer_init_shader(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path){
+    layer_init(dst, w, h);
+    layer_shader_load(dst, vert_path, frag_path);
+    return 0;
+}
+int layer_init(struct layer *dst, int w, int h){
     dst->w = w;
     dst->h = h;
+    dst->shader = (struct shader){
+        .attr_idx = 0,
+        .program = 0,
+    };
 
     // input side
     
@@ -74,7 +83,16 @@ int layer_unbind(struct layer *dst){
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     return 0;
 }
-int layer_draw(struct layer *dst, struct shader *shader){
+int layer_draw(struct layer *dst){
+    if(dst->shader.program != 0)
+        layer_draw_shader(dst, &dst->shader);
+    else
+        return 1;
+    return 0;
+}
+int layer_draw_shader(struct layer *dst, struct shader *shader){
+    if(shader == NULL && dst->shader.program != 0)
+        shader = &dst->shader;
     shader_bind(shader);
 
     texture_bind(&dst->texture, 0);
@@ -114,5 +132,9 @@ int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struc
     layer_unbind(dst);
 
     shader_unbind(bshader);
+    return 0;
+}
+int layer_shader_load(struct layer *dst, const char *vert_path, const char *frag_path){
+    shader_load(&dst->shader, vert_path, frag_path);
     return 0;
 }

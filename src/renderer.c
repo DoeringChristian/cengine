@@ -7,7 +7,7 @@ int renderer_init(struct renderer *dst, int w, int h){
     
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
-    layer_init(&dst->l1, w, h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
+    layer_init_shader(&dst->l1, w, h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
 
     gbuf_init(&dst->gbuf, w, h);
 
@@ -57,13 +57,13 @@ int renderer_render(struct renderer *src){
     scene_draw(src->scene);
     gbuf_unbind(&src->gbuf);
 
-    gbuf_draw(&src->gbuf, &light_shader, light);
+    gbuf_draw_shader(&src->gbuf, &light_shader, light);
 
 
     //layer_bind(&src->l1);
     //layer_unbind(&src->l1);
 
-    layer_draw(&src->l1, &layer_shader);
+    layer_draw_shader(&src->l1, &layer_shader);
 
     glBindVertexArray(0);
     glUseProgram(0);

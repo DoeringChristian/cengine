@@ -1,9 +1,18 @@
 #include "texture.h"
 
+int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const char *uname){
+    texture_init_f32(dst, w, h, src);
+    size_t uname_size = strlen(uname) + 1;
+    dst->uname = malloc(uname_size);
+    memcpy(dst->uname, uname, uname_size);
+    dst->uname[uname_size-1] = 0;
+    return 0;
+}
 int texture_init_f32(struct texture *dst, int w, int h, float *src){
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
+    dst->uname = NULL;
 
     size_t buf_size;
     float *buf = NULL;
@@ -50,6 +59,8 @@ int texture_load(struct texture *dst, const char *path){
 
     if(buf)
         stbi_image_free(buf);
+
+    dst->uname = NULL;
 
     return 0;
 }
@@ -98,6 +109,7 @@ int texture_resize_f32(struct texture *dst, int w, int h){
 }
 void texture_free(struct texture *dst){
     GLCall(glDeleteTextures(1, &dst->gl_tex));
+    free(dst->uname);
 }
 
 void texture_bind(struct texture *dst, GLuint slot){

@@ -8,6 +8,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "vert.h"
+#include "darray.h"
 
 struct layer{
     struct glbuf vbo;
@@ -20,16 +21,21 @@ struct layer{
     GLuint gl_rbo;
 
     struct texture texture;
+    struct shader shader;
 };
 
-int layer_init(struct layer *dst, int w, int h, const char *path_vert, const char *path_frag);
+int layer_init(struct layer *dst, int w, int h);
+int layer_init_shader(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path);
 void layer_free(struct layer *dst);
 
 int layer_bind(struct layer *dst);
 int layer_unbind(struct layer *dst);
 
-int layer_draw(struct layer *dst, struct shader *shader);
+int layer_draw(struct layer *dst);
+int layer_draw_shader(struct layer *dst, struct shader *shader);
 
 int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);
+
+int layer_shader_load(struct layer *dst, const char *vert_path, const char *frag_path);
 
 #endif //LAYER_H

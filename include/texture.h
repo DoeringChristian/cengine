@@ -17,9 +17,13 @@ struct texture{
 
     //GLuint gl_buf;
     GLuint gl_tex;
+
+    // uniform name
+    char *uname;
 };
 
 int texture_init_f32(struct texture *dst, int w, int h, float *src);
+int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const char *name);
 int texture_load(struct texture *dst, const char *path);
 void texture_free(struct texture *dst);
 
