@@ -10,33 +10,13 @@
 #include "texture.h"
 #include "shader.h"
 #include "glbuf.h"
+#include "vert.h"
 
 #define MAX_TEXTURES 10
 #define MAX_LIGHTS 4
 
-// mesh vertex
-struct vert{
-    float pos[3];
-    float normal[3];
-    float color[4];
-    float uv[2];
-};
-
 struct tri{
     GLuint idxs[3];
-};
-
-// light vertex
-struct lvert{
-    float pos[4];
-    float color[4];
-};
-
-// instance vertex
-struct ivert{
-    float trans[16];
-    float tex_idx_offset;
-    float light_tex_idx;
 };
 
 static struct tri tri(size_t v1_idx, size_t v2_idx, size_t v3_idx){

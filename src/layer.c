@@ -1,10 +1,12 @@
-#include "target.h"
+#include "layer.h"
 
-int target_init(struct target *dst, int w, int h, const char *vert_path, const char *frag_path){
+int layer_init(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path){
     dst->w = w;
     dst->h = h;
     shader_load(&dst->shader, vert_path, frag_path);
 
+    // input side
+    
     GLCall(glGenFramebuffers(1, &dst->gl_fbo));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
 
@@ -30,37 +32,14 @@ int target_init(struct target *dst, int w, int h, const char *vert_path, const c
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
-    // initialize quad.
-    struct svert sverts[] = {
-        {
-            .pos = {-1, -1},
-            .uv = {0, 0},
-        },
-        {
-            .pos = {-1, 1},
-            .uv = {0, 1},
-        },
-        {
-            .pos = {1, -1},
-            .uv = {1, 0},
-        },
-        {
-            .pos = {1, 1},
-            .uv = {1, 1},
-        },
-    };
-
-    GLint idxs[] = {
-        0, 1, 2,
-        2, 3, 1,
-    };
+    // output side
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
-    glbuf_init(&dst->vbo, sverts, sizeof(sverts), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-    glbuf_init(&dst->ibo, idxs, sizeof(idxs), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
     glbuf_bind(&dst->vbo);
 
@@ -73,30 +52,30 @@ int target_init(struct target *dst, int w, int h, const char *vert_path, const c
 
     return 0;
 }
-void target_free(struct target *dst){
+void layer_free(struct layer *dst){
     texture_free(&dst->texture);
     GLCall(glDeleteFramebuffers(1, &dst->gl_fbo));
     GLCall(glDeleteRenderbuffers(1, &dst->gl_rbo));
-    GLCall(glDeleteVertexArrays(GL_VERTEX_ARRAY, &dst->gl_vao));
+    GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
     glbuf_free(&dst->vbo);
     glbuf_free(&dst->ibo);
     shader_free(&dst->shader);
 }
-int target_bind(struct target *dst){
+int layer_bind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-    GLCall(glClearColor(0.1, 0.1, 0.1, 1));
+    GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     GLCall(glEnable(GL_DEPTH_TEST));
 
     return 0;
 }
-int target_unbind(struct target *dst){
+int layer_unbind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    GLCall(glClearColor(1.0, 1.0, 1.0, 1.0));
-    GLCall(glClear(GL_COLOR_BUFFER_BIT));
+    GLCall(glClearColor(0, 0, 0, 1));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     return 0;
 }
-int target_draw(struct target *dst){
+int layer_draw(struct layer *dst){
     shader_bind(&dst->shader);
 
     texture_bind(&dst->texture, 0);

@@ -1,9 +1,9 @@
-#ifndef GBUF_H
-#define GBUF_H
+#ifndef GLBUF_H
+#define GLBUF_H
 
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <gl_util.h>
+#include "gl_util.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -33,4 +33,4 @@ void glbuf_unbind(struct glbuf *dst);
 size_t glbuf_size(struct glbuf *src);
 
 
-#endif //GBUF_H
+#endif //GLBUF_H

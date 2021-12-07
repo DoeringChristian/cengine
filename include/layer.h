@@ -7,14 +7,9 @@
 #include "glbuf.h"
 #include "texture.h"
 #include "shader.h"
+#include "vert.h"
 
-// screen space vertex
-struct svert{
-    float pos[2];
-    float uv[2];
-};
-
-struct target{
+struct layer{
     struct glbuf vbo;
     struct glbuf ibo;
 
@@ -29,12 +24,12 @@ struct target{
     struct shader shader;
 };
 
-int target_init(struct target *dst, int w, int h, const char *path_vert, const char *path_frag);
-void target_free(struct target *dst);
+int layer_init(struct layer *dst, int w, int h, const char *path_vert, const char *path_frag);
+void layer_free(struct layer *dst);
 
-int target_bind(struct target *dst);
-int target_unbind(struct target *dst);
+int layer_bind(struct layer *dst);
+int layer_unbind(struct layer *dst);
 
-int target_draw(struct target *dst);
+int layer_draw(struct layer *dst);
 
 #endif //TARGET_H

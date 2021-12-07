@@ -7,17 +7,16 @@
 #include "mesh.h"
 #include "shader.h"
 #include "scene.h"
-#include "target.h"
+#include "layer.h"
 
 struct renderer{
     int w, h;
-
 
     struct scene *scene;
 
     struct shader shader;
 
-    struct target t1;
+    struct layer l1;
 };
 
 int renderer_init(struct renderer *dst, int w, int h);

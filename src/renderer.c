@@ -7,13 +7,13 @@ int renderer_init(struct renderer *dst, int w, int h){
     
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
-    target_init(&dst->t1, w, h, "shaders/gbuf/vert.glsl", "shaders/gbuf/frag.glsl");
+    layer_init(&dst->l1, w, h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
 
     dst->scene = NULL;
     return 0;
 }
 void renderer_free(struct renderer *dst){
-    target_free(&dst->t1);
+    layer_free(&dst->l1);
     shader_free(&dst->shader);
 }
 
@@ -31,13 +31,13 @@ int renderer_render(struct renderer *src){
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    target_bind(&src->t1);
+    layer_bind(&src->l1);
 
     scene_draw(src->scene);
 
-    target_unbind(&src->t1);
+    layer_unbind(&src->l1);
     
-    target_draw(&src->t1);
+    layer_draw(&src->l1);
 
     glBindVertexArray(0);
     glUseProgram(0);
