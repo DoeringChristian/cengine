@@ -28,7 +28,7 @@ int window_init(struct window *dst, int x, int y, int w, int h, const char *titl
 
     glViewport(0, 0, dst->w, dst->h);
 
-    renderer_init(&dst->renderer);
+    renderer_init(&dst->renderer, w, h);
 
     return 0;
 }

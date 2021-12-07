@@ -5,7 +5,7 @@ int scene_init(struct scene *dst){
 
     dst->shader = NULL;
 
-    texture_init(&dst->lights, 0, 2, NULL);
+    texture_init_f32(&dst->lights, 0, 2, NULL);
 
     return 0;
 }
@@ -23,7 +23,6 @@ int scene_mesh_push_back(struct scene *dst, struct mesh *src){
 int scene_draw(struct scene *dst){
     if(dst->shader == NULL)
         return 1;
-    glUseProgram(dst->shader->program);
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
         mesh_draw(dst->meshes[i]);
     }

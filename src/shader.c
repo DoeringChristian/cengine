@@ -212,6 +212,15 @@ int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei
     return 0;
 }
 
+int shader_bind(struct shader *src){
+    GLCall(glUseProgram(src->program));
+    return 0;
+}
+int shader_unbind(struct shader *src){
+    GLCall(glUseProgram(0));
+    return 0;
+}
+
 size_t attr_size(GLenum type){
     switch(type){
     case GL_BYTE:

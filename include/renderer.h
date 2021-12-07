@@ -7,14 +7,20 @@
 #include "mesh.h"
 #include "shader.h"
 #include "scene.h"
+#include "target.h"
 
 struct renderer{
+    int w, h;
+
+
     struct scene *scene;
 
     struct shader shader;
+
+    struct target t1;
 };
 
-int renderer_init(struct renderer *dst);
+int renderer_init(struct renderer *dst, int w, int h);
 void renderer_free(struct renderer *dst);
 
 int renderer_push(struct renderer *dst);

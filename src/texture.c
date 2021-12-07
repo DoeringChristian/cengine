@@ -1,13 +1,19 @@
 #include "texture.h"
 
-int texture_init(struct texture *dst, int w, int h, float *src){
+int texture_init_f32(struct texture *dst, int w, int h, float *src){
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
 
-    //size_t buf_size = sizeof(float) * dst->w * dst->h * dst->bpp;
-    //uint8_t *buf = malloc(buf_size);
-    //memset(buf, 0, buf_size);
+    size_t buf_size;
+    float *buf = NULL;
+
+    if(src == NULL){
+
+        buf_size = sizeof(float) * dst->w * dst->h * dst->bpp;
+        buf = malloc(buf_size);
+        memset(buf, 0, buf_size);
+    }
 
     GLCall(glGenTextures(1, &dst->gl_tex));
     GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
@@ -21,7 +27,7 @@ int texture_init(struct texture *dst, int w, int h, float *src){
 
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
-    //free(buf);
+    free(buf);
     return 0;
 }
 
@@ -47,7 +53,7 @@ int texture_load(struct texture *dst, const char *path){
 
     return 0;
 }
-int texture_resize(struct texture *dst, int w, int h){
+int texture_resize_f32(struct texture *dst, int w, int h){
     if(w == dst->w && h == dst->h)
         return 0;
     dst->bpp = 4;

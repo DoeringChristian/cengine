@@ -38,6 +38,9 @@ int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean nor
 int shader_attr_push_mat4f(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset);
 int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset);
 
+int shader_bind(struct shader *src);
+int shader_unbind(struct shader *src);
+
 
 size_t attr_size(GLenum type);
 

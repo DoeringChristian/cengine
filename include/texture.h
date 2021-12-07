@@ -19,11 +19,11 @@ struct texture{
     GLuint gl_tex;
 };
 
-int texture_init(struct texture *dst, int w, int h, float *src);
+int texture_init_f32(struct texture *dst, int w, int h, float *src);
 int texture_load(struct texture *dst, const char *path);
 void texture_free(struct texture *dst);
 
-int texture_resize(struct texture *dst, int w, int h);
+int texture_resize_f32(struct texture *dst, int w, int h);
 
 void texture_bind(struct texture *dst, GLuint slot);
 

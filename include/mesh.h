@@ -9,7 +9,7 @@
 #include "gl_util.h"
 #include "texture.h"
 #include "shader.h"
-#include "gbuf.h"
+#include "glbuf.h"
 
 #define MAX_TEXTURES 10
 #define MAX_LIGHTS 4
@@ -59,9 +59,9 @@ struct mesh{
 
     struct texture *lights;
 
-    struct gbuf vbo;
-    struct gbuf ibo;
-    struct gbuf vboi;
+    struct glbuf vbo;
+    struct glbuf ibo;
+    struct glbuf vboi;
 
     GLuint gl_vao;
 #if 0

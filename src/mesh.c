@@ -14,11 +14,11 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
-    gbuf_init(&dst->vbo, verts, verts_len * sizeof(struct vert), GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+    glbuf_init(&dst->vbo, verts, verts_len * sizeof(struct vert), GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
-    gbuf_init(&dst->ibo, tris, tris_len * sizeof(struct tri), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+    glbuf_init(&dst->ibo, tris, tris_len * sizeof(struct tri), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
-    gbuf_bind(&dst->vbo);
+    glbuf_bind(&dst->vbo);
 
 #if 0
     GLCall(glGenBuffers(1, &dst->gl_vbo));
@@ -35,11 +35,11 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, color);
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, uv);
 
-    gbuf_unbind(&dst->vbo);
+    glbuf_unbind(&dst->vbo);
 
     // instances
     
-    gbuf_init(&dst->vboi, NULL, 0, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+    glbuf_init(&dst->vboi, NULL, 0, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
 #if 0
     GLCall(glGenBuffers(1, &dst->gl_vboi));
@@ -47,7 +47,7 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
 #endif
 
     GLCall(glBindVertexArray(dst->gl_vao));
-    gbuf_bind(&dst->vboi);
+    glbuf_bind(&dst->vboi);
 
     shader_attr_push_mat4f_div_s(dst->shader, 0, struct ivert, trans);
 
@@ -57,7 +57,7 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
     GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, light_tex_idx);
 
-    gbuf_unbind(&dst->vboi);
+    glbuf_unbind(&dst->vboi);
 
     // set global rotation and translation.
 
@@ -130,9 +130,9 @@ int mesh_init_quad(struct mesh *dst, struct shader *shader){
 }
 
 void mesh_free(struct mesh *dst){
-    gbuf_free(&dst->vbo);
-    gbuf_free(&dst->ibo);
-    gbuf_free(&dst->vboi);
+    glbuf_free(&dst->vbo);
+    glbuf_free(&dst->ibo);
+    glbuf_free(&dst->vboi);
     GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
     darray_free(&dst->textures);
 }
@@ -176,6 +176,8 @@ int mesh_push(struct mesh *dst){
 }
 
 int mesh_draw(struct mesh *src){
+    shader_bind(src->shader);
+
     GLCall(glBindVertexArray(src->gl_vao));
 
     float mat_rot[16];
@@ -204,26 +206,27 @@ int mesh_draw(struct mesh *src){
 
 
     GLCall(glBindVertexArray(src->gl_vao));
-    gbuf_bind(&src->ibo);
+    glbuf_bind(&src->ibo);
     //GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
-    size_t count = gbuf_size(&src->ibo) / sizeof(float);
-    size_t count_inst = gbuf_size(&src->vboi) / sizeof(struct ivert);
+    size_t count = glbuf_size(&src->ibo) / sizeof(float);
+    size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
     GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
 
+    shader_unbind(src->shader);
     return 0;
 }
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src){
     GLCall(glBindVertexArray(dst->gl_vao));
-    return gbuf_append(&dst->vbo, &src, sizeof(struct vert));
+    return glbuf_append(&dst->vbo, &src, sizeof(struct vert));
 }
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
     GLCall(glBindVertexArray(dst->gl_vao));
-    gbuf_insert(&dst->vbo, &src, sizeof(struct vert), i * sizeof(struct vert));
-    struct tri *buf = malloc(gbuf_size(&dst->ibo));
-    gbuf_get(&dst->ibo, buf, 0, gbuf_size(&dst->ibo));
+    glbuf_insert(&dst->vbo, &src, sizeof(struct vert), i * sizeof(struct vert));
+    struct tri *buf = malloc(glbuf_size(&dst->ibo));
+    glbuf_get(&dst->ibo, buf, 0, glbuf_size(&dst->ibo));
 
-    for(size_t i = 0;i < gbuf_size(&dst->ibo) / sizeof(struct tri);i++){
+    for(size_t i = 0;i < glbuf_size(&dst->ibo) / sizeof(struct tri);i++){
         if(buf[i].idxs[0] >= i)
             buf[i].idxs[0]++;
         if(buf[i].idxs[1] >= i)
@@ -232,14 +235,14 @@ int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
             buf[i].idxs[2]++;
     }
 
-    gbuf_set(&dst->ibo, buf, 0, gbuf_size(&dst->ibo));
+    glbuf_set(&dst->ibo, buf, 0, glbuf_size(&dst->ibo));
 
     free(buf);
     return 0;
 }
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n){
     GLCall(glBindVertexArray(dst->gl_vao));
-    return gbuf_append(&dst->vbo, src, n * sizeof(struct vert));
+    return glbuf_append(&dst->vbo, src, n * sizeof(struct vert));
 }
 int mesh_append(struct mesh *dst, const struct mesh *src){
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -271,11 +274,11 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src){
     GLCall(glBindVertexArray(dst->gl_vao));
-    return gbuf_append(&dst->ibo, &src, sizeof(struct tri));
+    return glbuf_append(&dst->ibo, &src, sizeof(struct tri));
 }
 int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n){
     GLCall(glBindVertexArray(dst->gl_vao));
-    return gbuf_append(&dst->ibo, src, sizeof(struct tri) * n);
+    return glbuf_append(&dst->ibo, src, sizeof(struct tri) * n);
 }
 
 int mesh_texture_push(struct mesh *dst, struct texture src){
@@ -284,16 +287,16 @@ int mesh_texture_push(struct mesh *dst, struct texture src){
 }
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
     GLCall(glBindVertexArray(dst->gl_vao));
-    return gbuf_append(&dst->vboi, &src, sizeof(struct ivert));
+    return glbuf_append(&dst->vboi, &src, sizeof(struct ivert));
 }
 int mesh_iverts_clear(struct mesh *dst){
     GLCall(glBindVertexArray(dst->gl_vao));
-    gbuf_resize(&dst->vboi, 0);
+    glbuf_resize(&dst->vboi, 0);
     return 0;
 }
 int mesh_lvert_push_back(struct mesh *dst, struct lvert src){
     GLCall(glBindVertexArray(dst->gl_vao));
-    texture_resize(dst->lights, dst->lights->w + 1, dst->lights->h);
+    texture_resize_f32(dst->lights, dst->lights->w + 1, dst->lights->h);
     texture_set(dst->lights, dst->lights->w - 1, 0, src.pos);
     texture_set(dst->lights, dst->lights->w - 1, 1, src.color);
     return 0;

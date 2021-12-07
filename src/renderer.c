@@ -1,20 +1,19 @@
 #include "renderer.h"
 
-int renderer_init(struct renderer *dst){
+int renderer_init(struct renderer *dst, int w, int h){
     //darray_init(&dst->instances, 10);
+    dst->w = w;
+    dst->h = h;
     
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
+
+    target_init(&dst->t1, w, h, "shaders/gbuf/vert.glsl", "shaders/gbuf/frag.glsl");
 
     dst->scene = NULL;
     return 0;
 }
 void renderer_free(struct renderer *dst){
-#if 0
-    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
-        mesh_free(dst->meshes[i]);
-        free(dst->meshes[i]);
-    }
-#endif
+    target_free(&dst->t1);
     shader_free(&dst->shader);
 }
 
@@ -23,17 +22,6 @@ int renderer_push(struct renderer *dst){
     // - push all iverts from instances
     // - update all meshes
     
-#if 0
-    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
-        mesh_iverts_clear(dst->meshes[i]);
-    }
-    for(size_t i = 0;i < darray_len(&dst->instances);i++){
-        instance_push(dst->instances[i]);
-    }
-    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
-        mesh_push(dst->meshes[i]);
-    }
-#endif
     return 0;
 }
 
@@ -43,9 +31,13 @@ int renderer_render(struct renderer *src){
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUseProgram(src->shader.program);
+    target_bind(&src->t1);
 
     scene_draw(src->scene);
+
+    target_unbind(&src->t1);
+    
+    target_draw(&src->t1);
 
     glBindVertexArray(0);
     glUseProgram(0);
