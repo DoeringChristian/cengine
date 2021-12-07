@@ -6,9 +6,10 @@
 #include <GL/gl.h>
 #include "mesh.h"
 #include "shader.h"
+#include "scene.h"
 
 struct renderer{
-    darray(struct mesh *) meshes;
+    struct scene *scene;
 
     struct shader shader;
 };
@@ -19,6 +20,6 @@ void renderer_free(struct renderer *dst);
 int renderer_push(struct renderer *dst);
 int renderer_render(struct renderer *src);
 
-int renderer_mesh_push(struct renderer *dst, struct mesh *src);
+int renderer_scene_set(struct renderer *dst, struct scene *src);
 
 #endif //RENDERER_H

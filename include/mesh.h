@@ -57,7 +57,7 @@ struct mesh{
 
     struct shader *shader;
 
-    struct texture lights;
+    struct texture *lights;
 
     struct gbuf vbo;
     struct gbuf ibo;

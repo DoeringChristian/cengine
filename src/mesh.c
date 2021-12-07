@@ -75,7 +75,7 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
         1, 0, 0, 1,
         1, 1, 1, 1,
     };
-    texture_init(&dst->lights, 0, 2, light);
+    dst->lights = NULL;
 
     // init first instance
 # if 0
@@ -130,7 +130,6 @@ int mesh_init_quad(struct mesh *dst, struct shader *shader){
 }
 
 void mesh_free(struct mesh *dst){
-    texture_free(&dst->lights);
     gbuf_free(&dst->vbo);
     gbuf_free(&dst->ibo);
     gbuf_free(&dst->vboi);
@@ -196,10 +195,12 @@ int mesh_draw(struct mesh *src){
     }
 
     // add lights as texture
-    texture_bind(&src->lights, slot);
-    shader_uniform_i(src->shader, "u_lights", slot);
-    shader_uniform_i(src->shader, "u_lights_w", src->lights.w);
-    shader_uniform_i(src->shader, "u_lights_h", src->lights.h);
+    if(src->lights != NULL){
+        texture_bind(src->lights, slot);
+        shader_uniform_i(src->shader, "u_lights", slot);
+        shader_uniform_i(src->shader, "u_lights_w", src->lights->w);
+        shader_uniform_i(src->shader, "u_lights_h", src->lights->h);
+    }
 
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -292,9 +293,9 @@ int mesh_iverts_clear(struct mesh *dst){
 }
 int mesh_lvert_push_back(struct mesh *dst, struct lvert src){
     GLCall(glBindVertexArray(dst->gl_vao));
-    texture_resize(&dst->lights, dst->lights.w + 1, dst->lights.h);
-    texture_set(&dst->lights, dst->lights.w - 1, 0, src.pos);
-    texture_set(&dst->lights, dst->lights.w - 1, 1, src.color);
+    texture_resize(dst->lights, dst->lights->w + 1, dst->lights->h);
+    texture_set(dst->lights, dst->lights->w - 1, 0, src.pos);
+    texture_set(dst->lights, dst->lights->w - 1, 1, src.color);
     return 0;
 }
 

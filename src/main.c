@@ -15,6 +15,10 @@ int main(){
 
     mesh_init_quad(&mesh, &win.renderer.shader);
 
+    struct scene scene;
+    scene_init(&scene);
+    scene_mesh_push_back(&scene, &mesh);
+
 #if 0
     struct vert v1 = {
         .pos = {0, 0, 0},
@@ -72,10 +76,9 @@ int main(){
     mesh_lvert_push_back(&mesh, light0);
     mesh_lvert_push_back(&mesh, light1);
 
-    renderer_mesh_push(&win.renderer, &mesh);
-
-    renderer_push(&win.renderer);
+    //renderer_push(&win.renderer);
     //mesh_push(&mesh);
+    renderer_scene_set(&win.renderer, &scene);
 
     window_main(&win);
 
