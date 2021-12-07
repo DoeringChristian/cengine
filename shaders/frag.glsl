@@ -26,5 +26,7 @@ void main (void){
         //diff_color_sum += vec3(light_color);
     }
     o_color = texture(u_sampler[0], frag_uv) * vec4(diff_color_sum, 1.0);
+    //o_color = texture(u_lights, frag_uv) * vec4(diff_color_sum, 1.0);
+    //o_color = texture(u_lights, frag_uv);
     //o_color = texture(u_lights, vec2(0, 1));
 }

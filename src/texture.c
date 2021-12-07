@@ -50,18 +50,32 @@ int texture_load(struct texture *dst, const char *path){
 int texture_resize(struct texture *dst, int w, int h){
     if(w == dst->w && h == dst->h)
         return 0;
-    dst->w = w;
-    dst->h = h;
     dst->bpp = 4;
 
-    size_t buf_size = sizeof(float) * dst->w * dst->h * dst->bpp;
-    float *buf = malloc(buf_size);
-    memset(buf, 0, w * h * dst->bpp);
+    size_t buf_old_size = sizeof(float) * dst->w * dst->h * dst->bpp;
+    float *buf_old = malloc(buf_old_size);
+    size_t buf_new_size = sizeof(float) * w * h * dst->bpp;
+    float *buf_new = malloc(buf_new_size);
+    memset(buf_old, 0, buf_old_size);
 
     GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
-    GLCall(glGetnTexImage(GL_TEXTURE_2D, 0, GL_RGBA32F, GL_FLOAT, buf_size, buf));
+    GLCall(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, buf_old));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, buf));
+    for(size_t i = 0;i < dst->w;i++){
+        for(size_t j = 0;j < dst->h;j++){
+            if(i < dst->w && j < dst->h){
+                for(size_t k = 0;k < dst->bpp;k++){
+                    buf_new[k + dst->bpp * (i + j*w)] = buf_old[k + dst->bpp * (i + j*dst->w)];
+                }
+            }
+        }
+    }
+
+    // color is copied to false location
+    //printf("%i %f\n", dst->w, buf_old[5]);
+
+    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
+    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, buf_new));
 
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
@@ -70,7 +84,10 @@ int texture_resize(struct texture *dst, int w, int h){
 
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
-    free(buf);
+    dst->w = w;
+    dst->h = h;
+    free(buf_old);
+    free(buf_new);
     return 0;
 }
 void texture_free(struct texture *dst){

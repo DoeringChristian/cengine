@@ -72,6 +72,7 @@ int gbuf_insert(struct gbuf *dst, void *src, GLsizei size, size_t offset){
 }
 
 int gbuf_resize(struct gbuf *dst, GLsizei size){
+    // need to change
     void *buf = malloc(dst->gl_buf_size + size);
     memset(buf, 0, dst->gl_buf_size + size);
 

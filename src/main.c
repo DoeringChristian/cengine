@@ -62,8 +62,8 @@ int main(){
     mesh_texture_push(&mesh, tex1);
 
     struct lvert light0 = {
-        .pos = {-1, 0, 0.1, 1},
-        .color = {1, 1, 1, 1},
+        .pos = {1, 1, 0.1, 1},
+        .color = {0, 1, 1, 1},
     };
     struct lvert light1 = {
         .pos = {1, 0, 0.1, 1},
