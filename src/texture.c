@@ -102,7 +102,7 @@ void texture_free(struct texture *dst){
 
 void texture_bind(struct texture *dst, GLuint slot){
     GLCall(glActiveTexture(GL_TEXTURE0 + slot));
-    glBindTexture(GL_TEXTURE_2D, dst->gl_tex);
+    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
 }
 int texture_set(struct texture *dst, int x, int y, float *src){
     GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
@@ -110,3 +110,7 @@ int texture_set(struct texture *dst, int x, int y, float *src){
     return 0;
 }
 
+int textures_unbind(){
+    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    return 0;
+}

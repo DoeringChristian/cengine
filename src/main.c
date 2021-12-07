@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include "window.h"
 #include "mesh.h"
+#include "primitives.h"
 
 int main(){
     struct window win;

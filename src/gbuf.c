@@ -15,10 +15,17 @@ int gbuf_init(struct gbuf *dst, int w, int h, const char *path_vert, const char 
     GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->pos.gl_tex, 0));
 
     texture_init_f32(&dst->normal, w, h, NULL);
-    GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->normal.gl_tex, 0));
+    GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, dst->normal.gl_tex, 0));
 
     texture_init_f32(&dst->color, w, h, NULL);
-    GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->pos.gl_tex, 0));
+    GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, dst->color.gl_tex, 0));
+
+    textures_unbind();
+
+    GLCall(glGenRenderbuffers(1, &dst->gl_rbo));
+    GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
+    GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h));
+    GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
 
     GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dst->gl_rbo));
 
@@ -35,7 +42,7 @@ int gbuf_init(struct gbuf *dst, int w, int h, const char *path_vert, const char 
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
-    // output siede
+    // output side
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -91,7 +98,7 @@ int gbuf_draw_debug(struct gbuf *dst){
     texture_bind(&dst->normal, 1);
     shader_uniform_i(&dst->shader, "u_noraml", 1);
 
-    texture_bind(&dst->pos, 2);
+    texture_bind(&dst->color, 2);
     shader_uniform_i(&dst->shader, "u_color", 2);
 
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -100,6 +107,7 @@ int gbuf_draw_debug(struct gbuf *dst){
 
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
 
+    textures_unbind();
     glbuf_unbind(&dst->ibo);
     GLCall(glBindVertexArray(0));
     shader_unbind(&dst->shader);

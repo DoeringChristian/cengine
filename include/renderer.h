@@ -8,6 +8,7 @@
 #include "shader.h"
 #include "scene.h"
 #include "layer.h"
+#include "gbuf.h"
 
 struct renderer{
     int w, h;
@@ -17,6 +18,7 @@ struct renderer{
     struct shader shader;
 
     struct layer l1;
+    struct gbuf gbuf;
 };
 
 int renderer_init(struct renderer *dst, int w, int h);

@@ -5,7 +5,9 @@ in vec4 frag_normal;
 in vec4 frag_color;
 in vec2 frag_uv;
 
-out vec4 o_color;
+layout (location = 0) out vec4 o_pos;
+layout (location = 1) out vec4 o_normal;
+layout (location = 2) out vec4 o_color;
 
 uniform sampler2D u_sampler[10];
 uniform sampler2D u_lights;
@@ -13,20 +15,9 @@ uniform int u_lights_w;
 uniform int u_lights_h;
 
 void main (void){
-    vec3 diff_color_sum = vec3(0, 0, 0);
-    for(int i = 0;i < u_lights_w;i++){
-        vec3 light_pos = vec3(texture(u_lights, vec2(i / (u_lights_w - 1), 0 / (u_lights_h - 1))));
-        vec4 light_color = vec4(texture(u_lights, vec2(i / (u_lights_w - 1), 1 / (u_lights_h - 1))));
+    o_pos = frag_pos;
 
-        vec3 dir = normalize(light_pos - vec3(frag_pos));
-        float diff = max(dot(vec3(frag_normal), dir), 0);
-        float light_strength = light_color[3];
-        vec3 diff_color = diff * vec3(light_color) * light_strength;
-        diff_color_sum += diff_color;
-        //diff_color_sum += vec3(light_color);
-    }
-    o_color = texture(u_sampler[0], frag_uv) * vec4(diff_color_sum, 1.0);
-    //o_color = texture(u_lights, frag_uv) * vec4(diff_color_sum, 1.0);
-    //o_color = texture(u_lights, frag_uv);
-    //o_color = texture(u_lights, vec2(0, 1));
+    o_normal = normalize(frag_normal);
+
+    o_color = texture(u_sampler[0], frag_uv);
 }

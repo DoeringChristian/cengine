@@ -54,7 +54,6 @@ struct mesh{
 };
 
 int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len);
-int mesh_init_quad(struct mesh *dst, struct shader *shader);
 void mesh_free(struct mesh *dst);
 
 int mesh_push(struct mesh *dst);

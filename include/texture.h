@@ -29,4 +29,6 @@ void texture_bind(struct texture *dst, GLuint slot);
 
 int texture_set(struct texture *dst, int x, int y, float *src);
 
+int textures_unbind();
+
 #endif //TEXTURE_H
