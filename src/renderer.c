@@ -72,7 +72,8 @@ int renderer_render(struct renderer *src){
 
 #if 1
     // clear the summ of lightess maps
-    layer_clear(&src->light_sum);
+    layer_bind(&src->light_sum);
+    layer_unbind(&src->light_sum);
 
     for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
         // render the albedo of the gbuf to the light layer
