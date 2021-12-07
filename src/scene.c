@@ -2,21 +2,19 @@
 
 int scene_init(struct scene *dst){
     darray_init(&dst->meshes, 10);
+    darray_init(&dst->lights, 10);
 
     dst->shader = NULL;
-
-    texture_init_f32(&dst->lights, 0, 2, NULL);
 
     return 0;
 }
 void scene_free(struct scene *dst){
     darray_free(&dst->meshes);
-    texture_free(&dst->lights);
+    darray_free(&dst->lights);
 }
 
 int scene_mesh_push_back(struct scene *dst, struct mesh *src){
     darray_push_back(&dst->meshes, src);
-    src->lights = &dst->lights;
     return 0;
 }
 
@@ -27,4 +25,7 @@ int scene_draw(struct scene *dst){
         mesh_draw(dst->meshes[i]);
     }
     return 0;
+}
+int scene_lvert_push(struct scene *dst, struct lvert src){
+    return darray_push_back(&dst->lights, src);
 }

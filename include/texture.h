@@ -32,6 +32,9 @@ int texture_resize_f32(struct texture *dst, int w, int h);
 void texture_bind(struct texture *dst, GLuint slot);
 
 int texture_set(struct texture *dst, int x, int y, float *src);
+int texture_set_rect(struct texture *dst, int x, int y, int w, int h, float *src);
+
+int texture_fill(struct texture *dst, float *color);
 
 int textures_unbind();
 

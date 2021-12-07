@@ -17,8 +17,14 @@ struct renderer{
 
     struct shader shader;
 
-    struct layer l1;
     struct gbuf gbuf;
+
+    struct shader shader_sum;
+    struct shader shader_forward;
+
+    struct layer light;
+    struct layer light_sum;
+    struct layer light_tmp;
 };
 
 int renderer_init(struct renderer *dst, int w, int h);

@@ -37,7 +37,7 @@ struct mesh{
 
     struct shader *shader;
 
-    struct texture *lights;
+    //struct texture *lights;
 
     struct glbuf vbo;
     struct glbuf ibo;
@@ -67,8 +67,6 @@ int mesh_append(struct mesh *dst, const struct mesh *src);
 
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
 int mesh_iverts_clear(struct mesh *dst);
-
-int mesh_lvert_push_back(struct mesh *dst, struct lvert src);
 
 int mesh_texture_push(struct mesh *dst, struct texture src);
 

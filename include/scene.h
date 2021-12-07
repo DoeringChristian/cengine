@@ -8,10 +8,9 @@
 
 struct scene{
     darray(struct mesh *) meshes;
+    darray(struct lvert) lights;
 
     struct shader *shader;
-
-    struct texture lights;
 };
 
 int scene_init(struct scene *dst);
@@ -20,5 +19,7 @@ void scene_free(struct scene *dst);
 int scene_mesh_push_back(struct scene *dst, struct mesh *src);
 
 int scene_draw(struct scene *dst);
+
+int scene_lvert_push(struct scene *dst, struct lvert src);
 
 #endif //SCENEH_H

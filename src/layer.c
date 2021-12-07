@@ -117,7 +117,7 @@ int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struc
     texture_bind(&src1->texture, 0);
     shader_uniform_i(bshader, "u_texture1", 0);
 
-    texture_bind(&src1->texture, 1);
+    texture_bind(&src2->texture, 1);
     shader_uniform_i(bshader, "u_texture2", 1);
 
     GLCall(glBindVertexArray(src1->gl_vao));
@@ -136,5 +136,12 @@ int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struc
 }
 int layer_shader_load(struct layer *dst, const char *vert_path, const char *frag_path){
     shader_load(&dst->shader, vert_path, frag_path);
+    return 0;
+}
+int layer_clear(struct layer *dst){
+    float color_black[4] = {
+        0, 0, 0, 0,
+    };
+    texture_fill(&dst->texture, color_black);
     return 0;
 }

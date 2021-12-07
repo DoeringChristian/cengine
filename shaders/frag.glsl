@@ -10,9 +10,6 @@ layout (location = 1) out vec4 o_normal;
 layout (location = 2) out vec4 o_color;
 
 uniform sampler2D u_sampler[10];
-uniform sampler2D u_lights;
-uniform int u_lights_w;
-uniform int u_lights_h;
 
 void main (void){
     o_pos = frag_pos;

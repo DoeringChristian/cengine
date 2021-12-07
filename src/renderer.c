@@ -5,19 +5,32 @@ int renderer_init(struct renderer *dst, int w, int h){
     dst->w = w;
     dst->h = h;
     
+
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
-    layer_init_shader(&dst->l1, w, h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
+    gbuf_init_shader(&dst->gbuf, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
 
-    gbuf_init(&dst->gbuf, w, h);
+    shader_load(&dst->shader_forward, "shaders/layer/frag.glsl", "shaders/layer/frag.glsl");
+
+#if 1
+    layer_init_shader(&dst->light, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
+    layer_init_shader(&dst->light_sum, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
+    layer_init_shader(&dst->light_tmp, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
+#endif
+
+#if 0
+    layer_init(&dst->light, w, h);
+    layer_init(&dst->light_sum, w, h);
+    layer_init(&dst->light_tmp, w, h);
+#endif
+
+    shader_load(&dst->shader_sum, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_add.glsl");
 
     dst->scene = NULL;
     return 0;
 }
 void renderer_free(struct renderer *dst){
-    layer_free(&dst->l1);
     shader_free(&dst->shader);
-    layer_free(&dst->l1);
     gbuf_free(&dst->gbuf);
 }
 
@@ -43,27 +56,81 @@ int renderer_render(struct renderer *src){
         1, 1, 1, 1,
     };
 
-    struct shader light_shader;
-    shader_load(&light_shader, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
-    struct lvert light = {
+    struct lvert light0 = {
         .pos = {1, 1, 1, 1},
         .color = {1, 0, 0, 1},
     };
+    struct lvert light1 = {
+        .pos = {-1, -1, 1, 1},
+        .color = {0, 1, 0, 1},
+    };
 
-    struct shader layer_shader;
-    shader_load(&layer_shader, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
-
+    // render the scene to the gbuf
     gbuf_bind(&src->gbuf);
     scene_draw(src->scene);
     gbuf_unbind(&src->gbuf);
 
-    gbuf_draw_shader(&src->gbuf, &light_shader, light);
+#if 1
+    // clear the summ of lightess maps
+    layer_clear(&src->light_sum);
 
+    for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
+        // render the albedo of the gbuf to the light layer
+        layer_bind(&src->light);
+        gbuf_draw(&src->gbuf, src->scene->lights[i]);
+        layer_unbind(&src->light);
+
+        // sum the lightness map with all previous. and store it into the tmp layer.
+        
+        layer_blend(&src->light_tmp, &src->light_sum, &src->light, &src->shader_sum);
+
+        // copy it to the light sum layer
+        layer_bind(&src->light_sum);
+        layer_draw(&src->light_tmp);
+        layer_unbind(&src->light_sum);
+
+    }
+#endif
+
+# if 0
+    struct layer tmp;
+    layer_init_shader(&tmp, src->w, src->h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
+
+    layer_bind(&src->light);
+    gbuf_draw(&src->gbuf, light0);
+    layer_unbind(&src->light);
+
+    layer_blend(&tmp, &src->light_sum, &src->light, &src->shader_sum);
+
+    layer_bind(&src->light_sum);
+    layer_draw(&tmp);
+    layer_unbind(&src->light_sum);
+
+
+#if 1
+
+    layer_bind(&src->light);
+    gbuf_draw(&src->gbuf, light1);
+    layer_unbind(&src->light);
+
+    layer_blend(&tmp, &src->light_sum, &src->light, &src->shader_sum);
+
+    layer_bind(&src->light_sum);
+    layer_draw(&tmp);
+    layer_unbind(&src->light_sum);
+#endif
+#endif
+
+    // draw the lightness map
+    //layer_draw_shader(&src->light_sum, &src->shader_forward);
+    layer_draw(&src->light_sum);
+
+    //layer_clear(&src->light_sum);
 
     //layer_bind(&src->l1);
     //layer_unbind(&src->l1);
 
-    layer_draw_shader(&src->l1, &layer_shader);
+    //layer_draw_shader(&src->l1, &layer_shader);
 
     glBindVertexArray(0);
     glUseProgram(0);

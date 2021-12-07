@@ -126,3 +126,18 @@ int textures_unbind(){
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
     return 0;
 }
+int texture_set_rect(struct texture *dst, int x, int y, int w, int h, float *src){
+    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
+    GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, w, h, GL_RGBA, GL_FLOAT, src));
+    return 0;
+}
+
+int texture_fill(struct texture *dst, float *color){
+
+    for(size_t i = 0;i < dst->w;i++){
+        for(size_t j = 0;j < dst->h;j++){
+            texture_set(dst, i, j, color);
+        }
+    }
+    return 0;
+}
