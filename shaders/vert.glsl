@@ -7,7 +7,7 @@ layout(location = 2) in vec4 i_color;
 layout(location = 3) in vec2 i_uv;
 
 // instance data
-layout(location = 4) in mat4 i_trans;
+layout(location = 4) in mat4 i_instance;
 layout(location = 8) in float i_tex_idx_offset;
 
 out vec4 frag_pos;
@@ -16,12 +16,12 @@ out vec4 frag_color;
 out vec2 frag_uv;
 
 // global mesh transforms
-uniform mat4 u_trans;
+uniform mat4 u_model;
 uniform mat4 u_proj;
 uniform mat4 u_view;
 
 void main (void){
-    mat4 mv_matrix = u_proj * u_view * i_trans * u_trans;
+    mat4 mv_matrix = u_proj * u_view * i_instance * u_model;
     mat3 norm_matrix = transpose(inverse(mat3(mv_matrix)));
     frag_pos = mv_matrix * vec4(i_pos, 1.0);
     gl_Position = mv_matrix * vec4(i_pos, 1.0);

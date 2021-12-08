@@ -2,17 +2,15 @@
 
 struct cvert cvert(int w, int h, float fov){
     struct cvert dst;
-    glm_perspective(fov, (float)w/(float)h, 0.1, 100, dst.proj);
+    dst.far = 100;
+    glm_perspective(fov, (float)w/(float)h, 0.1, dst.far, dst.proj);
     glm_mat4_identity(dst.view);
     return dst;
 }
 
 int cvert_init(struct cvert *dst, int w, int h, float fov){
-    //mat4_perspective_fov(dst->mat, fov, (float)w, (float)h, 0.1, 1000.0);
-    //mat4_ortho(dst->mat, 0, 1, 0, 1, 0.1, 100);
-    //mat4_perspective(dst->mat, to_radians(45), (float)w/(float)h, 0.1, 100);
-    //mat4_perspective_fov_t(dst->mat, fov, (float)w / (float)h, 0.1, 100);
-    glm_perspective(fov, (float)w / (float)h, 0.1, 100, dst->proj);
+    dst->far = 100;
+    glm_perspective(fov, (float)w / (float)h, 0.1, dst->far, dst->proj);
     glm_mat4_identity(dst->view);
 #if 0
     for(size_t i = 0;i < 16;i++){

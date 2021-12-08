@@ -6,8 +6,10 @@ int layer_init_shader(struct layer *dst, int w, int h, const char *vert_path, co
     return 0;
 }
 int layer_init(struct layer *dst, int w, int h){
-    dst->w = w;
-    dst->h = h;
+    dst->s = w;
+    dst->t = h;
+    dst->r = 0;
+    dst->type = LAYER_TYPE_2D;
     dst->shader = (struct shader){
         .attr_idx = 0,
         .program = 0,
@@ -61,6 +63,73 @@ int layer_init(struct layer *dst, int w, int h){
 
     return 0;
 }
+int layer_init_cube(struct layer *dst, int size){
+    dst->s = size;
+    dst->t = size;
+    dst->r = size;
+    dst->type = LAYER_TYPE_CM;
+    dst->shader = (struct shader){
+        .attr_idx = 0,
+        .program = 0,
+    };
+
+    // input side
+    
+    GLCall(glGenFramebuffers(1, &dst->gl_fbo));
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
+
+    //texture_init_f32(&dst->texture, w, h, NULL);
+    texture_init_f32_cube(&dst->texture, dst->s, dst->t, dst->r, NULL);
+
+    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->texture.gl_tex, 0);
+    GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->gl_fbo, 0));
+    GLCall(glDrawBuffer(GL_NONE));
+    GLCall(glReadBuffer(GL_NONE));
+
+#if 1
+    GLCall(glGenRenderbuffers(1, &dst->gl_rbo));
+    GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
+    GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, dst->s, dst->t));
+    GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+    GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dst->gl_rbo));
+
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        return -1;
+
+    GLuint attachments[1] = {
+        GL_COLOR_ATTACHMENT0,
+    };
+
+    glDrawBuffers(1, attachments);
+
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+#endif
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+#if 0
+
+    // output side
+
+    GLCall(glGenVertexArrays(1, &dst->gl_vao));
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+
+    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+
+    glbuf_bind(&dst->vbo);
+
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
+
+    glbuf_unbind(&dst->vbo);
+
+    GLCall(glBindVertexArray(0));
+#endif
+
+    return 0;
+}
 void layer_free(struct layer *dst){
     texture_free(&dst->texture);
     GLCall(glDeleteFramebuffers(1, &dst->gl_fbo));
@@ -70,9 +139,11 @@ void layer_free(struct layer *dst){
     glbuf_free(&dst->ibo);
 }
 int layer_bind(struct layer *dst){
+    GLCall(glViewport(0, 0, dst->s, dst->t));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
     GLCall(glEnable(GL_DEPTH_TEST));
 
     return 0;
@@ -93,10 +164,38 @@ int layer_draw(struct layer *dst){
 int layer_draw_shader(struct layer *dst, struct shader *shader){
     if(shader == NULL && dst->shader.program != 0)
         shader = &dst->shader;
+    if(dst->type != LAYER_TYPE_2D)
+        return 1;
+
     shader_bind(shader);
 
     texture_bind(&dst->texture, 0);
     shader_uniform_i(shader, "u_texture", 0);
+
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_bind(&dst->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+
+    glbuf_unbind(&dst->ibo);
+    GLCall(glBindVertexArray(0));
+    shader_unbind(shader);
+    return 0;
+}
+int layer_draw_shader_tex(struct layer *dst, struct shader *shader, struct texture *tex){
+    if(shader == NULL && dst->shader.program != 0)
+        shader = &dst->shader;
+    if(dst->type != GL_TEXTURE_2D)
+        return 1;
+
+    shader_bind(shader);
+
+    texture_bind(&dst->texture, 0);
+    shader_uniform_i(shader, "u_texture1", 0);
+
+    texture_bind(tex, 1);
+    shader_uniform_i(shader, "u_texture2", 1);
 
     GLCall(glBindVertexArray(dst->gl_vao));
 

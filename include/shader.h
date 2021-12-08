@@ -26,6 +26,7 @@ struct shader{
 };
 
 int shader_load(struct shader *dst, const char *vert_path, const char *frag_path);
+int shader_load_vgf(struct shader *dst, const char *vert_path, const char *geo_path, const char *frag_path);
 void shader_free(struct shader *dst);
 
 int shader_attach(struct shader *dst, const char *path, int shader_type);

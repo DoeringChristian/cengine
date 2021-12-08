@@ -73,7 +73,7 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     glm_quat_mat4(src->rot, mat_tmp);
     glm_translate(mat_tmp, src->pos);
 
-    shader_uniform_mat4f(shader, "u_trans", (float *)mat_tmp);
+    shader_uniform_mat4f(shader, "u_model", (float *)mat_tmp);
 
     shader_uniform_mat4f(shader, "u_proj", (float *)camera->proj);
 
@@ -95,6 +95,42 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     size_t count = glbuf_size(&src->ibo) / sizeof(float);
     size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
     GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
+
+    shader_unbind(shader);
+    return 0;
+}
+
+int mesh_draw_shadow_cm(struct mesh *src, struct cvert *cameras, struct shader *shader, struct lvert *light){
+    shader_bind(shader);
+
+    GLCall(glBindVertexArray(src->gl_vao));
+
+    mat4 mat_tmp;
+    
+    glm_quat_mat4(src->rot, mat_tmp);
+    glm_translate(mat_tmp, src->pos);
+
+    shader_uniform_vec4f(shader, "u_light_pos", light->pos);
+
+    shader_uniform_f(shader, "u_far", cameras[0].far);
+
+    shader_uniform_mat4f(shader, "u_model", (float *)mat_tmp);
+
+    shader_uniform_mat4f(shader, "u_proj", (float *)cameras[0].proj);
+
+    for(size_t i = 0;i < 6;i++){
+        char buf[100] = {0};
+        snprintf(buf, 100, "u_view[%zu]", i);
+        shader_uniform_mat4f(shader, buf, (float *)cameras[i].view);
+    }
+
+    glbuf_bind(&src->ibo);
+
+    size_t count = glbuf_size(&src->ibo) / sizeof(float);
+    size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
+    GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
+
+    GLCall(glBindVertexArray(0));
 
     shader_unbind(shader);
     return 0;

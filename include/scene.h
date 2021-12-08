@@ -20,6 +20,7 @@ void scene_free(struct scene *dst);
 int scene_mesh_push_back(struct scene *dst, struct mesh *src);
 
 int scene_draw(struct scene *dst, struct cvert *camera, struct shader *shader);
+int scene_draw_shadow_cm(struct scene *dst, struct cvert *cameras, struct shader *shader, struct lvert *light);
 
 int scene_lvert_push(struct scene *dst, struct lvert src);
 

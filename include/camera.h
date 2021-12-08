@@ -7,6 +7,7 @@
 struct cvert{
     mat4 proj;
     mat4 view;
+    float far;
 };
 
 struct cvert cvert(int w, int h, float fov);

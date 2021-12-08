@@ -22,12 +22,15 @@ struct renderer{
 
     struct gbuf gbuf;
 
-    struct shader shader_sum;
+    struct shader shader_add;
+    struct shader shader_mul;
     struct shader shader_forward;
+    struct shader shader_shadow;
 
     struct layer light;
     struct layer light_sum;
     struct layer light_tmp;
+    struct layer shadow_cube;
 };
 
 int renderer_init(struct renderer *dst, int w, int h);

@@ -19,12 +19,15 @@ int scene_mesh_push_back(struct scene *dst, struct mesh *src){
 }
 
 int scene_draw(struct scene *dst, struct cvert *camera, struct shader *shader){
-    if(dst->shader == NULL)
-        return 1;
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
         mesh_draw(dst->meshes[i], camera, shader);
     }
     return 0;
+}
+int scene_draw_shadow_cm(struct scene *dst, struct cvert *cameras, struct shader *shader, struct lvert *light){
+    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
+        mesh_draw_shadow_cm(dst->meshes[i], cameras, shader, light);
+    }
 }
 int scene_lvert_push(struct scene *dst, struct lvert src){
     return darray_push_back(&dst->lights, src);

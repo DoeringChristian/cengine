@@ -97,6 +97,60 @@ int shader_load(struct shader *dst, const char *vert_path, const char *frag_path
 
     return 0;
 }
+int shader_load_vgf(struct shader *dst, const char *vert_path, const char *geo_path, const char *frag_path){
+    int status;
+    dst->program = glCreateProgram();
+
+    if(!dst->program){
+        printf("[Error creating program]\n");
+    }
+
+    GLuint vert, frag, geo;
+    _shader_load(&vert, vert_path, GL_VERTEX_SHADER);
+    _shader_load(&frag, frag_path, GL_FRAGMENT_SHADER);
+    _shader_load(&geo, geo_path, GL_GEOMETRY_SHADER);
+
+    glAttachShader(dst->program, vert);
+    glAttachShader(dst->program, frag);
+    glAttachShader(dst->program, geo);
+
+    glLinkProgram(dst->program);
+
+    glGetProgramiv(dst->program, GL_LINK_STATUS, &status);
+    if(status == GL_FALSE){
+        int log_len = 0;
+        glGetProgramiv(dst->program, GL_INFO_LOG_LENGTH, &log_len);
+
+        char buf[log_len +1];
+        glGetProgramInfoLog(dst->program, log_len, NULL, buf);
+
+        printf("[Error linking program] %s\n", buf);
+
+        glDetachShader(dst->program, vert);
+        glDetachShader(dst->program, frag);
+        glDetachShader(dst->program, geo);
+
+        glDeleteShader(vert);
+        glDeleteShader(frag);
+        glDeleteShader(geo);
+
+        glDeleteProgram(dst->program);
+        dst->program = 0;
+
+        return -1;
+    }
+    glDetachShader(dst->program, vert);
+    glDetachShader(dst->program, frag);
+    glDetachShader(dst->program, geo);
+
+    glDeleteShader(vert);
+    glDeleteShader(frag);
+    glDeleteShader(geo);
+
+    dst->attr_idx = 0;
+
+    return 0;
+}
 void shader_free(struct shader *dst){
     glDeleteProgram(dst->program);
     dst->program = 0;

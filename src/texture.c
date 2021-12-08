@@ -9,53 +9,99 @@ int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const 
     return 0;
 }
 int texture_init_f32(struct texture *dst, int w, int h, float *src){
-    dst->w = w;
-    dst->h = h;
+    dst->s = w;
+    dst->t = h;
+    dst->r = 0;
     dst->bpp = 4;
     dst->uname = NULL;
+    dst->type = GL_TEXTURE_2D;
 
     size_t buf_size;
     float *buf = NULL;
 
     if(src == NULL){
 
-        buf_size = sizeof(float) * dst->w * dst->h * dst->bpp;
+        buf_size = sizeof(float) * dst->s * dst->t * dst->bpp;
         buf = malloc(buf_size);
         memset(buf, 0, buf_size);
     }
 
     GLCall(glGenTextures(1, &dst->gl_tex));
-    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(dst->type, 0, GL_RGBA32F, dst->s, dst->t, 0, GL_RGBA, GL_FLOAT, src));
 
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    GLCall(glBindTexture(dst->type, 0));
+
+    free(buf);
+    return 0;
+}
+int texture_init_f32_cube(struct texture *dst, int s, int t, int r, float *src){
+    dst->s = s;
+    dst->t = t;
+    dst->r = r;
+    dst->bpp = 4;
+    dst->uname = NULL;
+    dst->type = GL_TEXTURE_CUBE_MAP;
+
+    size_t buf_size;
+    float *buf = NULL;
+
+#if 0
+    if(src == NULL){
+
+        buf_size = sizeof(float) * dst->bpp * (2*x*y + 2*y*z + 2*x*z);
+        buf = malloc(buf_size);
+        memset(buf, 0, buf_size);
+    }
+#endif
+
+    GLCall(glGenTextures(1, &dst->gl_tex));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
+
+    //GLCall(glTexImage2D(dst->type, 0, GL_RGBA32F, dst->x, dst->y, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA32F, dst->t, dst->r, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA32F, dst->t, dst->r, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA32F, dst->s, dst->r, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA32F, dst->s, dst->r, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA32F, dst->s, dst->t, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA32F, dst->s, dst->t, 0, GL_RGBA, GL_FLOAT, src));
+
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+
+    GLCall(glBindTexture(dst->type, 0));
 
     free(buf);
     return 0;
 }
 
 int texture_load(struct texture *dst, const char *path){
+    dst->type = GL_TEXTURE_2D;
+    dst->r = 0;
     stbi_set_flip_vertically_on_load(1);
 
-    uint8_t *buf = stbi_load(path, &dst->w, &dst->h, &dst->bpp, 4);
+    uint8_t *buf = stbi_load(path, &dst->s, &dst->t, &dst->bpp, 4);
 
     GLCall(glGenTextures(1, &dst->gl_tex));
-    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, dst->w, dst->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf));
+    GLCall(glTexImage2D(dst->type, 0, GL_RGBA8, dst->s, dst->t, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf));
 
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    GLCall(glBindTexture(dst->type, 0));
 
     if(buf)
         stbi_image_free(buf);
@@ -65,24 +111,24 @@ int texture_load(struct texture *dst, const char *path){
     return 0;
 }
 int texture_resize_f32(struct texture *dst, int w, int h){
-    if(w == dst->w && h == dst->h)
+    if(w == dst->s && h == dst->t)
         return 0;
     dst->bpp = 4;
 
-    size_t buf_old_size = sizeof(float) * dst->w * dst->h * dst->bpp;
+    size_t buf_old_size = sizeof(float) * dst->s * dst->t * dst->bpp;
     float *buf_old = malloc(buf_old_size);
     size_t buf_new_size = sizeof(float) * w * h * dst->bpp;
     float *buf_new = malloc(buf_new_size);
     memset(buf_old, 0, buf_old_size);
 
-    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
-    GLCall(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, buf_old));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
+    GLCall(glGetTexImage(dst->type, 0, GL_RGBA, GL_FLOAT, buf_old));
 
-    for(size_t i = 0;i < dst->w;i++){
-        for(size_t j = 0;j < dst->h;j++){
-            if(i < dst->w && j < dst->h){
+    for(size_t i = 0;i < dst->s;i++){
+        for(size_t j = 0;j < dst->t;j++){
+            if(i < dst->s && j < dst->t){
                 for(size_t k = 0;k < dst->bpp;k++){
-                    buf_new[k + dst->bpp * (i + j*w)] = buf_old[k + dst->bpp * (i + j*dst->w)];
+                    buf_new[k + dst->bpp * (i + j*w)] = buf_old[k + dst->bpp * (i + j*dst->s)];
                 }
             }
         }
@@ -91,18 +137,18 @@ int texture_resize_f32(struct texture *dst, int w, int h){
     // color is copied to false location
     //printf("%i %f\n", dst->w, buf_old[5]);
 
-    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, buf_new));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
+    GLCall(glTexImage2D(dst->type, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, buf_new));
 
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    GLCall(glBindTexture(dst->type, 0));
 
-    dst->w = w;
-    dst->h = h;
+    dst->s = w;
+    dst->t = h;
     free(buf_old);
     free(buf_new);
     return 0;
@@ -114,11 +160,11 @@ void texture_free(struct texture *dst){
 
 void texture_bind(struct texture *dst, GLuint slot){
     GLCall(glActiveTexture(GL_TEXTURE0 + slot));
-    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
 }
 int texture_set(struct texture *dst, int x, int y, float *src){
-    GLCall(glBindTexture(GL_TEXTURE_2D, dst->gl_tex));
-    GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, 1, 1, GL_RGBA, GL_FLOAT, src));
+    GLCall(glBindTexture(dst->type, dst->gl_tex));
+    GLCall(glTexSubImage2D(dst->type, 0, x, y, 1, 1, GL_RGBA, GL_FLOAT, src));
     return 0;
 }
 
@@ -134,8 +180,8 @@ int texture_set_rect(struct texture *dst, int x, int y, int w, int h, float *src
 
 int texture_fill(struct texture *dst, float *color){
 
-    for(size_t i = 0;i < dst->w;i++){
-        for(size_t j = 0;j < dst->h;j++){
+    for(size_t i = 0;i < dst->s;i++){
+        for(size_t j = 0;j < dst->t;j++){
             texture_set(dst, i, j, color);
         }
     }
