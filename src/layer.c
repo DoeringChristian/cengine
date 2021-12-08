@@ -79,7 +79,7 @@ int layer_init_cube(struct layer *dst, int size){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
 
     //texture_init_f32(&dst->texture, w, h, NULL);
-    texture_init_f32_depthcube(&dst->texture, dst->s, dst->t, dst->r, NULL);
+    texture_init_f32_depthcube(&dst->texture, size, size, NULL);
 
     //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->texture.gl_tex, 0);
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
