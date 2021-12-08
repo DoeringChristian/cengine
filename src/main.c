@@ -67,6 +67,7 @@ int main(){
 
     mesh_ivert_push_back(&mesh, iv);
 
+    cvert_translate(&win.renderer.camera, (float []){0, 0, -1});
     
 #if 0
     for(size_t i = 0;i < 16;i++){

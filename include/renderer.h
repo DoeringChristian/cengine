@@ -16,7 +16,7 @@ struct renderer{
 
     struct scene *scene;
 
-    struct camera camera;
+    struct cvert camera;
 
     struct shader shader;
 

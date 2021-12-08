@@ -26,7 +26,7 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_sum, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_add.glsl");
 
-    camera_init(&dst->camera, w, h, 1);
+    cvert_init(&dst->camera, w, h, 1);
 
     dst->scene = NULL;
     return 0;
@@ -63,7 +63,6 @@ int renderer_render(struct renderer *src){
     scene_draw(src->scene, &src->camera, &src->shader);
     gbuf_unbind(&src->gbuf);
 
-#if 1
     // clear the summ of lightess maps
     layer_bind(&src->light_sum);
     layer_unbind(&src->light_sum);
@@ -71,7 +70,7 @@ int renderer_render(struct renderer *src){
     for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
         // calculate view projection of light
         struct lvert light_tmp = src->scene->lights[i];
-        glm_mat4_mulv(src->camera.mat, src->scene->lights[i].pos, light_tmp.pos);
+        glm_mat4_mulv(src->camera.proj, src->scene->lights[i].pos, light_tmp.pos);
         //vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
 
         // render the albedo of the gbuf to the light layer
@@ -89,8 +88,6 @@ int renderer_render(struct renderer *src){
         layer_unbind(&src->light_sum);
 
     }
-#endif
-
 
     // draw the lightness map
     //layer_draw_shader(&src->light_sum, &src->shader_forward);

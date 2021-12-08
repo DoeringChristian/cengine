@@ -63,45 +63,7 @@ void mesh_free(struct mesh *dst){
     darray_free(&dst->textures);
 }
 
-int mesh_push(struct mesh *dst){
-#if 0
-    GLCall(glBindVertexArray(dst->gl_vao));
-
-    if(dst->gl_vbo_size != darray_size(&dst->verts)){
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->verts), dst->verts, GL_DYNAMIC_DRAW));
-        dst->gl_vbo_size = darray_size(&dst->verts);
-    }
-    else{
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
-        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vbo_size, dst->verts));
-    }
-
-    if(dst->gl_ibo_size != darray_size(&dst->tris)){
-        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
-        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, darray_size(&dst->tris), dst->tris, GL_DYNAMIC_DRAW));
-        dst->gl_ibo_size = darray_size(&dst->tris);
-    }
-    else{
-        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
-        GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, dst->gl_ibo_size, dst->tris));
-    }
-
-    if(dst->gl_vboi_size != darray_size(&dst->verts)){
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, darray_size(&dst->iverts), dst->iverts, GL_DYNAMIC_DRAW));
-        dst->gl_vboi_size = darray_size(&dst->iverts);
-    }
-    else{
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
-        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, dst->gl_vboi_size, dst->iverts));
-    }
-
-#endif
-    return 0;
-}
-
-int mesh_draw(struct mesh *src, struct camera *camera, struct shader *shader){
+int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     shader_bind(shader);
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -113,7 +75,9 @@ int mesh_draw(struct mesh *src, struct camera *camera, struct shader *shader){
 
     shader_uniform_mat4f(shader, "u_trans", (float *)mat_tmp);
 
-    shader_uniform_mat4f(shader, "u_proj", (float *)camera->mat);
+    shader_uniform_mat4f(shader, "u_proj", (float *)camera->proj);
+
+    shader_uniform_mat4f(shader, "u_view", (float *)camera->view);
 
     size_t slot = 0;
 
@@ -123,16 +87,6 @@ int mesh_draw(struct mesh *src, struct camera *camera, struct shader *shader){
         snprintf(buf, 100, "u_sampler[%zu]", slot);
         shader_uniform_i(shader, buf, slot);
     }
-
-    // add lights as texture
-#if 0
-    if(src->lights != NULL){
-        texture_bind(src->lights, slot);
-        shader_uniform_i(src->shader, "u_lights", slot);
-        shader_uniform_i(src->shader, "u_lights_w", src->lights->w);
-        shader_uniform_i(src->shader, "u_lights_h", src->lights->h);
-    }
-#endif
 
 
     GLCall(glBindVertexArray(src->gl_vao));

@@ -41,7 +41,7 @@ int mesh_init_cmesh(struct mesh *dst, struct cmesh *src);
 void mesh_free(struct mesh *dst);
 
 int mesh_push(struct mesh *dst);
-int mesh_draw(struct mesh *src, struct camera *camera, struct shader *shader);
+int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader);
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src);
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);

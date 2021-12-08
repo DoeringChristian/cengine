@@ -4,11 +4,16 @@
 #include <stdio.h>
 #include "cglm/cglm.h"
 
-struct camera{
-    mat4 mat;
+struct cvert{
+    mat4 proj;
+    mat4 view;
 };
 
-int camera_init(struct camera *dst, int w, int h, float fov);
-void camera_free(struct camera *dst);
+struct cvert cvert(int w, int h, float fov);
+int cvert_init(struct cvert *dst, int w, int h, float fov);
+void camera_free(struct cvert *dst);
+
+void cvert_translate(struct cvert *dst, vec3 pos);
+void cvert_rotate(struct cvert *dst, vec3 axis, float angle);
 
 #endif //CAMERA_H

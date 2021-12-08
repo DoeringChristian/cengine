@@ -23,7 +23,7 @@ void main (void){
 
     // assume the camera is located at (0, 0, 0)
     vec3 view_dir = pos;
-    vec3 light_dir_reflected = reflect(-vec3(light_dir), normal);
+    vec3 light_dir_reflected = reflect(vec3(light_dir), normal);
 
     float spec = pow(max(dot(view_dir, light_dir_reflected), 0.0), 32);
     vec3 specular = spec_strength * spec * vec3(u_light_color);

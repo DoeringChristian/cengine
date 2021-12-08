@@ -18,9 +18,10 @@ out vec2 frag_uv;
 // global mesh transforms
 uniform mat4 u_trans;
 uniform mat4 u_proj;
+uniform mat4 u_view;
 
 void main (void){
-    mat4 mv_matrix = u_proj * i_trans * u_trans;
+    mat4 mv_matrix = u_proj * u_view * i_trans * u_trans;
     mat3 norm_matrix = transpose(inverse(mat3(mv_matrix)));
     frag_pos = mv_matrix * vec4(i_pos, 1.0);
     gl_Position = mv_matrix * vec4(i_pos, 1.0);
