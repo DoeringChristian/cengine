@@ -43,13 +43,5 @@ void main (void){
     vec3 specular = spec_strength * spec * vec3(u_light_color);
 
     vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color);
-    o_color = vec4((specular + diffuse) * color, 1);
-    //o_color = vec4(shadow(pos), 0, 0, 1);
-    //o_color = vec4(vec3(texture(u_shadow, vec3(u_light_pos) - pos)), 1);
-    //o_color = vec4(1, 0, 0, 1);
-    //o_color = vec4(normal, 1);
-    // ned to remove mabient light form light pass.
-    //o_color = vec4((specular + diffuse + 0.1) * color, 1);
-    //o_color = vec4(dot(normal, light_dir), -dot(normal, light_dir), 0, 1);
-    //o_color = vec4(color, 1);
+    o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color, 1);
 }

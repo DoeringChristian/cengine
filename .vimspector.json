@@ -1,0 +1,14 @@
+{
+    "configurations":{
+        "Launch":{
+            "adapter": "vscode-cpptools",
+            "configuration": {
+                "request": "launch",
+                "program": "build/cengine",
+                "cwd": "${workspaceFolder}",
+                "externalConsole": true,
+                "MiMode": "gdb"
+            }
+        }
+    }
+}

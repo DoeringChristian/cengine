@@ -10,6 +10,7 @@
 #include "layer.h"
 #include "gbuf.h"
 #include "camera.h"
+#include "cubelayer.h"
 
 struct renderer{
     int w, h;
@@ -31,6 +32,7 @@ struct renderer{
     struct layer light_sum;
     struct layer light_tmp;
     struct layer shadow_cube;
+    struct cubelayer cl_shadow;
 };
 
 int renderer_init(struct renderer *dst, int w, int h);

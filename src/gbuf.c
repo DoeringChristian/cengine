@@ -92,13 +92,13 @@ int gbuf_unbind(struct gbuf *dst){
     return 0;
 }
 
-int gbuf_draw(struct gbuf *dst, struct lvert light, struct texture *shadowmap, struct cvert *camera){
+int gbuf_draw(struct gbuf *dst, struct lvert light, GLuint *shadowmap, struct cvert *camera){
     if(dst->shader.program == 0)
         return 1;
     gbuf_draw_shader(dst, &dst->shader, light, shadowmap, camera);
     return 0;
 }
-int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light, struct texture *shadowmap, struct cvert *camera){
+int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light, GLuint *shadowmap, struct cvert *camera){
     if(shader == NULL && dst->shader.program != 0)
         shader = &dst->shader;
     shader_bind(shader);
@@ -112,7 +112,9 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
     texture_bind(&dst->color, 2);
     shader_uniform_i(shader, "u_color", 2);
 
-    texture_bind(shadowmap, 3);
+    //texture_bind(shadowmap, 3);
+    GLCall(glActiveTexture(GL_TEXTURE0 + 3));
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, *shadowmap));
     shader_uniform_i(shader, "u_shadow", 3);
 
     shader_uniform_vec4f(shader, "u_light_pos", light.pos);
@@ -126,7 +128,8 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
 
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
 
-    texture_unbind(shadowmap);
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+
     glbuf_unbind(&dst->ibo);
     GLCall(glBindVertexArray(0));
     shader_unbind(shader);

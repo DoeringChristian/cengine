@@ -26,6 +26,7 @@ int renderer_init(struct renderer *dst, int w, int h){
     layer_init_shader(&dst->light_tmp, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
 
     layer_init_cube(&dst->shadow_cube, SHADOW_SIZE);
+    cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
 #endif
 
 #if 0
@@ -82,18 +83,31 @@ int renderer_render(struct renderer *src){
         cvert_init(&cm_cameras[0], 1, 1, M_PI/2);
         glm_perspective(M_PI/2, 1, 0.1, 100, cm_cameras[0].proj);
 
-        glm_lookat(src->scene->lights[i].pos, (float []){1, 0, 0}, (float []){0, -1, 0}, cm_cameras[0].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){-1, 0, 0}, (float []){0, -1, 0}, cm_cameras[1].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, 1, 0}, (float []){0, 0, 1}, cm_cameras[2].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, -1, 0}, (float []){0, 0, 1}, cm_cameras[3].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, 0, 1}, (float []){0, -1, 0}, cm_cameras[4].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, 0, -1}, (float []){0, -1, 0}, cm_cameras[5].view);
+        glm_look(src->scene->lights[i].pos, (float []){1, 0, 0}, (float []){0, -1, 0}, cm_cameras[0].view);
+        glm_look(src->scene->lights[i].pos, (float []){-1, 0, 0}, (float []){0, -1, 0}, cm_cameras[1].view);
+        glm_look(src->scene->lights[i].pos, (float []){0, 1, 0}, (float []){0, 0, 1}, cm_cameras[2].view);
+        glm_look(src->scene->lights[i].pos, (float []){0, -1, 0}, (float []){0, 0, 1}, cm_cameras[3].view);
+        glm_look(src->scene->lights[i].pos, (float []){0, 0, 1}, (float []){0, -1, 0}, cm_cameras[4].view);
+        glm_look(src->scene->lights[i].pos, (float []){0, 0, -1}, (float []){0, -1, 0}, cm_cameras[5].view);
         
+#if 0
+        for(size_t k = 0;k < 6;k++){
+            for(size_t j = 0;j < 16;j++){
+                printf("%f ", ((float *)cm_cameras[k].view)[j]);
+                if((j + 1) % 4 == 0)
+                    printf("\n");
+            }
+            printf("\n");
+        }
+        printf("\n");
+#endif
 
 #if 1
-        layer_bind(&src->shadow_cube);
+        //layer_bind(&src->shadow_cube);
+        cubelayer_bind(&src->cl_shadow);
         scene_draw_shadow_cm(src->scene, cm_cameras, &src->shader_shadow, &src->scene->lights[i]);
-        layer_unbind(&src->shadow_cube);
+        cubelayer_unbind(&src->cl_shadow);
+        //layer_unbind(&src->shadow_cube);
 #endif
 
 
@@ -105,7 +119,7 @@ int renderer_render(struct renderer *src){
 
         // render the light of the gbuf to the light layer
         layer_bind(&src->light);
-        gbuf_draw(&src->gbuf, light_tmp, &src->shadow_cube.texture, &src->camera);
+        gbuf_draw(&src->gbuf, light_tmp, &src->cl_shadow.texture, &src->camera);
         layer_unbind(&src->light);
 
         // sum the lightness map with all previous. and store it into the tmp layer.

@@ -20,7 +20,7 @@ struct layer{
     struct glbuf vbo;
     struct glbuf ibo;
 
-    int s, t, r;
+    int w, h;
 
     GLuint gl_fbo;
     GLuint gl_vao;

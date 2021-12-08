@@ -10,7 +10,7 @@ void main (void){
     
     light_dist = light_dist/u_far;
 
-    //light_dist = 0.1;
+    light_dist = 0.0;
 
     gl_FragDepth = light_dist;
 }

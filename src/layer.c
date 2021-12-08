@@ -6,9 +6,8 @@ int layer_init_shader(struct layer *dst, int w, int h, const char *vert_path, co
     return 0;
 }
 int layer_init(struct layer *dst, int w, int h){
-    dst->s = w;
-    dst->t = h;
-    dst->r = 0;
+    dst->w = w;
+    dst->h = h;
     dst->type = LAYER_TYPE_2D;
     dst->shader = (struct shader){
         .attr_idx = 0,
@@ -49,7 +48,7 @@ int layer_init(struct layer *dst, int w, int h){
 
     glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     glbuf_bind(&dst->vbo);
 
@@ -64,9 +63,8 @@ int layer_init(struct layer *dst, int w, int h){
     return 0;
 }
 int layer_init_cube(struct layer *dst, int size){
-    dst->s = size;
-    dst->t = size;
-    dst->r = size;
+    dst->w = size;
+    dst->h = size;
     dst->type = LAYER_TYPE_CM;
     dst->shader = (struct shader){
         .attr_idx = 0,
@@ -85,6 +83,9 @@ int layer_init_cube(struct layer *dst, int size){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->texture.gl_tex, 0));
 
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        assert(1);
+
     GLCall(glDrawBuffer(GL_NONE));
     GLCall(glReadBuffer(GL_NONE));
 
@@ -97,7 +98,7 @@ int layer_init_cube(struct layer *dst, int size){
 
     glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     glbuf_bind(&dst->vbo);
 
@@ -120,7 +121,7 @@ void layer_free(struct layer *dst){
     glbuf_free(&dst->ibo);
 }
 int layer_bind(struct layer *dst){
-    GLCall(glViewport(0, 0, dst->s, dst->t));
+    GLCall(glViewport(0, 0, dst->w, dst->h));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
