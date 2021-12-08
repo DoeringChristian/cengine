@@ -1,7 +1,7 @@
 #version 330
 
 in vec4 frag_pos;
-in vec4 frag_normal;
+in vec3 frag_normal;
 in vec4 frag_color;
 in vec2 frag_uv;
 
@@ -14,7 +14,7 @@ uniform sampler2D u_sampler[10];
 void main (void){
     o_pos = frag_pos;
 
-    o_normal = normalize(frag_normal);
+    o_normal = vec4(normalize(frag_normal), 1);
 
     o_color = texture(u_sampler[0], frag_uv);
 }

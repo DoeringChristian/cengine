@@ -28,7 +28,6 @@ struct lvert{
 struct ivert{
     float trans[16];
     float tex_idx_offset;
-    float light_tex_idx;
 };
 
 static struct svert svert_quad[] = {

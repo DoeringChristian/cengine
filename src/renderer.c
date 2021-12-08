@@ -26,12 +26,20 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_sum, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_add.glsl");
 
+    camera_init(&dst->camera, w, h, 1);
+
     dst->scene = NULL;
     return 0;
 }
 void renderer_free(struct renderer *dst){
     shader_free(&dst->shader);
     gbuf_free(&dst->gbuf);
+    layer_free(&dst->light);
+    layer_free(&dst->light_sum);
+    layer_free(&dst->light_tmp);
+    shader_free(&dst->shader_forward);
+    shader_free(&dst->shader_sum);
+    shader_free(&dst->shader);
 }
 
 int renderer_push(struct renderer *dst){
@@ -65,9 +73,11 @@ int renderer_render(struct renderer *src){
         .color = {0, 1, 0, 1},
     };
 
+
     // render the scene to the gbuf
+
     gbuf_bind(&src->gbuf);
-    scene_draw(src->scene);
+    scene_draw(src->scene, &src->camera);
     gbuf_unbind(&src->gbuf);
 
 #if 1
@@ -76,9 +86,13 @@ int renderer_render(struct renderer *src){
     layer_unbind(&src->light_sum);
 
     for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
+        // calculate view projection of light
+        struct lvert light_tmp = src->scene->lights[i];
+        vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
+
         // render the albedo of the gbuf to the light layer
         layer_bind(&src->light);
-        gbuf_draw(&src->gbuf, src->scene->lights[i]);
+        gbuf_draw(&src->gbuf, light_tmp);
         layer_unbind(&src->light);
 
         // sum the lightness map with all previous. and store it into the tmp layer.

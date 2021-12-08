@@ -17,8 +17,20 @@ void main (void){
     vec3 pos = vec3(texture(u_pos, frag_uv));
     vec3 normal = vec3(texture(u_normal, frag_uv));
     vec3 color = vec3(texture(u_color, frag_uv));
+    float spec_strength = texture(u_color, frag_uv).a;
 
     vec3 light_dir = normalize(vec3(u_light_pos) - pos);
-    vec3 diffuse = max(dot(normal, light_dir), 0) * color * vec3(u_light_color);
-    o_color = vec4(diffuse, 1);
+
+    // assume the camera is located at (0, 0, 0)
+    vec3 view_dir = pos;
+    vec3 light_dir_reflected = reflect(-vec3(light_dir), normal);
+
+    float spec = pow(max(dot(view_dir, light_dir_reflected), 0.0), 32);
+    vec3 specular = spec_strength * spec * vec3(u_light_color);
+
+    vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color);
+    o_color = vec4((specular + diffuse) * color, 1);
+    // ned to remove mabient light form light pass.
+    //o_color = vec4((specular + diffuse + 0.1) * color, 1);
+    //o_color = vec4(dot(normal, light_dir), -dot(normal, light_dir), 0, 1);
 }

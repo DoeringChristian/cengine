@@ -9,11 +9,14 @@
 #include "scene.h"
 #include "layer.h"
 #include "gbuf.h"
+#include "camera.h"
 
 struct renderer{
     int w, h;
 
     struct scene *scene;
+
+    struct camera camera;
 
     struct shader shader;
 

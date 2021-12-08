@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include "mesh.h"
 #include "darray.h"
+#include "camera.h"
 
 struct scene{
     darray(struct mesh *) meshes;
@@ -18,7 +19,7 @@ void scene_free(struct scene *dst);
 
 int scene_mesh_push_back(struct scene *dst, struct mesh *src);
 
-int scene_draw(struct scene *dst);
+int scene_draw(struct scene *dst, struct camera *camera);
 
 int scene_lvert_push(struct scene *dst, struct lvert src);
 

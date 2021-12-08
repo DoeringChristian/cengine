@@ -21,11 +21,14 @@ include_directories("lib/stb/")
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIRS})
 include_directories("lib/darray/")
-include_directories("lib/mathc/")
+#include_directories("lib/mathc/")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+add_subdirectory(lib/cglm/ EXCLUDE_FROM_ALL)
 
 target_link_libraries(${PROJECT_NAME} OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} m)
+target_link_libraries(${PROJECT_NAME} cglm_headers)

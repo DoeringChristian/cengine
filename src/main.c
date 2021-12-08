@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <SDL2/SDL.h>
+#include "mathc.h"
 #include "window.h"
 #include "mesh.h"
 #include "primitives.h"
@@ -15,6 +16,7 @@ int main(){
     window_init(&win, 0, 0, 800, 600, "test");
 
     mesh_init_quad(&mesh, &win.renderer.shader);
+    //mesh_init_cube(&mesh, &win.renderer.shader);
 
     struct scene scene;
     scene_init(&scene);
@@ -46,8 +48,18 @@ int main(){
     mesh_tri_push_back(&mesh, tri(0, 1, 2));
 #endif
     struct ivert iv;
-    mat4_rotation_axis(iv.trans, (float[]){1, 0, 0}, 0);
+    float mat[] = {
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+    };
+    memcpy(iv.trans, mat, sizeof(mat));
+    mat4_rotation_axis(iv.trans, (float[]){1, 0, 0}, -to_radians(45));
+    mat4_translation(iv.trans, iv.trans, (float []){0, 0, -1});
+    mat4_scaling(iv.trans, iv.trans, (float []){0.2, 0.2, 0.2});
     mesh_ivert_push_back(&mesh, iv);
+    
 
 #if 0
     for(size_t i = 0;i < 2;i++){
@@ -67,16 +79,16 @@ int main(){
     mesh_texture_push(&mesh, tex1);
 
     struct lvert light0 = {
-        .pos = {1, 1, 1, 1},
-        .color = {0, 1, 1, 1},
+        .pos = {0, 0, -1.4, 1},
+        .color = {1, 1, 1, 1},
     };
     struct lvert light1 = {
-        .pos = {-1, -1, 1, 1},
+        .pos = {0, 0, 0, 1},
         .color = {1, 1, 0, 1},
     };
 
     scene_lvert_push(&scene, light0);
-    scene_lvert_push(&scene, light1);
+    //scene_lvert_push(&scene, light1);
 
     //renderer_push(&win.renderer);
     //mesh_push(&mesh);

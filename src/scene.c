@@ -18,11 +18,11 @@ int scene_mesh_push_back(struct scene *dst, struct mesh *src){
     return 0;
 }
 
-int scene_draw(struct scene *dst){
+int scene_draw(struct scene *dst, struct camera *camera){
     if(dst->shader == NULL)
         return 1;
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
-        mesh_draw(dst->meshes[i]);
+        mesh_draw(dst->meshes[i], camera);
     }
     return 0;
 }

@@ -54,8 +54,10 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
     GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, tex_idx_offset);
 
+#if 0
     GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
     shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, light_tex_idx);
+#endif
 
     glbuf_unbind(&dst->vboi);
 
@@ -127,7 +129,7 @@ int mesh_push(struct mesh *dst){
     return 0;
 }
 
-int mesh_draw(struct mesh *src){
+int mesh_draw(struct mesh *src, struct camera *camera){
     shader_bind(src->shader);
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -138,6 +140,8 @@ int mesh_draw(struct mesh *src){
     mat4_translation(mat_trans, mat_rot, src->pos);
 
     shader_uniform_mat4f(src->shader, "u_trans", mat_trans);
+
+    shader_uniform_mat4f(src->shader, "u_proj", camera->mat);
 
     size_t slot = 0;
 
