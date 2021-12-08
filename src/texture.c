@@ -41,7 +41,7 @@ int texture_init_f32(struct texture *dst, int w, int h, float *src){
     free(buf);
     return 0;
 }
-int texture_init_f32_cube(struct texture *dst, int s, int t, int r, float *src){
+int texture_init_f32_depthcube(struct texture *dst, int s, int t, int r, float *src){
     dst->s = s;
     dst->t = t;
     dst->r = r;
@@ -65,12 +65,12 @@ int texture_init_f32_cube(struct texture *dst, int s, int t, int r, float *src){
     GLCall(glBindTexture(dst->type, dst->gl_tex));
 
     //GLCall(glTexImage2D(dst->type, 0, GL_RGBA32F, dst->x, dst->y, 0, GL_RGBA, GL_FLOAT, src));
-    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA32F, dst->t, dst->r, 0, GL_RGBA, GL_FLOAT, src));
-    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA32F, dst->t, dst->r, 0, GL_RGBA, GL_FLOAT, src));
-    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA32F, dst->s, dst->r, 0, GL_RGBA, GL_FLOAT, src));
-    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA32F, dst->s, dst->r, 0, GL_RGBA, GL_FLOAT, src));
-    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA32F, dst->s, dst->t, 0, GL_RGBA, GL_FLOAT, src));
-    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA32F, dst->s, dst->t, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_DEPTH_COMPONENT, dst->t, dst->r, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_DEPTH_COMPONENT, dst->t, dst->r, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_DEPTH_COMPONENT, dst->s, dst->r, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_DEPTH_COMPONENT, dst->s, dst->r, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_DEPTH_COMPONENT, dst->s, dst->t, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_DEPTH_COMPONENT, dst->s, dst->t, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
 
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));

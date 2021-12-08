@@ -79,15 +79,15 @@ int renderer_render(struct renderer *src){
         // render shadow cube map
         
         struct cvert cm_cameras[6];
-        cvert_init(&cm_cameras[0], 1, 1, M_PI);
+        cvert_init(&cm_cameras[0], 1, 1, M_PI/2);
         glm_perspective(M_PI/2, 1, 0.1, 100, cm_cameras[0].proj);
 
         glm_lookat(src->scene->lights[i].pos, (float []){1, 0, 0}, (float []){0, -1, 0}, cm_cameras[0].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){-1, 0, 0}, (float []){0, -1, 0}, cm_cameras[0].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, 1, 0}, (float []){0, 0, 1}, cm_cameras[0].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, -1, 0}, (float []){0, 0, 1}, cm_cameras[0].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, 0, 1}, (float []){0, -1, 0}, cm_cameras[0].view);
-        glm_lookat(src->scene->lights[i].pos, (float []){0, 0, -1}, (float []){0, -1, 0}, cm_cameras[0].view);
+        glm_lookat(src->scene->lights[i].pos, (float []){-1, 0, 0}, (float []){0, -1, 0}, cm_cameras[1].view);
+        glm_lookat(src->scene->lights[i].pos, (float []){0, 1, 0}, (float []){0, 0, 1}, cm_cameras[2].view);
+        glm_lookat(src->scene->lights[i].pos, (float []){0, -1, 0}, (float []){0, 0, 1}, cm_cameras[3].view);
+        glm_lookat(src->scene->lights[i].pos, (float []){0, 0, 1}, (float []){0, -1, 0}, cm_cameras[4].view);
+        glm_lookat(src->scene->lights[i].pos, (float []){0, 0, -1}, (float []){0, -1, 0}, cm_cameras[5].view);
         
 
 #if 1
@@ -103,9 +103,9 @@ int renderer_render(struct renderer *src){
         glm_mat4_mulv(src->camera.proj, src->scene->lights[i].pos, light_tmp.pos);
         //vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
 
-        // render the albedo of the gbuf to the light layer
+        // render the light of the gbuf to the light layer
         layer_bind(&src->light);
-        gbuf_draw(&src->gbuf, light_tmp);
+        gbuf_draw(&src->gbuf, light_tmp, &src->shadow_cube.texture, &src->camera);
         layer_unbind(&src->light);
 
         // sum the lightness map with all previous. and store it into the tmp layer.

@@ -79,14 +79,13 @@ int layer_init_cube(struct layer *dst, int size){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
 
     //texture_init_f32(&dst->texture, w, h, NULL);
-    texture_init_f32_cube(&dst->texture, dst->s, dst->t, dst->r, NULL);
+    texture_init_f32_depthcube(&dst->texture, dst->s, dst->t, dst->r, NULL);
 
     //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->texture.gl_tex, 0);
-    GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->gl_fbo, 0));
-    GLCall(glDrawBuffer(GL_NONE));
-    GLCall(glReadBuffer(GL_NONE));
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
+    GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->texture.gl_tex, 0));
 
-#if 1
+#if 0
     GLCall(glGenRenderbuffers(1, &dst->gl_rbo));
     GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
     GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, dst->s, dst->t));
@@ -96,15 +95,11 @@ int layer_init_cube(struct layer *dst, int size){
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         return -1;
 
-    GLuint attachments[1] = {
-        GL_COLOR_ATTACHMENT0,
-    };
-
-    glDrawBuffers(1, attachments);
-
-    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
 #endif
+    GLCall(glDrawBuffer(GL_NONE));
+    GLCall(glReadBuffer(GL_NONE));
+
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 #if 0
 
@@ -143,7 +138,6 @@ int layer_bind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
     GLCall(glEnable(GL_DEPTH_TEST));
 
     return 0;
