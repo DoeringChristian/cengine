@@ -17,7 +17,7 @@ struct cubelayer{
     GLuint gl_vao;
     GLuint gl_rbo;
 
-    GLuint texture;
+    struct texture texture;
 };
 
 int cubelayer_init(struct cubelayer *dst, int w, int h);
