@@ -56,28 +56,11 @@ int renderer_render(struct renderer *src){
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // light test:
-    float light_pos[4] = {
-        1, 1, 1, 1,
-    };
-    float light_color[4] = {
-        1, 1, 1, 1,
-    };
-
-    struct lvert light0 = {
-        .pos = {1, 1, 1, 1},
-        .color = {1, 0, 0, 1},
-    };
-    struct lvert light1 = {
-        .pos = {-1, -1, 1, 1},
-        .color = {0, 1, 0, 1},
-    };
-
 
     // render the scene to the gbuf
 
     gbuf_bind(&src->gbuf);
-    scene_draw(src->scene, &src->camera);
+    scene_draw(src->scene, &src->camera, &src->shader);
     gbuf_unbind(&src->gbuf);
 
 #if 1
@@ -108,34 +91,6 @@ int renderer_render(struct renderer *src){
     }
 #endif
 
-# if 0
-    struct layer tmp;
-    layer_init_shader(&tmp, src->w, src->h, "shaders/layer/vert.glsl", "shaders/layer/frag.glsl");
-
-    layer_bind(&src->light);
-    gbuf_draw(&src->gbuf, light0);
-    layer_unbind(&src->light);
-
-    layer_blend(&tmp, &src->light_sum, &src->light, &src->shader_sum);
-
-    layer_bind(&src->light_sum);
-    layer_draw(&tmp);
-    layer_unbind(&src->light_sum);
-
-
-#if 1
-
-    layer_bind(&src->light);
-    gbuf_draw(&src->gbuf, light1);
-    layer_unbind(&src->light);
-
-    layer_blend(&tmp, &src->light_sum, &src->light, &src->shader_sum);
-
-    layer_bind(&src->light_sum);
-    layer_draw(&tmp);
-    layer_unbind(&src->light_sum);
-#endif
-#endif
 
     // draw the lightness map
     //layer_draw_shader(&src->light_sum, &src->shader_forward);

@@ -31,6 +31,8 @@ int cmesh_tri_append(struct cmesh *dst, struct tri *src, size_t n);
 int cmesh_tri_insert(struct cmesh *dst, struct tri *src, size_t i, size_t n);
 int cmesh_tris_inc_cond(struct cmesh *dst, size_t i, size_t n);
 
+int cmesh_append(struct cmesh *dst, const struct cmesh *src);
+
 void cmesh_set_rot_axis(struct cmesh *dst, vec3 axis, float angle);
 void cmesh_set_pos(struct cmesh *dst, vec3 pos);
 

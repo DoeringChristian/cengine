@@ -2,14 +2,6 @@
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
     darray_init(&dst->textures, 2);
-#if 0
-    darray_init(&dst->tris, 100);
-    darray_init(&dst->verts, 100);
-    darray_init(&dst->iverts, 10);
-#endif
-    //dst->shader = shader;
-
-    // vertex array, vertex buffer and index buffer.
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -20,25 +12,12 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
 
     glbuf_bind(&dst->vbo);
 
-#if 1
+
     int idx = 0;
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, pos);
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, normal);
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, color);
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, uv);
-
-#else
-
-    struct shader dummy = {
-        .attr_idx = 0,
-        .program = 0
-    };
-
-    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, pos);
-    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, normal);
-    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, color);
-    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, uv);
-#endif
 
     glbuf_unbind(&dst->vbo);
 
@@ -50,18 +29,10 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     GLCall(glBindVertexArray(dst->gl_vao));
     glbuf_bind(&dst->vboi);
 
-#if 1
     vao_attr_push_mat4f_div_inc(idx, GL_FLOAT, 0, struct ivert, trans);
 
     GLCall(glVertexAttribDivisor(idx, 1));
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct ivert, tex_idx_offset);
-
-#else
-    shader_attr_push_mat4f_div_s(&dummy, 0, struct ivert, trans);
-
-    GLCall(glVertexAttribDivisor(dummy.attr_idx, 1));
-    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct ivert, tex_idx_offset);
-#endif
 
 
     glbuf_unbind(&dst->vboi);
@@ -77,15 +48,11 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     dst->pos[1] = 0;
     dst->pos[2] = 0;
 
-    // init light texture
-    // init first instance
-# if 0
-    struct ivert i1;
-    mat4_rotation_axis(i1.trans, (float []){0, 0, 1}, 0);
-    mesh_ivert_push_back(dst, i1);
-#endif
 
     return 0;
+}
+int mesh_init_cmesh(struct mesh *dst, struct cmesh *src){
+    return mesh_init(dst, src->verts, darray_len(&src->verts), src->tris, darray_len(&src->tris));
 }
 
 void mesh_free(struct mesh *dst){
@@ -242,13 +209,13 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
     free(append_verts);
 
     size_t src_tri_len = glbuf_size(&src->ibo) / sizeof(struct tri);
-    size_t dst_tri_len = glbuf_size(&dst->ibo) / sizeof(struct tri);
+    size_t dst_vert_len = glbuf_size(&dst->vbo) / sizeof(struct vert);
     struct tri *append_tris = malloc(sizeof(struct tri) * src_tri_len);
     for(size_t i = 0;i < src_tri_len;i++){
         glbuf_get(&src->ibo, &append_tris[i], i * sizeof(struct tri), sizeof(struct tri));
-        append_tris[i].idxs[0] += dst_tri_len;
-        append_tris[i].idxs[1] += dst_tri_len;
-        append_tris[i].idxs[2] += dst_tri_len;
+        append_tris[i].idxs[0] += dst_vert_len;
+        append_tris[i].idxs[1] += dst_vert_len;
+        append_tris[i].idxs[2] += dst_vert_len;
     }
 
     glbuf_append(&dst->ibo, append_tris, sizeof(struct tri) * src_tri_len);

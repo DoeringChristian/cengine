@@ -58,6 +58,42 @@ int cmesh_tris_inc_cond(struct cmesh *dst, size_t i, size_t n){
     return 0;
 }
 
+int cmesh_append(struct cmesh *dst, const struct cmesh *src){
+    size_t dst_vert_len = darray_len(&dst->verts);
+    struct vert dst_vert;
+    for(size_t i = 0;i < darray_len(&src->verts);i++){
+        dst_vert = src->verts[i];
+        
+        versor dst_rot_inv;
+        glm_quat_inv(dst->rot, dst_rot_inv);
+
+        vec3 tmpv3;
+
+        glm_vec3_add(dst_vert.pos, (float *)src->pos, dst_vert.pos);
+        glm_vec3_sub(dst_vert.pos, dst->pos, dst_vert.pos);
+
+        glm_quat_rotatev((float *)src->rot, dst_vert.pos, tmpv3);
+        glm_quat_rotatev(dst_rot_inv, tmpv3, dst_vert.pos);
+
+        glm_quat_rotatev((float *)src->rot, dst_vert.normal, tmpv3);
+        glm_quat_rotatev(dst_rot_inv, tmpv3, dst_vert.normal);
+        
+        cmesh_vert_push_back(dst, dst_vert);
+    }
+
+    for(size_t i = 0;i < darray_len(&src->tris);i++){
+        struct tri dst_tri = {
+            {
+                src->tris[i].idxs[0] + dst_vert_len,
+                src->tris[i].idxs[1] + dst_vert_len,
+                src->tris[i].idxs[2] + dst_vert_len,
+            }
+        };
+        cmesh_tri_push_back(dst, dst_tri);
+    }
+    return 0;
+}
+
 void cmesh_set_rot_axis(struct cmesh *dst, vec3 axis, float angle){
     glm_quatv(dst->rot, angle, axis);
 }

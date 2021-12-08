@@ -30,9 +30,9 @@ void main (void){
 
     vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color);
     o_color = vec4((specular + diffuse) * color, 1);
-    //o_color = vec4(pos, 1);
+    //o_color = vec4(normal, 1);
     // ned to remove mabient light form light pass.
     //o_color = vec4((specular + diffuse + 0.1) * color, 1);
     //o_color = vec4(dot(normal, light_dir), -dot(normal, light_dir), 0, 1);
-    o_color = vec4(color, 1);
+    //o_color = vec4(color, 1);
 }

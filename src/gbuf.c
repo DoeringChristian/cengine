@@ -107,7 +107,7 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
     shader_uniform_i(shader, "u_pos", 0);
 
     texture_bind(&dst->normal, 1);
-    shader_uniform_i(shader, "u_noraml", 1);
+    shader_uniform_i(shader, "u_normal", 1);
 
     texture_bind(&dst->color, 2);
     shader_uniform_i(shader, "u_color", 2);

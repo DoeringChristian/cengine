@@ -56,8 +56,17 @@ int main(){
         ,0
     };
     glm_translate_make(iv.trans, (float []){0, 0, -1});
-    glm_rotate(iv.trans, 0.9, (float []){1, 1, 0});
+    glm_rotate(iv.trans, 1, (float []){1, 1, 0});
     glm_scale(iv.trans, (float []){0.2, 0.2, 0.2});
+
+    mesh_ivert_push_back(&mesh, iv);
+
+    glm_translate_make(iv.trans, (float []){0, -1.5, -1});
+    glm_rotate(iv.trans, 0, (float []){1, 0, 0});
+    glm_scale(iv.trans, (float []){1, 1, 1});
+
+    mesh_ivert_push_back(&mesh, iv);
+
     
 #if 0
     for(size_t i = 0;i < 16;i++){
@@ -67,7 +76,6 @@ int main(){
     }
 #endif
 
-    mesh_ivert_push_back(&mesh, iv);
     
 
 #if 0
@@ -88,16 +96,16 @@ int main(){
     mesh_texture_push(&mesh, tex1);
 
     struct lvert light0 = {
-        .pos = {0, 0, -2, 1},
-        .color = {1, 1, 1, 1},
+        .pos = {0, 0.3, -1, 1},
+        .color = {1, 0, 1, 1},
     };
     struct lvert light1 = {
-        .pos = {0, 0, 0, 1},
+        .pos = {-0.5, 0, 0, 1},
         .color = {1, 1, 0, 1},
     };
 
     scene_lvert_push(&scene, light0);
-    //scene_lvert_push(&scene, light1);
+    scene_lvert_push(&scene, light1);
 
     //renderer_push(&win.renderer);
     //mesh_push(&mesh);
