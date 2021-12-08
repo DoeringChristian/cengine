@@ -23,7 +23,7 @@ int gbuf_init(struct gbuf *dst, int w, int h){
     texture_init_f32(&dst->color, w, h, NULL);
     GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, dst->color.gl_tex, 0));
 
-    textures_unbind();
+    texture_unbind(&dst->color);
 
     GLCall(glGenRenderbuffers(1, &dst->gl_rbo));
     GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
@@ -111,6 +111,7 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
 
     texture_bind(&dst->color, 2);
     shader_uniform_i(shader, "u_color", 2);
+    texture_unbind(&dst->color);
 
     texture_bind(shadowmap, 3);
     shader_uniform_i(shader, "u_shadow", 3);
@@ -126,7 +127,7 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
 
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
 
-    textures_unbind();
+    texture_unbind(shadowmap);
     glbuf_unbind(&dst->ibo);
     GLCall(glBindVertexArray(0));
     shader_unbind(shader);

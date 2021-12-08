@@ -85,43 +85,10 @@ int layer_init_cube(struct layer *dst, int size){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->texture.gl_tex, 0));
 
-#if 0
-    GLCall(glGenRenderbuffers(1, &dst->gl_rbo));
-    GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
-    GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, dst->s, dst->t));
-    GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
-    GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, dst->gl_rbo));
-
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        return -1;
-
-
-#endif
     GLCall(glDrawBuffer(GL_NONE));
     GLCall(glReadBuffer(GL_NONE));
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-#if 0
-
-    // output side
-
-    GLCall(glGenVertexArrays(1, &dst->gl_vao));
-    GLCall(glBindVertexArray(dst->gl_vao));
-
-    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-
-    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
-
-    glbuf_bind(&dst->vbo);
-
-    int idx = 0;
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
-
-    glbuf_unbind(&dst->vbo);
-
-    GLCall(glBindVertexArray(0));
-#endif
 
     return 0;
 }

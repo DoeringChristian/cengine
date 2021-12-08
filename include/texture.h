@@ -38,6 +38,6 @@ int texture_set_rect(struct texture *dst, int x, int y, int w, int h, float *src
 
 int texture_fill(struct texture *dst, float *color);
 
-int textures_unbind();
+int texture_unbind(struct texture *dst);
 
 #endif //TEXTURE_H

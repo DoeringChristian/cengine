@@ -168,8 +168,8 @@ int texture_set(struct texture *dst, int x, int y, float *src){
     return 0;
 }
 
-int textures_unbind(){
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+int texture_unbind(struct texture *dst){
+    GLCall(glBindTexture(dst->type, 0));
     return 0;
 }
 int texture_set_rect(struct texture *dst, int x, int y, int w, int h, float *src){
