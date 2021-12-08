@@ -102,19 +102,19 @@ int renderer_render(struct renderer *src){
         printf("\n");
 #endif
 
+        // calculate view projection of light
+        struct lvert light_tmp = src->scene->lights[i];
+        glm_mat4_mulv(src->camera.proj, src->scene->lights[i].pos, light_tmp.pos);
 #if 1
         //layer_bind(&src->shadow_cube);
         cubelayer_bind(&src->cl_shadow);
-        scene_draw_shadow_cm(src->scene, cm_cameras, &src->shader_shadow, &src->scene->lights[i]);
+        scene_draw_shadow_cm(src->scene, cm_cameras, &src->shader_shadow, &light_tmp);
         cubelayer_unbind(&src->cl_shadow);
         //layer_unbind(&src->shadow_cube);
 #endif
 
 
         
-        // calculate view projection of light
-        struct lvert light_tmp = src->scene->lights[i];
-        glm_mat4_mulv(src->camera.proj, src->scene->lights[i].pos, light_tmp.pos);
         //vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
 
         // render the light of the gbuf to the light layer
@@ -140,6 +140,13 @@ int renderer_render(struct renderer *src){
     //layer_draw_shader(&src->light_sum, &src->shader_forward);
     
     layer_draw(&src->light_sum);
+
+#if 0
+    struct shader tmp;
+    shader_load(&tmp, "shaders/layer/vert.glsl", "shaders/layer/frag_cube.glsl");
+    //cubelayer_draw(&src->cl_shadow, &tmp);
+    shader_free(&tmp);
+#endif
 
 #if 0
     struct shader tmp;

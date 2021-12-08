@@ -13,10 +13,15 @@ uniform samplerCube u_shadow;
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
 
+uniform mat4 u_proj;
+uniform mat4 u_view;
+
 uniform float u_far;
 
+vec4 light_pos;
+
 float shadow(vec3 pos){
-    vec3 frag_to_light = pos - vec3(u_light_pos);
+    vec3 frag_to_light = pos - vec3(light_pos);
     float depth_closest = texture(u_shadow, frag_to_light).r;
     depth_closest *= u_far;
     float depth_cur = length(frag_to_light);
@@ -33,7 +38,10 @@ void main (void){
     vec3 color = vec3(texture(u_color, frag_uv));
     float spec_strength = texture(u_color, frag_uv).a;
 
-    vec3 light_dir = normalize(vec3(u_light_pos) - pos);
+    // transform light pos to screen space
+    light_pos = u_light_pos;
+
+    vec3 light_dir = normalize(vec3(light_pos) - pos);
 
     // assume the camera is located at (0, 0, 0)
     vec3 view_dir = pos;
@@ -44,4 +52,5 @@ void main (void){
 
     vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color);
     o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color, 1);
+    //o_color = vec4(texture(u_shadow, pos - vec3(u_light_pos)).r, 0, 0, 1);
 }

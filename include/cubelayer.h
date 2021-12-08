@@ -6,6 +6,8 @@
 #include "gl_util.h"
 #include "glbuf.h"
 #include "texture.h"
+#include "vert.h"
+#include "shader.h"
 
 struct cubelayer{
     struct glbuf vbo;
@@ -25,6 +27,7 @@ int cubelayer_free(struct cubelayer *dst);
 
 int cubelayer_bind(struct cubelayer *dst);
 int cubelayer_unbind(struct cubelayer *dst);
+int cubelayer_draw(struct cubelayer *dst, struct shader *shader);
 
 
 #endif //CUBELAYER_H

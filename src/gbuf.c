@@ -118,6 +118,9 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
     shader_uniform_vec4f(shader, "u_light_pos", light.pos);
     shader_uniform_vec4f(shader, "u_light_color", light.color);
 
+    shader_uniform_mat4f(shader, "u_proj", (float *)camera->proj);
+    shader_uniform_mat4f(shader, "u_view", (float *)camera->view);
+
     shader_uniform_f(shader, "u_far", camera->far);
 
     GLCall(glBindVertexArray(dst->gl_vao));

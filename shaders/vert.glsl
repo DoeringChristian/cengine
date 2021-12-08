@@ -23,7 +23,12 @@ uniform mat4 u_view;
 void main (void){
     mat4 mv_matrix = u_proj * u_view * i_instance * u_model;
     mat3 norm_matrix = transpose(inverse(mat3(mv_matrix)));
+#if 0
     frag_pos = mv_matrix * vec4(i_pos, 1.0);
+#endif
+    // apply only instance and model to fragment position
+    frag_pos = i_instance * u_model * vec4(i_pos, 1.0);
+
     gl_Position = mv_matrix * vec4(i_pos, 1.0);
     frag_color = i_color;
     //frag_normal = vec4(mat3(i_trans) * mat3(u_trans) * i_normal, 1.0);
