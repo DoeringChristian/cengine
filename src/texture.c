@@ -72,8 +72,8 @@ int texture_init_f32_depthcube(struct texture *dst, int s, int t, int r, float *
     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_DEPTH_COMPONENT, dst->s, dst->t, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_DEPTH_COMPONENT, dst->s, dst->t, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
 
-    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+    GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));

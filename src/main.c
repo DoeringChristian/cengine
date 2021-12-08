@@ -106,7 +106,7 @@ int main(){
     };
 
     scene_lvert_push(&scene, light0);
-    scene_lvert_push(&scene, light1);
+    //scene_lvert_push(&scene, light1);
 
     //renderer_push(&win.renderer);
     //mesh_push(&mesh);

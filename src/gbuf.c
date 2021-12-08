@@ -111,7 +111,6 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
 
     texture_bind(&dst->color, 2);
     shader_uniform_i(shader, "u_color", 2);
-    texture_unbind(&dst->color);
 
     texture_bind(shadowmap, 3);
     shader_uniform_i(shader, "u_shadow", 3);

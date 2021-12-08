@@ -124,8 +124,15 @@ int renderer_render(struct renderer *src){
 
     // draw the lightness map
     //layer_draw_shader(&src->light_sum, &src->shader_forward);
-    layer_draw(&src->light_sum);
+    
+    //layer_draw(&src->light_sum);
 
+#if 1
+    struct shader tmp;
+    shader_load(&tmp, "shaders/layer/vert.glsl", "shaders/layer/frag_cube.glsl");
+    layer_draw_shader(&src->shadow_cube, &tmp);
+    shader_free(&tmp);
+#endif
 
     //layer_clear(&src->light_sum);
 

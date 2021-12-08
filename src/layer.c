@@ -90,6 +90,25 @@ int layer_init_cube(struct layer *dst, int size){
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
+    // output side
+
+    GLCall(glGenVertexArrays(1, &dst->gl_vao));
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+
+    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+
+    glbuf_bind(&dst->vbo);
+
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
+
+    glbuf_unbind(&dst->vbo);
+
+    GLCall(glBindVertexArray(0));
+
     return 0;
 }
 void layer_free(struct layer *dst){
@@ -125,8 +144,10 @@ int layer_draw(struct layer *dst){
 int layer_draw_shader(struct layer *dst, struct shader *shader){
     if(shader == NULL && dst->shader.program != 0)
         shader = &dst->shader;
+#if 0
     if(dst->type != LAYER_TYPE_2D)
         return 1;
+#endif
 
     shader_bind(shader);
 
