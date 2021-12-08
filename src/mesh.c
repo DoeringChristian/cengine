@@ -1,13 +1,13 @@
 #include "mesh.h"
 
-int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
+int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
     darray_init(&dst->textures, 2);
 #if 0
     darray_init(&dst->tris, 100);
     darray_init(&dst->verts, 100);
     darray_init(&dst->iverts, 10);
 #endif
-    dst->shader = shader;
+    //dst->shader = shader;
 
     // vertex array, vertex buffer and index buffer.
 
@@ -20,20 +20,25 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
 
     glbuf_bind(&dst->vbo);
 
-#if 0
-    GLCall(glGenBuffers(1, &dst->gl_vbo));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
+#if 1
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, pos);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, normal);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, color);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, uv);
 
-    GLCall(glGenBuffers(1, &dst->gl_ibo));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dst->gl_ibo));
+#else
 
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vbo));
+    struct shader dummy = {
+        .attr_idx = 0,
+        .program = 0
+    };
+
+    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, pos);
+    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, normal);
+    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, color);
+    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct vert, uv);
 #endif
-
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, pos);
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, normal);
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, color);
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct vert, uv);
 
     glbuf_unbind(&dst->vbo);
 
@@ -41,23 +46,23 @@ int mesh_init(struct mesh *dst, struct shader *shader, struct vert *verts, size_
     
     glbuf_init(&dst->vboi, NULL, 0, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
-#if 0
-    GLCall(glGenBuffers(1, &dst->gl_vboi));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, dst->gl_vboi));
-#endif
 
     GLCall(glBindVertexArray(dst->gl_vao));
     glbuf_bind(&dst->vboi);
 
-    shader_attr_push_mat4f_div_s(dst->shader, 0, struct ivert, trans);
+#if 1
+    vao_attr_push_mat4f_div_inc(idx, GL_FLOAT, 0, struct ivert, trans);
 
-    GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, tex_idx_offset);
+    GLCall(glVertexAttribDivisor(idx, 1));
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct ivert, tex_idx_offset);
 
-#if 0
-    GLCall(glVertexAttribDivisor(dst->shader->attr_idx, 1));
-    shader_attr_push_s(dst->shader, GL_FLOAT, 0, struct ivert, light_tex_idx);
+#else
+    shader_attr_push_mat4f_div_s(&dummy, 0, struct ivert, trans);
+
+    GLCall(glVertexAttribDivisor(dummy.attr_idx, 1));
+    shader_attr_push_s(&dummy, GL_FLOAT, 0, struct ivert, tex_idx_offset);
 #endif
+
 
     glbuf_unbind(&dst->vboi);
 
@@ -129,19 +134,19 @@ int mesh_push(struct mesh *dst){
     return 0;
 }
 
-int mesh_draw(struct mesh *src, struct camera *camera){
-    shader_bind(src->shader);
+int mesh_draw(struct mesh *src, struct camera *camera, struct shader *shader){
+    shader_bind(shader);
 
     GLCall(glBindVertexArray(src->gl_vao));
 
-    float mat_rot[16];
-    float mat_trans[16];
-    mat4_rotation_quat(mat_rot, src->rot);
-    mat4_translation(mat_trans, mat_rot, src->pos);
+    mat4 mat_tmp;
+    
+    glm_quat_mat4(src->rot, mat_tmp);
+    glm_translate(mat_tmp, src->pos);
 
-    shader_uniform_mat4f(src->shader, "u_trans", mat_trans);
+    shader_uniform_mat4f(shader, "u_trans", (float *)mat_tmp);
 
-    shader_uniform_mat4f(src->shader, "u_proj", camera->mat);
+    shader_uniform_mat4f(shader, "u_proj", (float *)camera->mat);
 
     size_t slot = 0;
 
@@ -149,7 +154,7 @@ int mesh_draw(struct mesh *src, struct camera *camera){
         texture_bind(&src->textures[slot], slot);
         char buf[100] = {0};
         snprintf(buf, 100, "u_sampler[%zu]", slot);
-        shader_uniform_i(src->shader, buf, slot);
+        shader_uniform_i(shader, buf, slot);
     }
 
     // add lights as texture
@@ -170,7 +175,7 @@ int mesh_draw(struct mesh *src, struct camera *camera){
     size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
     GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
 
-    shader_unbind(src->shader);
+    shader_unbind(shader);
     return 0;
 }
 
@@ -204,29 +209,51 @@ int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n){
 }
 int mesh_append(struct mesh *dst, const struct mesh *src){
     GLCall(glBindVertexArray(dst->gl_vao));
-#if 0
-    size_t i = darray_len(&dst->verts);
+
     struct vert src_vert;
-    for(size_t j = 0;j < darray_len(&src->verts);j++){
-        src_vert = src->verts[j];
-        vec3_subtract(src_vert.pos, src_vert.pos, dst->pos);
+    size_t src_verts_len = glbuf_size(&src->vbo) / sizeof(struct vert);
+    struct vert *append_verts = malloc(sizeof(struct vert) * src_verts_len);
+    for(size_t i = 0;i < src_verts_len;i++){
+        glbuf_get(&src->vbo, &src_vert, sizeof(struct vert) * i, sizeof(struct vert));
 
-        float q[4];
-        quat_multiply(q, dst->rot, (float *)src->rot);
-        vec3_quat_rotate_inverse(src_vert.pos, src_vert.pos, q);
-        darray_push_back(&dst->verts, src_vert);
-    }
-    //darray_append(&dst->verts, src->verts, darray_len(&src->verts));
+        versor tmpq;
+        vec3 tmpv3;
 
-    struct tri src_tri;
-    for(size_t j = 0;j < darray_len(&src->tris);j++){
-        src_tri = src->tris[j];
-        src_tri.idxs[0] += i;
-        src_tri.idxs[1] += i;
-        src_tri.idxs[2] += i;
-        darray_push_back(&dst->tris, src_tri);
+        glm_quat_inv(dst->rot, tmpq);
+
+        // add original transforms and subtract old ones.
+        glm_vec3_add(src_vert.pos, (float *)src->pos, src_vert.pos);
+        glm_vec3_sub(src_vert.pos, dst->pos,          src_vert.pos);
+
+        // rotate with src rotation and then inverse rotate with dst rotation
+        glm_quat_rotatev((float *)src->rot, src_vert.pos, tmpv3);
+        glm_quat_rotatev(tmpq, tmpv3, src_vert.pos);
+
+        // rotate normals
+        
+        glm_quat_rotatev((float *)src->rot, src_vert.normal, tmpv3);
+        glm_quat_rotatev(tmpq, tmpv3, src_vert.normal);
+
+        append_verts[i] = src_vert;
     }
-#endif
+
+    glbuf_append(&dst->vbo, append_verts, sizeof(struct vert) * src_verts_len);
+
+    free(append_verts);
+
+    size_t src_tri_len = glbuf_size(&src->ibo) / sizeof(struct tri);
+    size_t dst_tri_len = glbuf_size(&dst->ibo) / sizeof(struct tri);
+    struct tri *append_tris = malloc(sizeof(struct tri) * src_tri_len);
+    for(size_t i = 0;i < src_tri_len;i++){
+        glbuf_get(&src->ibo, &append_tris[i], i * sizeof(struct tri), sizeof(struct tri));
+        append_tris[i].idxs[0] += dst_tri_len;
+        append_tris[i].idxs[1] += dst_tri_len;
+        append_tris[i].idxs[2] += dst_tri_len;
+    }
+
+    glbuf_append(&dst->ibo, append_tris, sizeof(struct tri) * src_tri_len);
+
+    free(append_tris);
     return 0;
 }
 

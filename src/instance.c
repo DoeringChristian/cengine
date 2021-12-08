@@ -3,7 +3,7 @@
 int instance_init(struct instance *dst, struct mesh *src){
     dst->mesh = src;
 
-    mat4_identity(dst->ivert.trans);
+    //mat4_identity(dst->ivert.trans);
     dst->ivert.tex_idx_offset = 0;
 
     return 0;

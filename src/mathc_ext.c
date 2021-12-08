@@ -1,5 +1,6 @@
 #include "mathc_ext.h"
 
+#if 0
 mfloat_t *vec3_quat_rotate(mfloat_t *result, mfloat_t *v0, mfloat_t *q0){
     float q0_i[4];
     float result_q[4];
@@ -40,3 +41,4 @@ mfloat_t *mat4_perspective_fov_t(mfloat_t *result, mfloat_t fov, mfloat_t aspect
     result[15] = MFLOAT_C(0.0);
     return result;
 }
+#endif

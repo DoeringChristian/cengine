@@ -3,7 +3,7 @@
 
 #include "mesh.h"
 
-int mesh_init_quad(struct mesh *dst, struct shader *shader);
-int mesh_init_cube(struct mesh *dst, struct shader *shader);
+int mesh_init_quad(struct mesh *dst);
+int mesh_init_cube(struct mesh *dst);
 
 #endif //PRIMITIVES_H

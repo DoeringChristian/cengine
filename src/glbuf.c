@@ -27,7 +27,7 @@ int glbuf_set(struct glbuf *dst, void *src, GLsizei offset, GLsizei size){
     GLCall(glBindBuffer(dst->gl_type, 0));
     return 0;
 }
-int glbuf_get(struct glbuf *src, void *dst, GLsizei offset, GLsizei size){
+int glbuf_get(const struct glbuf *src, void *dst, GLsizei offset, GLsizei size){
     GLCall(glBindBuffer(src->gl_type, src->gl_buf));
     GLCall(glGetBufferSubData(src->gl_type, offset, size, dst));
     GLCall(glBindBuffer(src->gl_type, 0));
@@ -92,6 +92,6 @@ void glbuf_bind(struct glbuf *dst){
 void glbuf_unbind(struct glbuf *dst){
     GLCall(glBindBuffer(dst->gl_type, 0));
 }
-size_t glbuf_size(struct glbuf *src){
+size_t glbuf_size(const struct glbuf *src){
     return src->gl_buf_size;
 }

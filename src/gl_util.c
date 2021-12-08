@@ -37,3 +37,26 @@ size_t attr_size(GLenum type){
     }
     return 0;
 }
+int attr_push_mat4f_div_inc(int *idx, GLboolean normalized, GLsizei stride, const void *offset){
+    GLCall(glVertexAttribDivisor(*idx, 1));
+    GLCall(glEnableVertexAttribArray(*idx));
+    GLCall(glVertexAttribPointer(*idx, 4, GL_FLOAT, normalized, stride, offset + 0 * sizeof(float)));
+    (*idx)++;
+
+    GLCall(glVertexAttribDivisor(*idx, 1));
+    GLCall(glEnableVertexAttribArray(*idx));
+    GLCall(glVertexAttribPointer(*idx, 4, GL_FLOAT, normalized, stride, offset + 4 * sizeof(float)));
+    (*idx)++;
+
+    GLCall(glVertexAttribDivisor(*idx, 1));
+    GLCall(glEnableVertexAttribArray(*idx));
+    GLCall(glVertexAttribPointer(*idx, 4, GL_FLOAT, normalized, stride, offset + 8 * sizeof(float)));
+    (*idx)++;
+
+    GLCall(glVertexAttribDivisor(*idx, 1));
+    GLCall(glEnableVertexAttribArray(*idx));
+    GLCall(glVertexAttribPointer(*idx, 4, GL_FLOAT, normalized, stride, offset + 12 * sizeof(float)));
+    (*idx)++;
+
+    return 0;
+}

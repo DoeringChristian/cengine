@@ -3,32 +3,49 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
+#include "cglm/cglm.h"
 
 // screen space vertex
 struct svert{
+    vec2 pos;
+    vec2 uv;
+#if 0
     float pos[2];
     float uv[2];
+#endif
 };
 
 // mesh vertex
 struct vert{
-    float pos[3];
-    float normal[3];
-    float color[4];
-    float uv[2];
+    vec3 pos;
+    vec3 normal;
+    vec4 color;
+    vec2 uv;
 };
 
 // light vertex
 struct lvert{
-    float pos[4];
-    float color[4];
+    vec4 pos;
+    vec4 color;
 };
 
 // instance vertex
 struct ivert{
-    float trans[16];
+    mat4 trans;
     float tex_idx_offset;
 };
+
+
+
+struct tri{
+    GLuint idxs[3];
+};
+
+static struct tri tri(size_t v1_idx, size_t v2_idx, size_t v3_idx){
+    return (struct tri){.idxs[0] = v1_idx, .idxs[1] = v2_idx, .idxs[2] = v3_idx};
+}
+
+
 
 static struct svert svert_quad[] = {
         {

@@ -1,6 +1,6 @@
 #include "primitives.h"
 
-int mesh_init_quad(struct mesh *dst, struct shader *shader){
+int mesh_init_quad(struct mesh *dst){
 
     struct vert verts[4] = {
         {
@@ -38,11 +38,11 @@ int mesh_init_quad(struct mesh *dst, struct shader *shader){
         },
     };
 
-    mesh_init(dst, shader, verts, 4, tris, 2);
+    mesh_init(dst, verts, 4, tris, 2);
 
     return 0;
 }
-int mesh_init_cube(struct mesh *dst, struct shader *shader){
+int mesh_init_cube(struct mesh *dst){
     struct vert verts[] = {
         // side 0
         {
@@ -212,8 +212,8 @@ int mesh_init_cube(struct mesh *dst, struct shader *shader){
         {3, 4, 5},
         {4, 6, 3},
         {6, 7, 8},
-        {2, 9, 6},
+        {8, 9, 6},
     };
-    mesh_init(dst, shader, verts, 24, tris, 6);
-
+    mesh_init(dst, verts, 24, tris, 6);
+    return 0;
 }

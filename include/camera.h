@@ -1,12 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "mathc.h"
-#include "mathc_ext.h"
 #include <stdio.h>
+#include "cglm/cglm.h"
 
 struct camera{
-    float mat[16];
+    mat4 mat;
 };
 
 int camera_init(struct camera *dst, int w, int h, float fov);

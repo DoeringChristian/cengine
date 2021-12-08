@@ -22,7 +22,7 @@ int scene_draw(struct scene *dst, struct camera *camera){
     if(dst->shader == NULL)
         return 1;
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
-        mesh_draw(dst->meshes[i], camera);
+        mesh_draw(dst->meshes[i], camera, dst->shader);
     }
     return 0;
 }

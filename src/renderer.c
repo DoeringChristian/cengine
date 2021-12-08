@@ -88,7 +88,8 @@ int renderer_render(struct renderer *src){
     for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
         // calculate view projection of light
         struct lvert light_tmp = src->scene->lights[i];
-        vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
+        glm_mat4_mulv(src->camera.mat, src->scene->lights[i].pos, light_tmp.pos);
+        //vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
 
         // render the albedo of the gbuf to the light layer
         layer_bind(&src->light);
