@@ -27,11 +27,11 @@ struct renderer{
     struct shader shader_mul;
     struct shader shader_forward;
     struct shader shader_shadow;
+    struct shader shader_lighting;
 
     struct layer light;
     struct layer light_sum;
     struct layer light_tmp;
-    //struct layer shadow_cube;
     struct cubelayer cl_shadow;
 };
 

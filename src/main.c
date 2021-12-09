@@ -7,6 +7,8 @@
 #include "window.h"
 #include "mesh.h"
 #include "primitives.h"
+#include "cglm/cglm.h"
+#include "gl_util.h"
 
 int main(){
     struct window win;
@@ -55,27 +57,28 @@ int main(){
         }
         ,0
     };
-    glm_translate_make(iv.trans, (float []){0, 0, -0.6});
-    glm_rotate(iv.trans, 0, (float []){1, 1, 0});
-    glm_scale(iv.trans, (float []){0.2, 0.2, 0.2});
+    glm_translate_make(iv.trans, vec3(0, 0, -0.6));
+    glm_rotate(iv.trans, 1, vec3(1, 1, 0));
+    glm_scale(iv.trans, vec3(0.2, 0.2, 0.2));
 
     mesh_ivert_push_back(&mesh, iv);
 
-    glm_translate_make(iv.trans, (float []){0, -1.5, -1});
-    glm_rotate(iv.trans, 0, (float []){1, 0, 0});
-    glm_scale(iv.trans, (float []){1, 1, 1});
+    glm_translate_make(iv.trans, vec3(0, -1.5, -1));
+    glm_rotate(iv.trans, 0, vec3(1, 0, 0));
+    glm_scale(iv.trans, vec3(1, 1, 1));
+    //glm_scale(iv.trans, vec3(1, 2, 3));
 
     mesh_ivert_push_back(&mesh, iv);
 
-    glm_translate_make(iv.trans, (float []){0, 0, -3});
-    glm_rotate(iv.trans, 0, (float []){1, 0, 0});
-    glm_scale(iv.trans, (float []){1, 1, 1});
+    glm_translate_make(iv.trans, vec3(0, 0, -3));
+    glm_rotate(iv.trans, 0, vec3(1, 0, 0));
+    glm_scale(iv.trans, vec3(1, 1, 1));
 
     mesh_ivert_push_back(&mesh, iv);
 
-    cvert_translate(&win.renderer.camera, (float []){-0.5, -0.5, -1});
-    cvert_rotate(&win.renderer.camera, (float []){1, 0, 0}, 1);
-    cvert_rotate(&win.renderer.camera, (float []){0, 1, 0}, -0.5);
+    cvert_translate(&win.renderer.camera, vec3(-0.5, -0.5, -1));
+    cvert_rotate(&win.renderer.camera, vec3(1, 0, 0), 1);
+    cvert_rotate(&win.renderer.camera, vec3(0, 1, 0), -0.5);
     
 #if 0
     for(size_t i = 0;i < 16;i++){

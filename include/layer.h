@@ -33,8 +33,7 @@ int layer_clear(struct layer *dst);
 int layer_bind(struct layer *dst);
 int layer_unbind(struct layer *dst);
 
-int layer_draw(struct layer *dst);
-int layer_draw_shader(struct layer *dst, struct shader *shader);
+int layer_draw(struct layer *dst, struct shader *shader);
 int layer_draw_shader_tex(struct layer *dst, struct shader *shader, struct texture *tex);
 
 int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);

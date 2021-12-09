@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <stdio.h>
 #include <signal.h>
+#include "cglm/cglm.h"
 
 #define GLCall(_x){\
     gl_err_clear();\
@@ -53,6 +54,12 @@
 #define vao_attr_push_mat4f_div_inc(_idx, _type, _normalized, _struct, _element){\
     attr_push_mat4f_div_inc(&(_idx), _normalized, sizeof(_struct), (void *)offsetof(_struct, _element));\
 }
+
+// defining vec initialisations
+#define vec2(_x, _y) ((float []){_x, _y})
+#define vec3(_x, _y, _z) ((float []){_x, _y, _z})
+#define vec4(_x1, _x2, _x3, _x4) ((float []){_x1, _x2, _x3, _x4})
+#define versor(_x, _y, _z, _w) ((float []){_x, _y, _z, _w})
 
 void gl_err_clear();
 void gl_err_print(const char *file, const char *func, int line);

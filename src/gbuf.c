@@ -1,10 +1,5 @@
 #include "gbuf.h"
 
-int gbuf_init_shader(struct gbuf *dst, int w, int h, const char *vert_path, const char *frag_path){
-    gbuf_init(dst, w, h);
-    gbuf_shader_load(dst, vert_path, frag_path);
-    return 0;
-}
 int gbuf_init(struct gbuf *dst, int w, int h){
     dst->w = w;
     dst->h = h;
@@ -92,15 +87,10 @@ int gbuf_unbind(struct gbuf *dst){
     return 0;
 }
 
-int gbuf_draw(struct gbuf *dst, struct lvert light, struct texture *shadowmap, float shadow_scale, struct cvert *camera){
-    if(dst->shader.program == 0)
-        return 1;
-    gbuf_draw_shader(dst, &dst->shader, light, shadowmap, shadow_scale, camera);
-    return 0;
-}
-int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light, struct texture *shadowmap, float shadow_scale, struct cvert *camera){
-    if(shader == NULL && dst->shader.program != 0)
-        shader = &dst->shader;
+int gbuf_draw(struct gbuf *dst, struct shader *shader, struct lvert light, struct texture *shadow_depth, float shadow_scale, struct cvert *camera){
+    if(shader == NULL)
+        return -1;
+
     shader_bind(shader);
 
     texture_bind(&dst->pos, 0);
@@ -112,7 +102,7 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
     texture_bind(&dst->color, 2);
     shader_uniform_i(shader, "u_color", 2);
 
-    texture_bind(shadowmap, 3);
+    texture_bind(shadow_depth, 3);
     shader_uniform_i(shader, "u_shadow", 3);
 
     shader_uniform_vec4f(shader, "u_light_pos", light.pos);
@@ -134,9 +124,5 @@ int gbuf_draw_shader(struct gbuf *dst, struct shader *shader, struct lvert light
     glbuf_unbind(&dst->ibo);
     GLCall(glBindVertexArray(0));
     shader_unbind(shader);
-    return 0;
-}
-int gbuf_shader_load(struct gbuf *dst, const char *vert_path, const char *frag_path){
-    shader_load(&dst->shader, vert_path, frag_path);
     return 0;
 }

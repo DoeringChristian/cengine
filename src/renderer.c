@@ -19,7 +19,10 @@ int renderer_init(struct renderer *dst, int w, int h){
     //shader_load_vgf(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/geo_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
     shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow02.glsl", "shaders/lighting/frag_shadow_02.glsl");
 
-    gbuf_init_shader(&dst->gbuf, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+    shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+
+    //gbuf_init_shader(&dst->gbuf, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+    gbuf_init(&dst->gbuf, w, h);
 
     layer_init(&dst->light, w, h);
     layer_init(&dst->light_sum, w, h);
@@ -72,7 +75,6 @@ int renderer_render(struct renderer *src){
         // calculate view projection of light
         struct lvert light_tmp = src->scene->lights[i];
         //glm_mat4_mulv(src->camera.proj, src->scene->lights[i].pos, light_tmp.pos);
-#if 1
         
         struct cvert cm_cameras[6];
         cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
@@ -96,17 +98,6 @@ int renderer_render(struct renderer *src){
         glm_look(src->scene->lights[i].pos, (float []){0, 0, 1}, (float []){0, -1, 0}, cm_cameras[4].view);
         glm_look(src->scene->lights[i].pos, (float []){0, 0, -1}, (float []){0, -1, 0}, cm_cameras[5].view);
         
-#if 0
-        for(size_t k = 0;k < 6;k++){
-            for(size_t j = 0;j < 16;j++){
-                printf("%f ", ((float *)cm_cameras[k].proj)[j]);
-                if((j + 1) % 4 == 0)
-                    printf("\n");
-            }
-            printf("\n");
-        }
-        printf("\n");
-#endif
 
         // calculate view projection of light
         //layer_bind(&src->shadow_cube);
@@ -116,15 +107,13 @@ int renderer_render(struct renderer *src){
             cubelayer_unbind(&src->cl_shadow);
         }
         //layer_unbind(&src->shadow_cube);
-#endif
-
-
         
         //vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
 
         // render the light of the gbuf to the light layer
         layer_bind(&src->light);
-        gbuf_draw(&src->gbuf, light_tmp, &src->cl_shadow.texture, 100, &src->camera);
+        //gbuf_draw(&src->gbuf, light_tmp, &src->cl_shadow.texture, 100, &src->camera);
+        gbuf_draw(&src->gbuf, &src->shader_lighting, light_tmp, &src->cl_shadow.texture, 100, &src->camera);
         layer_unbind(&src->light);
 
         // sum the lightness map with all previous. and store it into the tmp layer.
@@ -133,7 +122,7 @@ int renderer_render(struct renderer *src){
 
         // copy it to the light sum layer
         layer_bind(&src->light_sum);
-        layer_draw_shader(&src->light_tmp, &src->shader_forward);
+        layer_draw(&src->light_tmp, &src->shader_forward);
         layer_unbind(&src->light_sum);
 
     }
@@ -144,7 +133,7 @@ int renderer_render(struct renderer *src){
     // draw the lightness map
     //layer_draw_shader(&src->light_sum, &src->shader_forward);
     
-    layer_draw_shader(&src->light_sum, &src->shader_forward);
+    layer_draw(&src->light_sum, &src->shader_forward);
 
 #if 0
     struct shader tmp;

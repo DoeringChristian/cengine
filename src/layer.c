@@ -79,14 +79,7 @@ int layer_unbind(struct layer *dst){
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     return 0;
 }
-int layer_draw(struct layer *dst){
-    if(dst->shader.program != 0)
-        layer_draw_shader(dst, &dst->shader);
-    else
-        return 1;
-    return 0;
-}
-int layer_draw_shader(struct layer *dst, struct shader *shader){
+int layer_draw(struct layer *dst, struct shader *shader){
     if(shader == NULL && dst->shader.program != 0)
         shader = &dst->shader;
 #if 0
