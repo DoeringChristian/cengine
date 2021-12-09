@@ -10,5 +10,10 @@ void main (void){
     
     light_dist = light_dist/u_far;
 
+    // why is this not working
+    //light_dist = 0.5;
+    //light_dist = u_light_pos.y;
+    //light_dist = u_far / 200;
+
     gl_FragDepth = light_dist;
 }

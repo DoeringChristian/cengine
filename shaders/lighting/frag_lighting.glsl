@@ -16,14 +16,18 @@ uniform vec4 u_light_color;
 uniform mat4 u_proj;
 uniform mat4 u_view;
 
-uniform float u_far;
+uniform float u_shadow_scaling;
 
 vec4 light_pos;
+vec4 debug_out;
 
 float shadow(vec3 pos){
     vec3 frag_to_light = pos - vec3(light_pos);
     float depth_closest = texture(u_shadow, frag_to_light).r;
-    depth_closest *= u_far;
+    depth_closest *= u_shadow_scaling;
+
+    debug_out = vec4(vec3(depth_closest), 1);
+
     float depth_cur = length(frag_to_light);
 
     float bias = 0.05;
@@ -52,5 +56,7 @@ void main (void){
 
     vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color);
     o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color, 1);
+    //o_color = debug_out;
+    //o_color = vec4(texture(u_shadow, vec3(frag_uv.x, -1, frag_uv.y)).r, 0, 0, 1);
     //o_color = vec4(texture(u_shadow, pos - vec3(u_light_pos)).r, 0, 0, 1);
 }

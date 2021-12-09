@@ -51,7 +51,7 @@ int texture_init_f32_depthcube(struct texture *dst, int w, int h, float *src){
     GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, dst->gl_tex));
 
     for(size_t i = 0;i < 6;i++){
-        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT16, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
     }
 
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
