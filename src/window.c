@@ -58,10 +58,17 @@ int window_main(struct window *dst){
             }
         }
 
+        if(dst->update != NULL)
+            dst->update(&dst->renderer, dst->data);
+
         renderer_render(&dst->renderer);
 
         SDL_GL_SwapWindow(dst->window);
     }
 
     return 0;
+}
+void window_set_update(struct window *dst, int (*update)(struct renderer *renderer, void *data), void *data){
+    dst->data = data;
+    dst->update = update;
 }

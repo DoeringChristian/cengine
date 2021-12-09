@@ -29,6 +29,6 @@ int scene_draw_shadow_depth(struct scene *dst, struct cvert *camera, struct shad
         mesh_draw_depth(dst->meshes[i], camera, shader, light);
     }
 }
-int scene_light_push(struct scene *dst, struct light src){
+int scene_light_push(struct scene *dst, struct light *src){
     return darray_push_back(&dst->lights, src);
 }

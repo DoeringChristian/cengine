@@ -17,11 +17,16 @@ struct window{
     int x, y, w, h;
 
     struct renderer renderer;
+
+    void *data;
+    int (*update)(struct renderer *renderer, void *data);
 };
 
 int window_init(struct window *dst, int x, int y, int w, int h, const char *title);
 void window_free(struct window *dst);
 
 int window_main(struct window *dst);
+
+void window_set_update(struct window *dst, int (*update)(struct renderer *renderer, void *data), void *data);
 
 #endif //WINDOW_H

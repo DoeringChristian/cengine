@@ -10,7 +10,7 @@
 
 struct scene{
     darray(struct mesh *) meshes;
-    darray(struct light) lights;
+    darray(struct light *) lights;
 
     struct shader *shader;
 };
@@ -23,6 +23,6 @@ int scene_mesh_push_back(struct scene *dst, struct mesh *src);
 int scene_draw(struct scene *dst, struct cvert *camera, struct shader *shader);
 int scene_draw_shadow_depth(struct scene *dst, struct cvert *camera, struct shader *shader, struct light *light);
 
-int scene_light_push(struct scene *dst, struct light src);
+int scene_light_push(struct scene *dst, struct light *src);
 
 #endif //SCENEH_H

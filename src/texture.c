@@ -133,7 +133,8 @@ int texture_resize_f32(struct texture *dst, int w, int h){
 }
 void texture_free(struct texture *dst){
     GLCall(glDeleteTextures(1, &dst->gl_tex));
-    free(dst->uname);
+    if(dst->uname != NULL)
+        free(dst->uname);
 }
 
 void texture_bind(struct texture *dst, GLuint slot){

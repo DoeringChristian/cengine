@@ -7,7 +7,7 @@ int renderer_init(struct renderer *dst, int w, int h){
     dst->w = w;
     dst->h = h;
     
-
+    // loading shaders
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
     shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
@@ -16,12 +16,11 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_add, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_add.glsl");
 
-    //shader_load_vgf(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/geo_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
     shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow02.glsl", "shaders/lighting/frag_shadow_02.glsl");
 
     shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
 
-    //gbuf_init_shader(&dst->gbuf, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+    // initializing layers
     gbuf_init(&dst->gbuf, w, h);
 
     layer_init(&dst->light, w, h);
@@ -29,6 +28,7 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
 
+    // initializing camera
     cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
 
     dst->scene = NULL;
@@ -39,7 +39,6 @@ void renderer_free(struct renderer *dst){
     gbuf_free(&dst->gbuf);
     layer_free(&dst->light);
     layer_free(&dst->light_sum);
-    layer_free(&dst->light_tmp);
     shader_free(&dst->shader_forward);
     shader_free(&dst->shader_add);
     shader_free(&dst->shader);
@@ -73,10 +72,10 @@ int renderer_render(struct renderer *src){
     for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
         // render shadow cube map
         // calculate view projection of light
-        struct light light_tmp = src->scene->lights[i];
+        struct light *light_tmp = src->scene->lights[i];
         
-        if(light_tmp.type == LIGHT_POINT){
-            renderer_render_point_shadow(src, &light_tmp);
+        if(light_tmp->type == LIGHT_POINT){
+            renderer_render_point_shadow(src, light_tmp);
 
             // render the light of the gbuf to the light layer
             layer_bind(&src->light);
@@ -86,7 +85,7 @@ int renderer_render(struct renderer *src){
                     &src->shader_lighting,
                     &src->cl_shadow.texture,
                     &src->light_sum.texture,
-                    &light_tmp);
+                    light_tmp);
             layer_unbind(&src->light);
         }
 
