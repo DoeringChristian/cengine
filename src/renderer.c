@@ -16,7 +16,8 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_add, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_add.glsl");
 
-    shader_load_vgf(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/geo_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
+    //shader_load_vgf(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/geo_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
+    shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow02.glsl", "shaders/lighting/frag_shadow_02.glsl");
 
     gbuf_init_shader(&dst->gbuf, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
 
@@ -86,6 +87,17 @@ int renderer_render(struct renderer *src){
         struct cvert cm_cameras[6];
         cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
         glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
+        cm_cameras[0].far = 100;
+        cm_cameras[1].far = 100;
+        cm_cameras[2].far = 100;
+        cm_cameras[3].far = 100;
+        cm_cameras[4].far = 100;
+        cm_cameras[5].far = 100;
 
         glm_look(src->scene->lights[i].pos, (float []){1, 0, 0}, (float []){0, -1, 0}, cm_cameras[0].view);
         glm_look(src->scene->lights[i].pos, (float []){-1, 0, 0}, (float []){0, -1, 0}, cm_cameras[1].view);
@@ -108,9 +120,11 @@ int renderer_render(struct renderer *src){
 
         // calculate view projection of light
         //layer_bind(&src->shadow_cube);
-        cubelayer_bind(&src->cl_shadow);
-        scene_draw_shadow_cm(src->scene, cm_cameras, &src->shader_shadow, &src->scene->lights[i]);
-        cubelayer_unbind(&src->cl_shadow);
+        for(size_t j = 0;j < 6;j++){
+            cubelayer_bind(&src->cl_shadow, j);
+            scene_draw_shadow_cm(src->scene, &cm_cameras[j], &src->shader_shadow, &src->scene->lights[i]);
+            cubelayer_unbind(&src->cl_shadow);
+        }
         //layer_unbind(&src->shadow_cube);
 #endif
 

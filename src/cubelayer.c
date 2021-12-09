@@ -10,8 +10,7 @@ int cubelayer_init(struct cubelayer *dst, int w, int h){
 
     GLCall(glGenFramebuffers(1, &dst->gl_fbo));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-    GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->texture.gl_tex, 0));
+    //GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->texture.gl_tex, 0));
     GLCall(glDrawBuffer(GL_NONE));
     GLCall(glReadBuffer(GL_NONE));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
@@ -47,9 +46,10 @@ int cubelayer_free(struct cubelayer *dst){
     return 0;
 }
 
-int cubelayer_bind(struct cubelayer *dst){
+int cubelayer_bind(struct cubelayer *dst, int face){
     GLCall(glViewport(0, 0, dst->w, dst->h));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
+    GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, dst->texture.gl_tex, 0));
     GLCall(glClear(GL_DEPTH_BUFFER_BIT));
     return 0;
 }

@@ -25,7 +25,7 @@ struct cubelayer{
 int cubelayer_init(struct cubelayer *dst, int w, int h);
 int cubelayer_free(struct cubelayer *dst);
 
-int cubelayer_bind(struct cubelayer *dst);
+int cubelayer_bind(struct cubelayer *dst, int face);
 int cubelayer_unbind(struct cubelayer *dst);
 int cubelayer_draw(struct cubelayer *dst, struct shader *shader);
 

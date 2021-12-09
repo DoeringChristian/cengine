@@ -106,15 +106,15 @@ int main(){
 
     struct lvert light0 = {
         .pos = {0, 1, -0.5, 1},
-        .color = {1, 1, 1, 1},
+        .color = {0, 1, 1, 1},
     };
     struct lvert light1 = {
-        .pos = {-0.5, 0, 0, 1},
-        .color = {1, 1, 0, 1},
+        .pos = {-0.4, 0, 0, 1},
+        .color = {1, 1, 0, 0.5},
     };
 
     scene_lvert_push(&scene, light0);
-    //scene_lvert_push(&scene, light1);
+    scene_lvert_push(&scene, light1);
 
     //renderer_push(&win.renderer);
     //mesh_push(&mesh);

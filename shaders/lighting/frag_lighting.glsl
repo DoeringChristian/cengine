@@ -52,9 +52,9 @@ void main (void){
     vec3 light_dir_reflected = reflect(vec3(light_dir), normal);
 
     float spec = pow(max(dot(view_dir, light_dir_reflected), 0.0), 32);
-    vec3 specular = spec_strength * spec * vec3(u_light_color);
+    vec3 specular = spec_strength * spec * vec3(u_light_color) * u_light_color.a;
 
-    vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color);
+    vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color) * u_light_color.a;
     o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color, 1);
     //o_color = debug_out;
     //o_color = vec4(texture(u_shadow, vec3(frag_uv.x, -1, frag_uv.y)).r, 0, 0, 1);
