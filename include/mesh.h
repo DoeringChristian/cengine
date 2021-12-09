@@ -21,9 +21,15 @@
  * mesh is a mesh that lives on the gpu
  */
 
+enum mesh_type{
+    MESH_STATIC,
+    MESH_DYNAMIC,
+};
 
 struct mesh{
-    darray(struct texture) textures;
+    darray(struct vert) verts;
+    darray(struct tri) tris;
+    darray(struct ivert) iverts;
 
     vec3 pos;
     versor rot;
@@ -39,13 +45,17 @@ struct mesh{
     struct texture *tex_albedo;
     struct texture *tex_normal;
     struct texture *tex_spec;
+
+    enum mesh_type type;
 };
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len);
 int mesh_init_cmesh(struct mesh *dst, struct cmesh *src);
 void mesh_free(struct mesh *dst);
 
-int mesh_push(struct mesh *dst);
+// functions for pulling and pushing ram based vertices from and to gpu
+int mesh_pull(struct mesh *dst);
+int mesh_push(struct mesh *src);
 int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader);
 // draw shadow cube map
 int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light);
@@ -59,6 +69,8 @@ int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i);
 int mesh_append(struct mesh *dst, const struct mesh *src);
 
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
+int mesh_ivert_set(struct mesh *dst, struct ivert src, int i);
+int mesh_ivert_get(struct mesh *src, struct ivert *dst, int i);
 int mesh_iverts_clear(struct mesh *dst);
 
 int mesh_texture_push(struct mesh *dst, struct texture src);

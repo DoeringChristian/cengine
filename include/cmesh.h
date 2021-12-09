@@ -4,8 +4,6 @@
 #include "darray.h"
 #include "vert.h"
 #include "cglm/cglm.h"
-#define CGLTF_IMPLEMENTATION
-#include "cgltf.h"
 
 /*
  * cmesh is a mesh that lives in ram

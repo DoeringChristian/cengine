@@ -13,5 +13,6 @@ struct model{
 };
 
 int model_load(struct model *dst, const char *path);
+void model_free(struct model *dst);
 
 #endif //MODEL_H

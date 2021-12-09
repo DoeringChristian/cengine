@@ -11,18 +11,26 @@
 #include "gl_util.h"
 
 struct light light0, light1;
+struct mesh mesh;
 
 int update(struct renderer *renderer, void *data){
     int time = SDL_GetTicks();
 
     light0.pos[0] = sinf((float)time / 1000);
+    struct ivert tmp;
+    mesh_ivert_get(&mesh, &tmp, 0);
+    //glm_translate(tmp.trans, vec3(0, 0, sinf((float)time / 1000)));
+    //tmp.trans[3][2] = sinf((float)time/1000);
+    glm_translate_make(tmp.trans, vec3(0.2 * cosf((float)time/110), 0.1 * sinf((float)time/100), -0.6));
+    glm_rotate(tmp.trans, 1, vec3(1, 1, 0));
+    glm_scale(tmp.trans, vec3(0.2, 0.2, 0.2));
+    mesh_ivert_set(&mesh, tmp, 0);
 
     return 0;
 }
 
 int main(){
     struct window win;
-    struct mesh mesh;
 
     window_init(&win, 0, 0, 800, 600, "test");
 
