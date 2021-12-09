@@ -14,8 +14,10 @@ struct light{
     enum light_type type;
 
     float shadow_len;
+
+    float c1, c2;
 };
 
-struct light light(vec4 pos, vec4 color, enum light_type type);
+int light_init(struct light *dst, vec4 pos, vec4 color, enum light_type type);
 
 #endif //LIGHT_H

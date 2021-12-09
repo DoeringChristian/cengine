@@ -70,10 +70,11 @@ int main(){
     struct texture tex1;
     texture_load(&tex1, "res/img/test01.jpg");
 
-    mesh_texture_push(&mesh, tex1);
+    //mesh_texture_push(&mesh, tex1);
+    mesh_texture_albedo_set(&mesh, &tex1);
 
-    light0 = light(vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
-    light1 = light(vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
+    light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
+    light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
 
     scene_light_push(&scene, &light0);
     scene_light_push(&scene, &light1);

@@ -48,6 +48,9 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     dst->pos[1] = 0;
     dst->pos[2] = 0;
 
+    dst->tex_albedo = NULL;
+    dst->tex_normal = NULL;
+    dst->tex_spec = NULL;
 
     return 0;
 }
@@ -81,12 +84,29 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
 
     size_t slot = 0;
 
+    if(src->tex_albedo != NULL){
+        texture_bind(src->tex_albedo, 0);
+        shader_uniform_i(shader, "u_albedo", 0);
+    }
+
+    if(src->tex_normal != NULL){
+        texture_bind(src->tex_normal, 1);
+        shader_uniform_i(shader, "u_normal", 1);
+    }
+
+    if(src->tex_spec != NULL){
+        texture_bind(src->tex_spec, 2);
+        shader_uniform_i(shader, "u_spec", 2);
+    }
+
+#if 0
     for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){
         texture_bind(&src->textures[slot], slot);
         char buf[100] = {0};
         snprintf(buf, 100, "u_sampler[%zu]", slot);
         shader_uniform_i(shader, buf, slot);
     }
+#endif
 
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -220,8 +240,16 @@ int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n){
 }
 
 int mesh_texture_push(struct mesh *dst, struct texture src){
-    GLCall(glBindVertexArray(dst->gl_vao));
     return darray_push_back(&dst->textures, src);
+}
+void mesh_texture_albedo_set(struct mesh *dst, struct texture *src){
+    dst->tex_albedo = src;
+}
+void mesh_texture_normal_set(struct mesh *dst, struct texture *src){
+    dst->tex_normal = src;
+}
+void mesh_texture_spec_set(struct mesh *dst, struct texture *src){
+    dst->tex_spec = src;
 }
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
     GLCall(glBindVertexArray(dst->gl_vao));

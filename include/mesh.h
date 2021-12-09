@@ -35,6 +35,10 @@ struct mesh{
     struct glbuf vboi;
 
     GLuint gl_vao;
+
+    struct texture *tex_albedo;
+    struct texture *tex_normal;
+    struct texture *tex_spec;
 };
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len);
@@ -56,6 +60,9 @@ int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
 int mesh_iverts_clear(struct mesh *dst);
 
 int mesh_texture_push(struct mesh *dst, struct texture src);
+void mesh_texture_albedo_set(struct mesh *dst, struct texture *src);
+void mesh_texture_normal_set(struct mesh *dst, struct texture *src);
+void mesh_texture_spec_set(struct mesh *dst, struct texture *src);
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src);
 int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n);

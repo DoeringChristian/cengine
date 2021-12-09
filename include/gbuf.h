@@ -40,7 +40,7 @@ int gbuf_unbind(struct gbuf *dst);
  * @param light: light source.
  * @param camera: camera from which to view the gbuf.
  */
-int gbuf_draw_ps(struct gbuf *src, struct shader *shader, struct texture *shadow_depth, struct texture *light_prev, struct light *light);
+int gbuf_draw_ps(struct gbuf *src, struct shader *shader, struct texture *shadow_depth, struct texture *light_prev, struct light *light, struct cvert *camera);
 
 int gbuf_shader_load(struct gbuf *dst, const char *vert_path, const char *frag_path);
 

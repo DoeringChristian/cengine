@@ -24,9 +24,7 @@ void main (void){
     mat4 m_matrix = i_instance * u_model;
     mat4 pvm_matrix = u_proj * u_view * m_matrix;
     mat3 norm_matrix = transpose(inverse(mat3(m_matrix)));
-#if 0
-    frag_pos = pvm_matrix * vec4(i_pos, 1.0);
-#endif
+
     // apply only instance and model to fragment position
     frag_pos = m_matrix * vec4(i_pos, 1.0);
 
