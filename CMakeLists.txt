@@ -21,6 +21,7 @@ include_directories("lib/stb/")
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIRS})
 include_directories("lib/darray/")
+include_directories("lib/cgltf/")
 #include_directories("lib/mathc/")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
