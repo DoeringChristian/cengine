@@ -29,8 +29,12 @@ void main (void){
     frag_pos = m_matrix * vec4(i_pos, 1.0);
 
     gl_Position = pvm_matrix * vec4(i_pos, 1.0);
+
+    // forward the color
     frag_color = i_color;
-    //frag_normal = vec4(mat3(i_trans) * mat3(u_trans) * i_normal, 1.0);
+
+    // set the fragment normal 
     frag_normal = normalize(norm_matrix * i_normal);
+
     frag_uv = i_uv;
 }
