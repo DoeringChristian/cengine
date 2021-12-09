@@ -1,21 +1,27 @@
 #include "layer.h"
 
 int layer_init(struct layer *dst, int w, int h){
+    return layer_init_n(dst, w, h, 1);
+}
+int layer_init_n(struct layer *dst, int w, int h, int num_textures){
+    if(num_textures > 16)
+        return -1;
     dst->w = w;
     dst->h = h;
-    dst->shader = (struct shader){
-        .attr_idx = 0,
-        .program = 0,
-    };
+    darray_init(&dst->textures, num_textures);
 
     // input side
     
     GLCall(glGenFramebuffers(1, &dst->gl_fbo));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
 
-    texture_init_f32(&dst->texture, w, h, NULL);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->texture.gl_tex, 0);
+    // push initial texture
+    struct texture texture;
+    for(size_t i = 0;i < num_textures;i++){
+        texture_init_f32(&texture, w, h, NULL);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.gl_tex, 0);
+        darray_push_back(&dst->textures, texture);
+    }
 
     GLCall(glGenRenderbuffers(1, &dst->gl_rbo));
     GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
@@ -27,11 +33,13 @@ int layer_init(struct layer *dst, int w, int h){
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         return -1;
 
-    GLuint attachments[1] = {
-        GL_COLOR_ATTACHMENT0,
-    };
+    GLuint attachments[num_textures];
 
-    glDrawBuffers(1, attachments);
+    for(size_t i = 0;i < num_textures;i++){
+        attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+    }
+
+    glDrawBuffers(num_textures, attachments);
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
@@ -57,7 +65,9 @@ int layer_init(struct layer *dst, int w, int h){
     return 0;
 }
 void layer_free(struct layer *dst){
-    texture_free(&dst->texture);
+    for(size_t i = 0;i < darray_len(&dst->textures);i++)
+        texture_free(&dst->textures[i]);
+    darray_free(&dst->textures);
     GLCall(glDeleteFramebuffers(1, &dst->gl_fbo));
     GLCall(glDeleteRenderbuffers(1, &dst->gl_rbo));
     GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
@@ -80,16 +90,12 @@ int layer_unbind(struct layer *dst){
     return 0;
 }
 int layer_draw(struct layer *dst, struct shader *shader){
-    if(shader == NULL && dst->shader.program != 0)
-        shader = &dst->shader;
-#if 0
-    if(dst->type != LAYER_TYPE_2D)
-        return 1;
-#endif
+    if(shader == NULL)
+        return -1;
 
     shader_bind(shader);
 
-    texture_bind(&dst->texture, 0);
+    texture_bind(&dst->textures[0], 0);
     shader_uniform_i(shader, "u_texture", 0);
 
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -103,13 +109,13 @@ int layer_draw(struct layer *dst, struct shader *shader){
     shader_unbind(shader);
     return 0;
 }
-int layer_draw_shader_tex(struct layer *dst, struct shader *shader, struct texture *tex){
-    if(shader == NULL && dst->shader.program != 0)
-        shader = &dst->shader;
+int layer_draw_tex(struct layer *dst, struct shader *shader, struct texture *tex){
+    if(shader == NULL)
+        return -1;
 
     shader_bind(shader);
 
-    texture_bind(&dst->texture, 0);
+    texture_bind(&dst->textures[0], 0);
     shader_uniform_i(shader, "u_texture1", 0);
 
     texture_bind(tex, 1);
@@ -131,10 +137,10 @@ int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struc
 
     layer_bind(dst);
 
-    texture_bind(&src1->texture, 0);
+    texture_bind(&src1->textures[0], 0);
     shader_uniform_i(bshader, "u_texture1", 0);
 
-    texture_bind(&src2->texture, 1);
+    texture_bind(&src2->textures[0], 1);
     shader_uniform_i(bshader, "u_texture2", 1);
 
     GLCall(glBindVertexArray(src1->gl_vao));
@@ -151,14 +157,12 @@ int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struc
     shader_unbind(bshader);
     return 0;
 }
-int layer_shader_load(struct layer *dst, const char *vert_path, const char *frag_path){
-    shader_load(&dst->shader, vert_path, frag_path);
-    return 0;
-}
 int layer_clear(struct layer *dst){
     float color_black[4] = {
         0, 0, 0, 0,
     };
-    texture_fill(&dst->texture, color_black);
+    for(size_t i = 0;i < darray_len(&dst->textures);i++)
+        texture_fill(&dst->textures[0], color_black);
+
     return 0;
 }

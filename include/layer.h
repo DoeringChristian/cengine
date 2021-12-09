@@ -21,11 +21,12 @@ struct layer{
     GLuint gl_vao;
     GLuint gl_rbo;
 
-    struct texture texture;
-    struct shader shader;
+    //struct texture texture;
+    darray(struct texture) textures;
 };
 
 int layer_init(struct layer *dst, int w, int h);
+int layer_init_n(struct layer *dst, int w, int h, int num_textures);
 void layer_free(struct layer *dst);
 
 int layer_clear(struct layer *dst);
@@ -34,11 +35,8 @@ int layer_bind(struct layer *dst);
 int layer_unbind(struct layer *dst);
 
 int layer_draw(struct layer *dst, struct shader *shader);
-int layer_draw_shader_tex(struct layer *dst, struct shader *shader, struct texture *tex);
+int layer_draw_tex(struct layer *dst, struct shader *shader, struct texture *tex);
 
-int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);
-int layer_blend_gbuf(struct layer *dst, struct layer *srcl, struct gbuf *srcg, struct shader *bshader);
-
-int layer_shader_load(struct layer *dst, const char *vert_path, const char *frag_path);
+//int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);
 
 #endif //LAYER_H

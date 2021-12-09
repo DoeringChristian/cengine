@@ -84,7 +84,7 @@ int renderer_render(struct renderer *src){
                     &src->gbuf,
                     &src->shader_lighting,
                     &src->cl_shadow.texture,
-                    &src->light_sum.texture,
+                    &src->light_sum.textures[0],
                     light_tmp,
                     &src->camera);
             layer_unbind(&src->light);
