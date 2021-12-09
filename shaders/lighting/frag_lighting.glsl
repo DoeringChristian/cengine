@@ -8,13 +8,11 @@ out vec4 o_color;
 uniform sampler2D u_pos;
 uniform sampler2D u_normal;
 uniform sampler2D u_color;
+uniform sampler2D u_light_prev;
 uniform samplerCube u_shadow;
 
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
-
-uniform mat4 u_proj;
-uniform mat4 u_view;
 
 uniform float u_shadow_len;
 
@@ -56,6 +54,10 @@ void main (void){
 
     vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color) * u_light_color.a;
     o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color, 1);
+
+    // add light from previous passes.
+    o_color += texture(u_light_prev, frag_uv);
+
     //o_color = debug_out;
     //o_color = vec4(texture(u_shadow, vec3(frag_uv.x, -1, frag_uv.y)).r, 0, 0, 1);
     //o_color = vec4(texture(u_shadow, pos - vec3(u_light_pos)).r, 0, 0, 1);

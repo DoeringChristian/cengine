@@ -26,7 +26,7 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     layer_init(&dst->light, w, h);
     layer_init(&dst->light_sum, w, h);
-    layer_init(&dst->light_tmp, w, h);
+
     cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
 
     cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
@@ -75,49 +75,25 @@ int renderer_render(struct renderer *src){
         // calculate view projection of light
         struct light light_tmp = src->scene->lights[i];
         
-        struct cvert cm_cameras[6];
-        cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
-        cm_cameras[0].far = 100;
-        cm_cameras[1].far = 100;
-        cm_cameras[2].far = 100;
-        cm_cameras[3].far = 100;
-        cm_cameras[4].far = 100;
-        cm_cameras[5].far = 100;
+        if(light_tmp.type == LIGHT_POINT){
+            renderer_render_point_shadow(src, &light_tmp);
 
-        glm_look(src->scene->lights[i].pos, (float []){1, 0, 0}, (float []){0, -1, 0}, cm_cameras[0].view);
-        glm_look(src->scene->lights[i].pos, (float []){-1, 0, 0}, (float []){0, -1, 0}, cm_cameras[1].view);
-        glm_look(src->scene->lights[i].pos, (float []){0, 1, 0}, (float []){0, 0, 1}, cm_cameras[2].view);
-        glm_look(src->scene->lights[i].pos, (float []){0, -1, 0}, (float []){0, 0, -1}, cm_cameras[3].view);
-        glm_look(src->scene->lights[i].pos, (float []){0, 0, 1}, (float []){0, -1, 0}, cm_cameras[4].view);
-        glm_look(src->scene->lights[i].pos, (float []){0, 0, -1}, (float []){0, -1, 0}, cm_cameras[5].view);
-        
-
-        // calculate view projection of light
-        for(size_t j = 0;j < 6;j++){
-            cubelayer_bind(&src->cl_shadow, j);
-            scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, &src->scene->lights[i]);
-            cubelayer_unbind(&src->cl_shadow);
+            // render the light of the gbuf to the light layer
+            layer_bind(&src->light);
+            // render the gbuf with the previous light 
+            gbuf_draw_ps(
+                    &src->gbuf,
+                    &src->shader_lighting,
+                    &src->cl_shadow.texture,
+                    &src->light_sum.texture,
+                    &light_tmp);
+            layer_unbind(&src->light);
         }
-
-        // render the light of the gbuf to the light layer
-        layer_bind(&src->light);
-        //gbuf_draw(&src->gbuf, light_tmp, &src->cl_shadow.texture, 100, &src->camera);
-        gbuf_draw(&src->gbuf, &src->shader_lighting, &src->cl_shadow.texture, &light_tmp, &src->camera);
-        layer_unbind(&src->light);
-
-        // sum the lightness map with all previous. and store it into the tmp layer.
-        
-        layer_blend(&src->light_tmp, &src->light_sum, &src->light, &src->shader_add);
 
         // copy it to the light sum layer
         layer_bind(&src->light_sum);
-        layer_draw(&src->light_tmp, &src->shader_forward);
+        //layer_draw(&src->light_tmp, &src->shader_forward);
+        layer_draw(&src->light, &src->shader_forward);
         layer_unbind(&src->light_sum);
 
     }
@@ -140,4 +116,35 @@ int renderer_scene_set(struct renderer *dst, struct scene *src){
     dst->scene = src;
     src->shader = &dst->shader;
     return 0;
+}
+int renderer_render_point_shadow(struct renderer *src, struct light *light){
+        struct cvert cm_cameras[6];
+        cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
+        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
+        cm_cameras[0].far = 100;
+        cm_cameras[1].far = 100;
+        cm_cameras[2].far = 100;
+        cm_cameras[3].far = 100;
+        cm_cameras[4].far = 100;
+        cm_cameras[5].far = 100;
+
+        glm_look(light->pos, vec3(1, 0, 0), vec3(0, -1, 0), cm_cameras[0].view);
+        glm_look(light->pos, vec3(-1, 0, 0), vec3(0, -1, 0), cm_cameras[1].view);
+        glm_look(light->pos, vec3(0, 1, 0), vec3(0, 0, 1), cm_cameras[2].view);
+        glm_look(light->pos, vec3(0, -1, 0), vec3(0, 0, -1), cm_cameras[3].view);
+        glm_look(light->pos, vec3(0, 0, 1), vec3(0, -1, 0), cm_cameras[4].view);
+        glm_look(light->pos, vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
+
+        // calculate view projection of light
+        for(size_t j = 0;j < 6;j++){
+            cubelayer_bind(&src->cl_shadow, j);
+            scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
+            cubelayer_unbind(&src->cl_shadow);
+        }
+        return 0;
 }

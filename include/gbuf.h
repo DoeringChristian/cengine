@@ -30,7 +30,17 @@ void gbuf_free(struct gbuf *dst);
 int gbuf_bind(struct gbuf *dst);
 int gbuf_unbind(struct gbuf *dst);
 
-int gbuf_draw(struct gbuf *dst, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera);
+/*
+ * Draws the GBuffer to the currently active framebuffer with a point light.
+ *
+ * @param src: gbufer to draw
+ * @param shader: Shader to use when drawing the gbuf.
+ * @param shadow_depth: cubemap texture specifying the distance to geometry from the light source.
+ * @param light_prev: Comulative result of the prvious passes.
+ * @param light: light source.
+ * @param camera: camera from which to view the gbuf.
+ */
+int gbuf_draw_ps(struct gbuf *src, struct shader *shader, struct texture *shadow_depth, struct texture *light_prev, struct light *light);
 
 int gbuf_shader_load(struct gbuf *dst, const char *vert_path, const char *frag_path);
 

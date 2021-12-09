@@ -40,6 +40,7 @@ void renderer_free(struct renderer *dst);
 
 int renderer_push(struct renderer *dst);
 int renderer_render(struct renderer *src);
+int renderer_render_point_shadow(struct renderer *src, struct light *light);
 
 int renderer_scene_set(struct renderer *dst, struct scene *src);
 
