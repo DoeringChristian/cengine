@@ -100,7 +100,7 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     return 0;
 }
 
-int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct lvert *light){
+int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light){
     shader_bind(shader);
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -112,13 +112,13 @@ int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shade
 
     shader_uniform_vec4f(shader, "u_light_pos", light->pos);
 
-    shader_uniform_f(shader, "u_far", camera[0].far);
+    shader_uniform_f(shader, "u_far", camera->far);
 
     shader_uniform_mat4f(shader, "u_model", (float *)mat_tmp);
 
-    shader_uniform_mat4f(shader, "u_proj", (float *)camera[0].proj);
+    shader_uniform_mat4f(shader, "u_proj", (float *)camera->proj);
 
-    shader_uniform_mat4f(shader, "u_view", (float *)camera[0].view);
+    shader_uniform_mat4f(shader, "u_view", (float *)camera->view);
 
     glbuf_bind(&src->ibo);
 

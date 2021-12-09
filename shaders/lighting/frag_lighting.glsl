@@ -16,7 +16,7 @@ uniform vec4 u_light_color;
 uniform mat4 u_proj;
 uniform mat4 u_view;
 
-uniform float u_shadow_scaling;
+uniform float u_shadow_len;
 
 vec4 light_pos;
 vec4 debug_out;
@@ -24,7 +24,7 @@ vec4 debug_out;
 float shadow(vec3 pos){
     vec3 frag_to_light = pos - vec3(light_pos);
     float depth_closest = texture(u_shadow, frag_to_light).r;
-    depth_closest *= u_shadow_scaling;
+    depth_closest *= u_shadow_len;
 
     debug_out = vec4(vec3(depth_closest), 1);
 

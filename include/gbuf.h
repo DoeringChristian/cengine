@@ -9,6 +9,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "camera.h"
+#include "light.h"
 
 struct gbuf{
     struct glbuf vbo;
@@ -29,7 +30,7 @@ void gbuf_free(struct gbuf *dst);
 int gbuf_bind(struct gbuf *dst);
 int gbuf_unbind(struct gbuf *dst);
 
-int gbuf_draw(struct gbuf *dst, struct shader *shader, struct lvert light, struct texture *shadow_depth, float shadow_scale, struct cvert *camera);
+int gbuf_draw(struct gbuf *dst, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera);
 
 int gbuf_shader_load(struct gbuf *dst, const char *vert_path, const char *frag_path);
 

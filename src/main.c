@@ -107,17 +107,13 @@ int main(){
 
     mesh_texture_push(&mesh, tex1);
 
-    struct lvert light0 = {
-        .pos = {0, 1, -0.5, 1},
-        .color = {0, 1, 1, 1},
-    };
-    struct lvert light1 = {
-        .pos = {-0.4, 0, 0, 1},
-        .color = {1, 1, 0, 0.5},
-    };
+    struct light light0, light1;
+    light0 = light(vec4(0, 1, -0.5, 1), vec4(0, 1, 1, 1), LIGHT_POINT);
+    light1 = light(vec4(-0.4, 0, 0, 1), vec4(1, 1, 0, 0.5), LIGHT_POINT);
+    //printf("%zu\n", sizeof((float []){0, 0, 0}));
 
-    scene_lvert_push(&scene, light0);
-    scene_lvert_push(&scene, light1);
+    scene_light_push(&scene, light0);
+    scene_light_push(&scene, light1);
 
     //renderer_push(&win.renderer);
     //mesh_push(&mesh);

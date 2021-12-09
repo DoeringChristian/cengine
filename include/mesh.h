@@ -12,6 +12,7 @@
 #include "vert.h"
 #include "camera.h"
 #include "cmesh.h"
+#include "light.h"
 
 #define MAX_TEXTURES 10
 #define MAX_LIGHTS 4
@@ -43,7 +44,7 @@ void mesh_free(struct mesh *dst);
 int mesh_push(struct mesh *dst);
 int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader);
 // draw shadow cube map
-int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct lvert *light);
+int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light);
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src);
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);

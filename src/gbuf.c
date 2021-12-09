@@ -87,7 +87,7 @@ int gbuf_unbind(struct gbuf *dst){
     return 0;
 }
 
-int gbuf_draw(struct gbuf *dst, struct shader *shader, struct lvert light, struct texture *shadow_depth, float shadow_scale, struct cvert *camera){
+int gbuf_draw(struct gbuf *dst, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera){
     if(shader == NULL)
         return -1;
 
@@ -105,13 +105,13 @@ int gbuf_draw(struct gbuf *dst, struct shader *shader, struct lvert light, struc
     texture_bind(shadow_depth, 3);
     shader_uniform_i(shader, "u_shadow", 3);
 
-    shader_uniform_vec4f(shader, "u_light_pos", light.pos);
-    shader_uniform_vec4f(shader, "u_light_color", light.color);
+    shader_uniform_vec4f(shader, "u_light_pos", light->pos);
+    shader_uniform_vec4f(shader, "u_light_color", light->color);
 
     shader_uniform_mat4f(shader, "u_proj", (float *)camera->proj);
     shader_uniform_mat4f(shader, "u_view", (float *)camera->view);
 
-    shader_uniform_f(shader, "u_shadow_scaling", shadow_scale);
+    shader_uniform_f(shader, "u_shadow_len", light->shadow_len);
 
     GLCall(glBindVertexArray(dst->gl_vao));
 

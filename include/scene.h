@@ -6,10 +6,11 @@
 #include "mesh.h"
 #include "darray.h"
 #include "camera.h"
+#include "light.h"
 
 struct scene{
     darray(struct mesh *) meshes;
-    darray(struct lvert) lights;
+    darray(struct light) lights;
 
     struct shader *shader;
 };
@@ -20,8 +21,8 @@ void scene_free(struct scene *dst);
 int scene_mesh_push_back(struct scene *dst, struct mesh *src);
 
 int scene_draw(struct scene *dst, struct cvert *camera, struct shader *shader);
-int scene_draw_shadow_cm(struct scene *dst, struct cvert *camera, struct shader *shader, struct lvert *light);
+int scene_draw_shadow_depth(struct scene *dst, struct cvert *camera, struct shader *shader, struct light *light);
 
-int scene_lvert_push(struct scene *dst, struct lvert src);
+int scene_light_push(struct scene *dst, struct light src);
 
 #endif //SCENEH_H

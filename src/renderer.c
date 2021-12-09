@@ -73,8 +73,7 @@ int renderer_render(struct renderer *src){
     for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
         // render shadow cube map
         // calculate view projection of light
-        struct lvert light_tmp = src->scene->lights[i];
-        //glm_mat4_mulv(src->camera.proj, src->scene->lights[i].pos, light_tmp.pos);
+        struct light light_tmp = src->scene->lights[i];
         
         struct cvert cm_cameras[6];
         cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
@@ -100,20 +99,16 @@ int renderer_render(struct renderer *src){
         
 
         // calculate view projection of light
-        //layer_bind(&src->shadow_cube);
         for(size_t j = 0;j < 6;j++){
             cubelayer_bind(&src->cl_shadow, j);
-            scene_draw_shadow_cm(src->scene, &cm_cameras[j], &src->shader_shadow, &src->scene->lights[i]);
+            scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, &src->scene->lights[i]);
             cubelayer_unbind(&src->cl_shadow);
         }
-        //layer_unbind(&src->shadow_cube);
-        
-        //vec4_multiply_mat4(light_tmp.pos, src->scene->lights[i].pos, src->camera.mat);
 
         // render the light of the gbuf to the light layer
         layer_bind(&src->light);
         //gbuf_draw(&src->gbuf, light_tmp, &src->cl_shadow.texture, 100, &src->camera);
-        gbuf_draw(&src->gbuf, &src->shader_lighting, light_tmp, &src->cl_shadow.texture, 100, &src->camera);
+        gbuf_draw(&src->gbuf, &src->shader_lighting, &src->cl_shadow.texture, &light_tmp, &src->camera);
         layer_unbind(&src->light);
 
         // sum the lightness map with all previous. and store it into the tmp layer.
@@ -134,27 +129,6 @@ int renderer_render(struct renderer *src){
     //layer_draw_shader(&src->light_sum, &src->shader_forward);
     
     layer_draw(&src->light_sum, &src->shader_forward);
-
-#if 0
-    struct shader tmp;
-    shader_load(&tmp, "shaders/layer/vert.glsl", "shaders/layer/frag_cube.glsl");
-    //cubelayer_draw(&src->cl_shadow, &tmp);
-    shader_free(&tmp);
-#endif
-
-#if 0
-    struct shader tmp;
-    shader_load(&tmp, "shaders/layer/vert.glsl", "shaders/layer/frag_cube.glsl");
-    layer_draw_shader(&src->shadow_cube, &tmp);
-    shader_free(&tmp);
-#endif
-
-    //layer_clear(&src->light_sum);
-
-    //layer_bind(&src->l1);
-    //layer_unbind(&src->l1);
-
-    //layer_draw_shader(&src->l1, &layer_shader);
 
     glBindVertexArray(0);
     glUseProgram(0);

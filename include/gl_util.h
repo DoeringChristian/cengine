@@ -56,10 +56,10 @@
 }
 
 // defining vec initialisations
-#define vec2(_x, _y) ((float []){_x, _y})
-#define vec3(_x, _y, _z) ((float []){_x, _y, _z})
-#define vec4(_x1, _x2, _x3, _x4) ((float []){_x1, _x2, _x3, _x4})
-#define versor(_x, _y, _z, _w) ((float []){_x, _y, _z, _w})
+#define vec2(_x, _y) ((float [2]){_x, _y})
+#define vec3(_x, _y, _z) ((float [3]){_x, _y, _z})
+#define vec4(_x1, _x2, _x3, _x4) ((float [4]){_x1, _x2, _x3, _x4})
+#define versor(_x, _y, _z, _w) ((float [4]){_x, _y, _z, _w})
 
 void gl_err_clear();
 void gl_err_print(const char *file, const char *func, int line);
