@@ -180,6 +180,12 @@ int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n){
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_append(&dst->vbo, src, n * sizeof(struct vert));
 }
+int mesh_vert_set(struct mesh *dst, struct vert src, size_t i){
+    return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), sizeof(struct vert));
+}
+int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i){
+    return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), n * sizeof(struct vert));
+}
 int mesh_append(struct mesh *dst, const struct mesh *src){
     GLCall(glBindVertexArray(dst->gl_vao));
 

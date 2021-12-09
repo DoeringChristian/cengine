@@ -33,6 +33,16 @@ int cmesh_vert_insert(struct cmesh *dst, struct vert *src, size_t i, size_t n){
     cmesh_tris_inc_cond(dst, i, n);
     return darray_insert(&dst->verts, src, n, i);
 }
+int cmesh_vert_set(struct cmesh *dst, struct vert src, size_t i){
+    dst->verts[i] = src;
+    return 0;
+}
+int cmesh_vert_setn(struct cmesh *dst, struct vert *src, size_t i, size_t n){
+    if(i + n > darray_len(&dst->verts))
+        return 1;
+    memcpy(&dst->verts[i], src, sizeof(struct vert) * n);
+    return 0;
+}
 
 int cmesh_tri_push(struct cmesh *dst, struct tri src, size_t i){
     return darray_push(&dst->tris, src, i);

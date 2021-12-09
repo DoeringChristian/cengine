@@ -72,13 +72,13 @@ int glbuf_insert(struct glbuf *dst, void *src, GLsizei size, size_t offset){
 }
 
 int glbuf_resize(struct glbuf *dst, GLsizei size){
-    // need to change
-    void *buf = malloc(dst->gl_buf_size + size);
-    memset(buf, 0, dst->gl_buf_size + size);
+    size_t buf_size = MAX(dst->gl_buf_size, size);
+    void *buf = malloc(buf_size);
+    memset(buf, 0, buf_size);
 
     glbuf_get(dst, buf, 0, dst->gl_buf_size);
 
-    dst->gl_buf_size += size;
+    dst->gl_buf_size = size;
 
     GLCall(glBindBuffer(dst->gl_type, dst->gl_buf));
     GLCall(glBufferData(dst->gl_type, dst->gl_buf_size, buf, dst->gl_usage));

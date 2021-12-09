@@ -10,12 +10,13 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
     dst->h = h;
     darray_init(&dst->textures, num_textures);
 
+    // -----------------------------------------
     // input side
     
     GLCall(glGenFramebuffers(1, &dst->gl_fbo));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
 
-    // push initial texture
+    // push textures
     struct texture texture;
     for(size_t i = 0;i < num_textures;i++){
         texture_init_f32(&texture, w, h, NULL);
@@ -43,6 +44,7 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
+    // -----------------------------------------
     // output side
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));

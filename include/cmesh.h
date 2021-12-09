@@ -24,6 +24,8 @@ int cmesh_vert_push(struct cmesh *dst, struct vert src, size_t i);
 int cmesh_vert_push_back(struct cmesh *dst, struct vert src);
 int cmesh_vert_append(struct cmesh *dst, struct vert *src, size_t n);
 int cmesh_vert_insert(struct cmesh *dst, struct vert *src, size_t i, size_t n);
+int cmesh_vert_set(struct cmesh *dst, struct vert src, size_t i);
+int cmesh_vert_setn(struct cmesh *dst, struct vert *src, size_t i, size_t n);
 
 int cmesh_tri_push(struct cmesh *dst, struct tri src, size_t i);
 int cmesh_tri_push_back(struct cmesh *dst, struct tri src);

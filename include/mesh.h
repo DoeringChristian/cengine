@@ -53,6 +53,8 @@ int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shade
 int mesh_vert_push_back(struct mesh *dst, struct vert src);
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n);
+int mesh_vert_set(struct mesh *dst, struct vert src, size_t i);
+int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i);
 
 int mesh_append(struct mesh *dst, const struct mesh *src);
 

@@ -27,7 +27,11 @@ int main(){
     window_init(&win, 0, 0, 800, 600, "test");
 
     //mesh_init_quad(&mesh, &win.renderer.shader);
-    mesh_init_cube(&mesh);
+    struct cmesh cmesh;
+    cmesh_init_cube(&cmesh);
+    mesh_init_cmesh(&mesh, &cmesh);
+    cmesh_free(&cmesh);
+    //mesh_init_cube(&mesh);
 
     struct scene scene;
     scene_init(&scene);
