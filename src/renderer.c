@@ -10,7 +10,7 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
-    shader_load(&dst->shader_forward, "shaders/layer/frag.glsl", "shaders/layer/frag.glsl");
+    shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
 
     shader_load(&dst->shader_mul, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_mul.glsl");
 
@@ -21,20 +21,10 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     gbuf_init_shader(&dst->gbuf, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
 
-#if 1
-    layer_init_shader(&dst->light, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
-    layer_init_shader(&dst->light_sum, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
-    layer_init_shader(&dst->light_tmp, w, h, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
-
-    layer_init_cube(&dst->shadow_cube, SHADOW_SIZE);
-    cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
-#endif
-
-#if 0
     layer_init(&dst->light, w, h);
     layer_init(&dst->light_sum, w, h);
     layer_init(&dst->light_tmp, w, h);
-#endif
+    cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
 
     cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
 
@@ -143,7 +133,7 @@ int renderer_render(struct renderer *src){
 
         // copy it to the light sum layer
         layer_bind(&src->light_sum);
-        layer_draw(&src->light_tmp);
+        layer_draw_shader(&src->light_tmp, &src->shader_forward);
         layer_unbind(&src->light_sum);
 
     }
@@ -154,7 +144,7 @@ int renderer_render(struct renderer *src){
     // draw the lightness map
     //layer_draw_shader(&src->light_sum, &src->shader_forward);
     
-    layer_draw(&src->light_sum);
+    layer_draw_shader(&src->light_sum, &src->shader_forward);
 
 #if 0
     struct shader tmp;

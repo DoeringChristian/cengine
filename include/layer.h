@@ -11,11 +11,6 @@
 #include "darray.h"
 #include "gbuf.h"
 
-enum layer_type{
-    LAYER_TYPE_2D,
-    LAYER_TYPE_CM,
-};
-
 struct layer{
     struct glbuf vbo;
     struct glbuf ibo;
@@ -28,13 +23,9 @@ struct layer{
 
     struct texture texture;
     struct shader shader;
-
-    GLenum type;
 };
 
 int layer_init(struct layer *dst, int w, int h);
-int layer_init_shader(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path);
-int layer_init_cube(struct layer *dst, int size);
 void layer_free(struct layer *dst);
 
 int layer_clear(struct layer *dst);

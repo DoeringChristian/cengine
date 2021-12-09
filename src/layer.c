@@ -1,14 +1,8 @@
 #include "layer.h"
 
-int layer_init_shader(struct layer *dst, int w, int h, const char *vert_path, const char *frag_path){
-    layer_init(dst, w, h);
-    layer_shader_load(dst, vert_path, frag_path);
-    return 0;
-}
 int layer_init(struct layer *dst, int w, int h){
     dst->w = w;
     dst->h = h;
-    dst->type = LAYER_TYPE_2D;
     dst->shader = (struct shader){
         .attr_idx = 0,
         .program = 0,
@@ -38,56 +32,6 @@ int layer_init(struct layer *dst, int w, int h){
     };
 
     glDrawBuffers(1, attachments);
-
-    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-
-    // output side
-
-    GLCall(glGenVertexArrays(1, &dst->gl_vao));
-    GLCall(glBindVertexArray(dst->gl_vao));
-
-    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-
-    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
-
-    glbuf_bind(&dst->vbo);
-
-    int idx = 0;
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
-
-    glbuf_unbind(&dst->vbo);
-
-    GLCall(glBindVertexArray(0));
-
-    return 0;
-}
-int layer_init_cube(struct layer *dst, int size){
-    dst->w = size;
-    dst->h = size;
-    dst->type = LAYER_TYPE_CM;
-    dst->shader = (struct shader){
-        .attr_idx = 0,
-        .program = 0,
-    };
-
-    // input side
-    
-    GLCall(glGenFramebuffers(1, &dst->gl_fbo));
-    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-
-    //texture_init_f32(&dst->texture, w, h, NULL);
-    texture_init_f32_depthcube(&dst->texture, size, size, NULL);
-
-    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dst->texture.gl_tex, 0);
-    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-    GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dst->texture.gl_tex, 0));
-
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        assert(1);
-
-    GLCall(glDrawBuffer(GL_NONE));
-    GLCall(glReadBuffer(GL_NONE));
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
@@ -169,8 +113,6 @@ int layer_draw_shader(struct layer *dst, struct shader *shader){
 int layer_draw_shader_tex(struct layer *dst, struct shader *shader, struct texture *tex){
     if(shader == NULL && dst->shader.program != 0)
         shader = &dst->shader;
-    if(dst->type != GL_TEXTURE_2D)
-        return 1;
 
     shader_bind(shader);
 

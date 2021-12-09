@@ -31,7 +31,7 @@ struct renderer{
     struct layer light;
     struct layer light_sum;
     struct layer light_tmp;
-    struct layer shadow_cube;
+    //struct layer shadow_cube;
     struct cubelayer cl_shadow;
 };
 
