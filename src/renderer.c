@@ -18,12 +18,19 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
 
+    shader_load(&dst->shader_clip, "shaders/layer/vert.glsl", "shaders/layer/frag_clip.glsl");
+
+#if 0
+    shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
+    shader_load(&dst->shader_blurv, "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
+#endif
+
     // initializing layers
     //gbuf_init(&dst->gbuf, w, h);
     layer_init_n(&dst->gbuf, w, h, 3);
 
     layer_init(&dst->light, w, h);
-    layer_init(&dst->light_sum, w, h);
+    layer_init(&dst->light_out, w, h);
 
     cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
 
@@ -37,7 +44,7 @@ void renderer_free(struct renderer *dst){
     //gbuf_free(&dst->gbuf);
     layer_free(&dst->gbuf);
     layer_free(&dst->light);
-    layer_free(&dst->light_sum);
+    layer_free(&dst->light_out);
     shader_free(&dst->shader_forward);
     shader_free(&dst->shader);
     darray_free(&dst->lights);
@@ -45,53 +52,58 @@ void renderer_free(struct renderer *dst){
 }
 
 int renderer_render(struct renderer *src){
-    glClearColor(0.f, 0.f, 0.f, 0.f);
+    glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+    // ------------------------------------------------
     // render the scene to the gbuf
 
     //gbuf_bind(&src->gbuf);
     layer_bind(&src->gbuf);
+    glBlendFunc(GL_ONE, GL_ZERO);
     for(size_t i = 0;i < darray_len(&src->meshes);i++)
         mesh_draw(src->meshes[i], &src->camera, &src->shader);
     layer_unbind(&src->gbuf);
     //gbuf_unbind(&src->gbuf);
 
     // clear the summ of lightess maps
-    layer_bind(&src->light);
-    layer_unbind(&src->light);
 
+    layer_bind(&src->light_out);
+    layer_unbind(&src->light_out);
+
+    // -----------------------------------------------
+    // Render lights
     for(size_t i = 0;i < darray_len(&src->lights);i++){
         // render shadow cube map
         // calculate view projection of light
         struct light *light_tmp = src->lights[i];
         
         if(light_tmp->type == LIGHT_POINT){
-            renderer_render_point_shadow(src, light_tmp);
 
-            // render the light of the gbuf to the light layer
-            layer_rebind(&src->light);
-            GLCall(glBlendFunc(GL_ONE, GL_ZERO));
-            // render the gbuf with the previous light 
+            //renderer_render_point_shadow(src, light_tmp);
+            
+            layer_bind(&src->light);
+            GLCall(glEnable(GL_BLEND));
+            GLCall(glDisable(GL_DEPTH_TEST));
+            GLCall(glBlendFunc(GL_ONE, GL_ONE));
+
             layer_draw_gbuf(
                     &src->gbuf,
                     &src->shader_lighting,
                     &src->cl_shadow.texture,
                     light_tmp,
                     &src->camera);
-            layer_draw(&src->light_sum, &src->shader_forward);
+            layer_draw(&src->light_out, &src->shader_forward);
+
             layer_unbind(&src->light);
         }
-
 #if 1
-        // copy it to the light sum layer
-        layer_bind(&src->light_sum);
-        //layer_draw(&src->light_tmp, &src->shader_forward);
+        layer_bind(&src->light_out);
         layer_draw(&src->light, &src->shader_forward);
-        layer_unbind(&src->light_sum);
+        layer_unbind(&src->light_out);
+        GLCall(glEnable(GL_DEPTH_TEST));
 #endif
-
     }
 
     // reset viewport
@@ -99,54 +111,86 @@ int renderer_render(struct renderer *src){
 
     // draw the lightness map
     //layer_draw_shader(&src->light_sum, &src->shader_forward);
-    
-    layer_draw(&src->light_sum, &src->shader_forward);
+
+    //renderer_render_bloom(src);
+
+    layer_draw(&src->light_out, &src->shader_forward);
 
     glBindVertexArray(0);
     glUseProgram(0);
     return 0;
 }
 
+int renderer_render_bloom(struct renderer *src){
+    struct layer layers_bloom[16];
+    struct layer layer_tmp;
+    layer_init(&layer_tmp, src->w, src->h);
+    for(size_t i = 0;i < 16;i++){
+        layer_init(&layers_bloom[i], src->w/(i+1), src->h/(i+1));
+    }
 
-#if 0
-int renderer_scene_set(struct renderer *dst, struct scene *src){
-    dst->scene = src;
-    src->shader = &dst->shader;
+    for(size_t i = 0;i < 16;i++){
+        layer_bind(&layers_bloom[i]);
+        if(i == 0){
+            layer_draw(&src->light_out, &src->shader_clip);
+        }
+        else{
+            layer_draw(&layers_bloom[i-1], &src->shader_forward);
+        }
+        layer_unbind(&layers_bloom[i]);
+    }
+
+    layer_bind(&layer_tmp);
+    GLCall(glBlendFunc(GL_ONE, GL_ONE));
+    layer_draw(&src->light_out, &src->shader_forward);
+    for(size_t i = 0;i < 16;i++){
+        layer_draw(&layers_bloom[i], &src->shader_forward);
+    }
+    layer_unbind(&layer_tmp);
+
+    layer_bind(&src->light_out);
+    layer_draw(&layer_tmp, &src->shader_forward);
+    layer_unbind(&src->light_out);
+
+    layer_free(&layer_tmp);
+    for(size_t i = 0;i < 16;i++){
+        layer_free(&layers_bloom[i]);
+    }
     return 0;
 }
-#endif
+
 int renderer_render_point_shadow(struct renderer *src, struct light *light){
-        struct cvert cm_cameras[6];
-        cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
-        glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
-        cm_cameras[0].far = 100;
-        cm_cameras[1].far = 100;
-        cm_cameras[2].far = 100;
-        cm_cameras[3].far = 100;
-        cm_cameras[4].far = 100;
-        cm_cameras[5].far = 100;
+    struct cvert cm_cameras[6];
+    cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
+    cm_cameras[0].far = 100;
+    cm_cameras[1].far = 100;
+    cm_cameras[2].far = 100;
+    cm_cameras[3].far = 100;
+    cm_cameras[4].far = 100;
+    cm_cameras[5].far = 100;
 
-        glm_look(light->pos, vec3(1, 0, 0), vec3(0, -1, 0), cm_cameras[0].view);
-        glm_look(light->pos, vec3(-1, 0, 0), vec3(0, -1, 0), cm_cameras[1].view);
-        glm_look(light->pos, vec3(0, 1, 0), vec3(0, 0, 1), cm_cameras[2].view);
-        glm_look(light->pos, vec3(0, -1, 0), vec3(0, 0, -1), cm_cameras[3].view);
-        glm_look(light->pos, vec3(0, 0, 1), vec3(0, -1, 0), cm_cameras[4].view);
-        glm_look(light->pos, vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
+    glm_look(light->pos, vec3(1, 0, 0), vec3(0, -1, 0), cm_cameras[0].view);
+    glm_look(light->pos, vec3(-1, 0, 0), vec3(0, -1, 0), cm_cameras[1].view);
+    glm_look(light->pos, vec3(0, 1, 0), vec3(0, 0, 1), cm_cameras[2].view);
+    glm_look(light->pos, vec3(0, -1, 0), vec3(0, 0, -1), cm_cameras[3].view);
+    glm_look(light->pos, vec3(0, 0, 1), vec3(0, -1, 0), cm_cameras[4].view);
+    glm_look(light->pos, vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
 
-        // calculate view projection of light
-        for(size_t i = 0;i < 6;i++){
-            cubelayer_bind(&src->cl_shadow, i);
-            for(size_t j = 0;j < darray_len(&src->meshes);j++)
-                mesh_draw_depth(src->meshes[j], &cm_cameras[i], &src->shader_shadow, light);
-            //scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
-            cubelayer_unbind(&src->cl_shadow);
-        }
-        return 0;
+    // calculate view projection of light
+    for(size_t i = 0;i < 6;i++){
+        cubelayer_bind(&src->cl_shadow, i);
+        for(size_t j = 0;j < darray_len(&src->meshes);j++)
+            mesh_draw_depth(src->meshes[j], &cm_cameras[i], &src->shader_shadow, light);
+        //scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
+        cubelayer_unbind(&src->cl_shadow);
+    }
+    return 0;
 }
 int renderer_mesh_register(struct renderer *dst, struct mesh *src){
     darray_push_back(&dst->meshes, src);

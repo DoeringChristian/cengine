@@ -81,21 +81,23 @@ int layer_bind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    GLCall(glEnable(GL_DEPTH_TEST));
+    //glBlendFunc(GL_ONE, GL_ZERO);
 
     return 0;
 }
 int layer_rebind(struct layer *dst){
     GLCall(glViewport(0, 0, dst->w, dst->h));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-    GLCall(glEnable(GL_DEPTH_TEST));
-    GLCall(glEnable(GL_BLEND));
+    //GLCall(glEnable(GL_DEPTH_TEST));
+    //GLCall(glEnable(GL_BLEND));
     return 0;
 }
 int layer_unbind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    //GLCall(glDisable(GL_BLEND));
+    //glBlendFunc(GL_ONE, GL_ZERO);
     return 0;
 }
 int layer_draw(struct layer *src, struct shader *shader){

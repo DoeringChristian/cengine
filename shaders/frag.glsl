@@ -34,6 +34,6 @@ void main (void){
     // debug
     //o_normal = vec4(fs_in.tbn[2], 1);
 
-    o_color = vec4(vec3(texture(u_albedo, fs_in.uv)), 1);
+    o_color = vec4(vec3(texture(u_albedo, fs_in.uv)), 1.0);
     //o_color = vec4(texture(u_normal, fs_in.uv));
 }

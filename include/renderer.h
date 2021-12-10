@@ -26,10 +26,12 @@ struct renderer{
     struct shader shader_forward;
     struct shader shader_shadow;
     struct shader shader_lighting;
+    struct shader shader_clip;
+    struct shader shader_blurh;
+    struct shader shader_blurv;
 
     struct layer light;
-    struct layer light_sum;
-    struct layer light_tmp;
+    struct layer light_out;
     struct cubelayer cl_shadow;
 };
 
@@ -38,6 +40,7 @@ void renderer_free(struct renderer *dst);
 
 int renderer_render(struct renderer *src);
 int renderer_render_point_shadow(struct renderer *src, struct light *light);
+int renderer_render_bloom(struct renderer *src);
 
 int renderer_mesh_register(struct renderer *dst, struct mesh *src);
 int renderer_mesh_unregister(struct renderer *dst, struct mesh *target);
