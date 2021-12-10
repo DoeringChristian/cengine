@@ -50,6 +50,7 @@ int _shader_load(GLuint *dst, const char *path, int shader_type){
 int shader_load(struct shader *dst, const char *vert_path, const char *frag_path){
     int status;
     dst->program = glCreateProgram();
+    dst->slot_count = 0;
 
     if(!dst->program){
         printf("[Error creating program]\n");
@@ -100,6 +101,7 @@ int shader_load(struct shader *dst, const char *vert_path, const char *frag_path
 int shader_load_vgf(struct shader *dst, const char *vert_path, const char *geo_path, const char *frag_path){
     int status;
     dst->program = glCreateProgram();
+    dst->slot_count = 0;
 
     if(!dst->program){
         printf("[Error creating program]\n");
@@ -223,6 +225,12 @@ int shader_uniform_vec4f(struct shader *dst, const char *name, const float *src)
     GLCall(glUniform4f(location, src[0], src[1], src[2], src[3]));
     return 0;
 }
+int shader_uniform_tex(struct shader *dst, struct texture *src, const char *name){
+    texture_bind(src, dst->slot_count);
+    shader_uniform_i(dst, name, dst->slot_count);
+    dst->slot_count++;
+    return 0;
+}
 int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset){
     GLCall(glEnableVertexAttribArray(dst->attr_idx));
     GLCall(glVertexAttribPointer(dst->attr_idx, num, type, normalized, stride, offset));
@@ -275,9 +283,11 @@ int shader_attr_push_mat4f_div(struct shader *dst, GLboolean normalized, GLsizei
 
 int shader_bind(struct shader *src){
     GLCall(glUseProgram(src->program));
+    src->slot_count = 0;
     return 0;
 }
 int shader_unbind(struct shader *src){
     GLCall(glUseProgram(0));
+    src->slot_count = 0;
     return 0;
 }

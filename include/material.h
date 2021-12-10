@@ -4,6 +4,7 @@
 #include "texture.h"
 #include "cglm/cglm.h"
 
+// either as pointer in mesh or directly
 struct material{
     vec3 ambient;
     vec3 diffuse;

@@ -97,8 +97,9 @@ int layer_draw(struct layer *src, struct shader *shader){
 
     shader_bind(shader);
 
-    texture_bind(&src->textures[0], 0);
-    shader_uniform_i(shader, "u_texture", 0);
+    shader_uniform_tex(shader, &src->textures[0], "u_texture");
+    //texture_bind(&src->textures[0], 0);
+    //shader_uniform_i(shader, "u_texture", 0);
 
     GLCall(glBindVertexArray(src->gl_vao));
 
@@ -117,8 +118,9 @@ int layer_draw_n(struct layer *src, struct shader *shader){
     for(size_t i = 0;i < darray_len(&src->textures);i++){
         char buf[100];
         sprintf(buf, "u_texture[%zu]", i);
-        texture_bind(&src->textures[i], i);
-        shader_uniform_i(shader, buf, i);
+        shader_uniform_tex(shader, &src->textures[i], buf);
+        //texture_bind(&src->textures[i], i);
+        //shader_uniform_i(shader, buf, i);
     }
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -141,20 +143,11 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     shader_bind(shader);
 
     // set textures
-    texture_bind(&src->textures[0], 0);
-    shader_uniform_i(shader, "u_pos", 0);
-
-    texture_bind(&src->textures[1], 1);
-    shader_uniform_i(shader, "u_normal", 1);
-
-    texture_bind(&src->textures[2], 2);
-    shader_uniform_i(shader, "u_color", 2);
-
-    texture_bind(shadow_depth, 3);
-    shader_uniform_i(shader, "u_shadow_depth", 3);
-
-    texture_bind(light_prev, 4);
-    shader_uniform_i(shader, "u_light_prev", 4);
+    shader_uniform_tex(shader, &src->textures[0], "u_pos");
+    shader_uniform_tex(shader, &src->textures[1], "u_normal");
+    shader_uniform_tex(shader, &src->textures[2], "u_color");
+    shader_uniform_tex(shader, shadow_depth, "u_shadow_depth");
+    shader_uniform_tex(shader, light_prev, "u_light_prev");
 
     // set light parameters
     shader_uniform_vec4f(shader, "u_light_pos", light->pos);

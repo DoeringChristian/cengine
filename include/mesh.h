@@ -66,6 +66,7 @@ int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n);
 int mesh_vert_set(struct mesh *dst, struct vert src, size_t i);
 int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i);
+int mesh_vert_set_tri(struct mesh *dst, struct vert *src, struct tri target);
 struct vert mesh_vert_get(struct mesh *src, size_t i);
 size_t mesh_vert_count(struct mesh *src);
 
@@ -84,12 +85,14 @@ void mesh_texture_spec_set(struct mesh *dst, struct texture *src);
 int mesh_tri_push_back(struct mesh *dst, struct tri src);
 int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n);
 int mesh_tri_set(struct mesh *dst, struct tri src, size_t i);
+int mesh_tri_get_verts(struct mesh *src, struct tri tri, struct vert *dst);
 int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst);
 struct tri mesh_tri_get(struct mesh *src, size_t i);
 size_t mesh_tri_count(struct mesh *src);
 
 int mesh_cull_from_normal(struct mesh *dst);
 int mesh_normal_from_cull(struct mesh *dst);
+int mesh_gen_tangent(struct mesh *dst);
 
 int mesh_name_set(struct mesh *dst, const char *name);
 

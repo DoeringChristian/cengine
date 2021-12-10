@@ -26,6 +26,7 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     int idx = 0;
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, pos);
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, normal);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, tangent);
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, color);
     vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert, uv);
 
@@ -102,20 +103,14 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
 
     size_t slot = 0;
 
-    if(src->tex_albedo != NULL){
-        texture_bind(src->tex_albedo, 0);
-        shader_uniform_i(shader, "u_albedo", 0);
-    }
+    if(src->tex_albedo != NULL)
+        shader_uniform_tex(shader, src->tex_albedo, "u_albedo");
 
-    if(src->tex_normal != NULL){
-        texture_bind(src->tex_normal, 1);
-        shader_uniform_i(shader, "u_normal", 1);
-    }
+    if(src->tex_normal != NULL)
+        shader_uniform_tex(shader, src->tex_normal, "u_normal");
 
-    if(src->tex_spec != NULL){
-        texture_bind(src->tex_spec, 2);
-        shader_uniform_i(shader, "u_spec", 2);
-    }
+    if(src->tex_spec != NULL)
+        shader_uniform_tex(shader, src->tex_spec, "u_spec");
 
 #if 0
     for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){
@@ -283,6 +278,12 @@ int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i){
         assert(0);
     return 1;
 }
+int mesh_vert_set_tri(struct mesh *dst, struct vert *src, struct tri target){
+    mesh_vert_set(dst, src[0], target.idxs[0]);
+    mesh_vert_set(dst, src[1], target.idxs[1]);
+    mesh_vert_set(dst, src[2], target.idxs[2]);
+    return 0;
+}
 struct vert mesh_vert_get(struct mesh *src, size_t i){
     struct vert dst;
     if(src->type == MESH_DYNAMIC){
@@ -412,6 +413,27 @@ int mesh_tri_set(struct mesh *dst, struct tri src, size_t i){
     else
         assert(0);
     return 1;
+}
+int mesh_tri_get_verts(struct mesh *src, struct tri tri, struct vert *dst){
+    if(src->type == MESH_DYNAMIC){
+        if(tri.idxs[0] < darray_len(&src->verts))
+            dst[0] = mesh_vert_get(src, tri.idxs[0]);
+        if(tri.idxs[1] < darray_len(&src->verts))
+            dst[1] = mesh_vert_get(src, tri.idxs[1]);
+        if(tri.idxs[2] < darray_len(&src->verts))
+            dst[2] = mesh_vert_get(src, tri.idxs[2]);
+    }
+    else if(src->type == MESH_STATIC){
+        if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
+            glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+            glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[1], sizeof(struct vert));
+        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+            glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[2], sizeof(struct vert));
+    }
+    else
+        assert(0);
+    return 0;
 }
 
 void mesh_texture_albedo_set(struct mesh *dst, struct texture *src){
@@ -566,6 +588,43 @@ int mesh_normal_from_cull(struct mesh *dst){
 
     }
 #endif
+}
+int mesh_gen_tangent(struct mesh *dst){
+    struct tri tmptri;
+    struct vert tmpverts[3];
+    for(size_t i = 0;i < mesh_tri_count(dst);i++){
+        tmptri = mesh_tri_get(dst, i);
+        mesh_tri_get_verts(dst, tmptri, tmpverts);
+
+        vec3 edge1, edge2;
+        glm_vec3_sub(tmpverts[1].pos, tmpverts[0].pos, edge1);
+        glm_vec3_sub(tmpverts[2].pos, tmpverts[0].pos, edge2);
+
+        vec2 duv1, duv2;
+        glm_vec2_sub(tmpverts[1].uv, tmpverts[0].uv, duv1);
+        glm_vec2_sub(tmpverts[2].uv, tmpverts[0].uv, duv2);
+
+        vec3 tangent, bitangent;
+        // tangent
+        float f = 1.0f / (duv1[0] * duv2[1] - duv2[0] * duv1[1]);
+        tangent[0] = f * (duv2[1] * edge1[0] - duv1[1] * edge2[0]);
+        tangent[1] = f * (duv2[1] * edge1[1] - duv1[1] * edge2[1]);
+        tangent[2] = f * (duv2[1] * edge1[2] - duv1[1] * edge2[2]);
+
+        // bitangent
+        bitangent[0] = f * (-duv2[0] * edge1[0] - duv1[0] * edge2[0]);
+        bitangent[1] = f * (-duv2[0] * edge1[1] - duv1[0] * edge2[1]);
+        bitangent[2] = f * (-duv2[0] * edge1[2] - duv1[0] * edge2[2]);
+
+        glm_vec3_copy(tangent, tmpverts[0].tangent);
+        glm_vec3_copy(tangent, tmpverts[1].tangent);
+        glm_vec3_copy(tangent, tmpverts[2].tangent);
+
+        //glm_vec3_print(tangent, stdout);
+
+        mesh_vert_set_tri(dst, tmpverts, tmptri);
+    }
+    return 0;
 }
 
 int mesh_name_set(struct mesh *dst, const char *name){

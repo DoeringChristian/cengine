@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include "gl_util.h"
+#include "texture.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -23,6 +24,7 @@
 struct shader{
     GLuint program;
     size_t attr_idx;
+    size_t slot_count;
 };
 
 int shader_load(struct shader *dst, const char *vert_path, const char *frag_path);
@@ -35,6 +37,8 @@ int shader_uniform_i(struct shader *dst, const char *name, const int src);
 int shader_uniform_f(struct shader *dst, const char *name, const float src);
 int shader_uniform_mat4f(struct shader *dst, const char *name, const float *src);
 int shader_uniform_vec4f(struct shader *dst, const char *name, const float *src);
+
+int shader_uniform_tex(struct shader *dst, struct texture *src, const char *name);
 
 int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset);
 int shader_attr_push_mat4f(struct shader *dst, GLboolean normalized, GLsizei stride, const void *offset);

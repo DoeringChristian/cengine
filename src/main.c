@@ -42,6 +42,8 @@ int main(){
     mesh_load_obj(&monkey_mesh, "res/models/monkey.obj");
     mesh_load_obj(&cube_mesh, "res/models/cube.obj");
 
+    mesh_gen_tangent(&mesh);
+
     //struct scene scene;
     //scene_init(&scene);
     //scene_mesh_push_back(&scene, &mesh);

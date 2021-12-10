@@ -19,6 +19,7 @@ struct svert{
 struct vert{
     vec3 pos;
     vec3 normal;
+    vec3 tangent;
     vec4 color;
     vec2 uv;
 };

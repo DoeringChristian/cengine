@@ -5,7 +5,9 @@
 #include <GL/gl.h>
 #include <stdio.h>
 #include <signal.h>
+#define DEBUG
 #include "cglm/cglm.h"
+#undef DEBUG
 
 #define GLCall(_x){\
     gl_err_clear();\
