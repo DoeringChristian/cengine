@@ -61,7 +61,10 @@ int renderer_render(struct renderer *src){
 
     //gbuf_bind(&src->gbuf);
     layer_bind(&src->gbuf);
-    glBlendFunc(GL_ONE, GL_ZERO);
+    // disable blend
+    GLCall(glDisable(GL_BLEND));
+    //GLCall(glBlendFunc(GL_ONE, GL_ZERO));
+    //GLCall(glEnable(GL_DEPTH_TEST));
     for(size_t i = 0;i < darray_len(&src->meshes);i++)
         mesh_draw(src->meshes[i], &src->camera, &src->shader);
     layer_unbind(&src->gbuf);
@@ -72,6 +75,11 @@ int renderer_render(struct renderer *src){
     layer_bind(&src->light_out);
     layer_unbind(&src->light_out);
 
+    layer_bind(&src->light_out);
+    // TODO: move enable/disable GL_DEPTH_TEST to draw functions.
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glDisable(GL_DEPTH_TEST));
+    GLCall(glBlendFunc(GL_ONE, GL_ONE));
     // -----------------------------------------------
     // Render lights
     for(size_t i = 0;i < darray_len(&src->lights);i++){
@@ -81,12 +89,9 @@ int renderer_render(struct renderer *src){
         
         if(light_tmp->type == LIGHT_POINT){
 
-            //renderer_render_point_shadow(src, light_tmp);
+            renderer_render_point_shadow(src, light_tmp);
             
-            layer_bind(&src->light);
-            GLCall(glEnable(GL_BLEND));
-            GLCall(glDisable(GL_DEPTH_TEST));
-            GLCall(glBlendFunc(GL_ONE, GL_ONE));
+            layer_rebind(&src->light_out);
 
             layer_draw_gbuf(
                     &src->gbuf,
@@ -94,25 +99,15 @@ int renderer_render(struct renderer *src){
                     &src->cl_shadow.texture,
                     light_tmp,
                     &src->camera);
-            layer_draw(&src->light_out, &src->shader_forward);
 
-            layer_unbind(&src->light);
         }
-#if 1
-        layer_bind(&src->light_out);
-        layer_draw(&src->light, &src->shader_forward);
-        layer_unbind(&src->light_out);
-        GLCall(glEnable(GL_DEPTH_TEST));
-#endif
     }
+    layer_unbind(&src->light_out);
+
+    //renderer_render_bloom(src);
 
     // reset viewport
     glViewport(0, 0, src->w, src->h);
-
-    // draw the lightness map
-    //layer_draw_shader(&src->light_sum, &src->shader_forward);
-
-    //renderer_render_bloom(src);
 
     layer_draw(&src->light_out, &src->shader_forward);
 
@@ -141,7 +136,7 @@ int renderer_render_bloom(struct renderer *src){
     }
 
     layer_bind(&layer_tmp);
-    GLCall(glBlendFunc(GL_ONE, GL_ONE));
+    //GLCall(glBlendFunc(GL_ONE, GL_ONE));
     layer_draw(&src->light_out, &src->shader_forward);
     for(size_t i = 0;i < 16;i++){
         layer_draw(&layers_bloom[i], &src->shader_forward);

@@ -20,8 +20,6 @@ uniform float u_shadow_len;
 uniform vec4 u_view_pos;
 
 float shadow(vec3 pos){
-    // disable shadow
-    return 0.0;
     vec3 frag_to_light = pos - vec3(u_light_pos);
     float depth_closest = texture(u_shadow_depth, frag_to_light).r;
     depth_closest *= u_shadow_len;

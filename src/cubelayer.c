@@ -51,6 +51,7 @@ int cubelayer_bind(struct cubelayer *dst, int face){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, dst->texture.gl_tex, 0));
     GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+    GLCall(glEnable(GL_DEPTH_TEST));
     return 0;
 }
 int cubelayer_unbind(struct cubelayer *dst){

@@ -87,6 +87,8 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     if(src->type == MESH_DYNAMIC)
         mesh_push(src);
 
+    GLCall(glEnable(GL_DEPTH_TEST));
+
     shader_bind(shader);
 
     GLCall(glBindVertexArray(src->gl_vao));
@@ -151,6 +153,8 @@ int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shade
         return 0;
     if(src->type == MESH_DYNAMIC)
         mesh_push(src);
+
+    GLCall(glEnable(GL_DEPTH_TEST));
 
     shader_bind(shader);
 

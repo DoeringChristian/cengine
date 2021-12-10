@@ -81,13 +81,17 @@ int layer_bind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
     GLCall(glClearColor(0, 0, 0, 1));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    //glBlendFunc(GL_ONE, GL_ZERO);
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_ONE, GL_ONE));
 
     return 0;
 }
 int layer_rebind(struct layer *dst){
     GLCall(glViewport(0, 0, dst->w, dst->h));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
+    GLCall(glDisable(GL_DEPTH_TEST));
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_ONE, GL_ONE));
     //GLCall(glEnable(GL_DEPTH_TEST));
     //GLCall(glEnable(GL_BLEND));
     return 0;
@@ -103,6 +107,8 @@ int layer_unbind(struct layer *dst){
 int layer_draw(struct layer *src, struct shader *shader){
     if(shader == NULL)
         return -1;
+
+    GLCall(glDisable(GL_DEPTH_TEST));
 
     shader_bind(shader);
 
@@ -148,6 +154,8 @@ int layer_draw_n(struct layer *src, struct shader *shader){
 int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera){
     if(darray_len(&src->textures) < 3)
         return -1;
+
+    GLCall(glDisable(GL_DEPTH_TEST));
 
     shader_bind(shader);
 
