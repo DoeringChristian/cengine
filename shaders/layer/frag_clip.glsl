@@ -8,5 +8,6 @@ out vec4 o_color;
 uniform sampler2D u_texture;
 
 void main (void){
-    o_color = texture(u_texture, frag_uv)-1.0;
+    vec4 color = texture(u_texture, frag_uv);
+    o_color = length(color.xyz) > 1 ? color : vec4(0, 0, 0, 1);
 }

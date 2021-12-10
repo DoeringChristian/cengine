@@ -20,6 +20,9 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_clip, "shaders/layer/vert.glsl", "shaders/layer/frag_clip.glsl");
 
+    shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
+    shader_load(&dst->shader_blurv,  "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
+
 #if 0
     shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
     shader_load(&dst->shader_blurv, "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
@@ -104,7 +107,7 @@ int renderer_render(struct renderer *src){
     }
     layer_unbind(&src->light_out);
 
-    //renderer_render_bloom(src);
+    renderer_render_bloom(src);
 
     // reset viewport
     glViewport(0, 0, src->w, src->h);
@@ -123,6 +126,53 @@ int renderer_render_bloom(struct renderer *src){
     for(size_t i = 0;i < 16;i++){
         layer_init(&layers_bloom[i], src->w/(i+1), src->h/(i+1));
     }
+
+    for(size_t i = 0;i < 16;i++){
+        if(i == 0){
+            layer_bind(&layers_bloom[0]);
+            layer_draw(&src->light_out, &src->shader_clip);
+            layer_unbind(&layers_bloom[0]);
+        }
+        else{
+            layer_bind(&layers_bloom[i]);
+            layer_draw(&layers_bloom[i-1], &src->shader_blurv);
+            layer_draw(&layers_bloom[i-1], &src->shader_blurh);
+            layer_unbind(&layers_bloom[i]);
+        }
+    }
+
+    layer_bind(&layer_tmp);
+    layer_draw(&src->light_out, &src->shader_forward);
+    for(size_t i = 0;i < 16;i++){
+        layer_draw(&layers_bloom[i], &src->shader_forward);
+    }
+    layer_unbind(&layer_tmp);
+
+
+#if 0
+
+    layer_bind(&layers_bloom[0]);
+    layer_draw(&src->light_out, &src->shader_clip);
+    layer_unbind(&layers_bloom[0]);
+
+    layer_bind(&layer_tmp);
+    layer_draw(&layers_bloom[0], &src->shader_blurv);
+    layer_draw(&layers_bloom[0], &src->shader_blurh);
+    layer_unbind(&layer_tmp);
+
+    layer_draw(&src->light_out, &src->shader_forward);
+#endif
+
+    layer_bind(&src->light_out);
+    layer_draw(&layer_tmp, &src->shader_forward);
+    layer_unbind(&src->light_out);
+
+
+    layer_free(&layer_tmp);
+    for(size_t i = 0;i < 16;i++){
+        layer_free(&layers_bloom[i]);
+    }
+#if 0
 
     for(size_t i = 0;i < 16;i++){
         layer_bind(&layers_bloom[i]);
@@ -151,6 +201,7 @@ int renderer_render_bloom(struct renderer *src){
     for(size_t i = 0;i < 16;i++){
         layer_free(&layers_bloom[i]);
     }
+#endif
     return 0;
 }
 

@@ -56,8 +56,12 @@ void main (void){
 
     // ---------------------------------------------------
     // difuse calculations
+    
     vec3 diffuse = max(dot(normal, light_dir), 0) * vec3(u_light_color) * u_light_color.a;
-    o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color * attenuation(light_dist), 1.0);
 
-    //o_color = vec4(pos, 1);
+    // ---------------------------------------------------
+    // output calculation
+
+    o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color * attenuation(light_dist), 1.0);
+    //o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color * attenuation(light_dist) * 2, 1.0);
 }

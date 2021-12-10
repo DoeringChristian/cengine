@@ -14,6 +14,6 @@ void main (void){
     //o_color = texture(u_texture, frag_uv).rgb * weights[0];
     
     for(int i = -5;i <= 5;i++){
-        o_color += texture(u_texture, frag_uv + vec2(0.0, tex_offset.x * i)).rgb * weights[i];
+        o_color += vec4(texture(u_texture, frag_uv + vec2(0.0, tex_offset.x * i)).rgb * weights[i], 1.0);
     }
 }
