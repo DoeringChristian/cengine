@@ -45,11 +45,11 @@ void main (void){
     vec3 light_dir = normalize(vec3(u_light_pos) - pos);
     float light_dist = length(vec3(u_light_pos) - pos);
 
-    // ---------------------------------------------------
-    // specular calculations
-
     vec3 view_dir = normalize(vec3(u_view_pos) - pos);
     vec3 light_dir_reflected = reflect(-vec3(light_dir), normal);
+
+    // ---------------------------------------------------
+    // specular calculations
 
     float spec = pow(max(dot(view_dir, light_dir_reflected), 0.0), 32);
     vec3 specular = spec_strength * spec * vec3(u_light_color) * u_light_color.a;

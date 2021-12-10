@@ -99,7 +99,7 @@ int main(){
     //mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
-    light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(0, 1, 1, 1), LIGHT_POINT);
+    light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
 
     renderer_mesh_register(&win.renderer, &mesh);
     renderer_mesh_register(&win.renderer, &monkey_mesh);
