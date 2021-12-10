@@ -11,7 +11,7 @@
 #include "glbuf.h"
 #include "vert.h"
 #include "camera.h"
-#include "cmesh.h"
+//#include "cmesh.h"
 #include "light.h"
 
 #define MAX_TEXTURES 10
@@ -50,7 +50,7 @@ struct mesh{
 };
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len);
-int mesh_init_cmesh(struct mesh *dst, struct cmesh *src);
+//int mesh_init_cmesh(struct mesh *dst, struct cmesh *src);
 void mesh_free(struct mesh *dst);
 
 // functions for pulling and pushing ram based vertices from and to gpu
@@ -65,12 +65,14 @@ int mesh_vert_push(struct mesh *dst, struct vert src, size_t i);
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n);
 int mesh_vert_set(struct mesh *dst, struct vert src, size_t i);
 int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i);
+struct vert mesh_vert_get(struct mesh *src, size_t i);
+size_t mesh_vert_count(struct mesh *src);
 
 int mesh_append(struct mesh *dst, const struct mesh *src);
 
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src);
 int mesh_ivert_set(struct mesh *dst, struct ivert src, int i);
-int mesh_ivert_get(struct mesh *src, struct ivert *dst, int i);
+struct ivert mesh_ivert_get(struct mesh *src, int i);
 int mesh_iverts_clear(struct mesh *dst);
 
 int mesh_texture_push(struct mesh *dst, struct texture src);
@@ -80,6 +82,12 @@ void mesh_texture_spec_set(struct mesh *dst, struct texture *src);
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src);
 int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n);
+int mesh_tri_set(struct mesh *dst, struct tri src, size_t i);
+int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst);
+struct tri mesh_tri_get(struct mesh *src, size_t i);
+size_t mesh_tri_count(struct mesh *src);
 
+int mesh_cull_from_normal(struct mesh *dst);
+int mesh_normal_from_cull(struct mesh *dst);
 
 #endif //MESH_H

@@ -63,9 +63,11 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
 
     return 0;
 }
+#if 0
 int mesh_init_cmesh(struct mesh *dst, struct cmesh *src){
     return mesh_init(dst, src->verts, darray_len(&src->verts), src->tris, darray_len(&src->tris));
 }
+#endif
 
 void mesh_free(struct mesh *dst){
     glbuf_free(&dst->vbo);
@@ -275,7 +277,34 @@ int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i){
     else if(dst->type == MESH_STATIC){
         return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), n * sizeof(struct vert));
     }
+    else
+        assert(0);
     return 1;
+}
+struct vert mesh_vert_get(struct mesh *src, size_t i){
+    struct vert dst;
+    if(src->type == MESH_DYNAMIC){
+        if(i <= darray_len(&src->verts)){
+            dst = src->verts[i];
+        }
+    }
+    else if(src->type == MESH_STATIC){
+        glbuf_get(&src->vbo, &dst, i * sizeof(struct vert), sizeof(struct vert));
+    }
+    else
+        assert(0);
+    return dst;
+}
+size_t mesh_vert_count(struct mesh *src){
+    if(src->type == MESH_DYNAMIC){
+        return darray_len(&src->verts);
+    }
+    else if(src->type == MESH_STATIC){
+        return glbuf_size(&src->vbo) / sizeof(struct vert);
+    }
+    else
+        assert(0);
+    return 0;
 }
 int mesh_append(struct mesh *dst, const struct mesh *src){
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -363,6 +392,25 @@ int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n){
         assert(0);
     return 0;
 }
+int mesh_tri_set(struct mesh *dst, struct tri src, size_t i){
+    if(dst->type == MESH_DYNAMIC){
+        if(i < darray_len(&dst->tris))
+            dst->tris[i] = src;
+        else
+            return 1;
+        return 0;
+    }
+    else if(dst->type == MESH_STATIC){
+        if(i < glbuf_size(&dst->ibo) / sizeof(struct tri))
+            glbuf_set(&dst->ibo, &src, sizeof(struct tri) * i, sizeof(struct tri));
+        else
+            return 1;
+        return 0;
+    }
+    else
+        assert(0);
+    return 1;
+}
 
 void mesh_texture_albedo_set(struct mesh *dst, struct texture *src){
     dst->tex_albedo = src;
@@ -398,17 +446,18 @@ int mesh_ivert_set(struct mesh *dst, struct ivert src, int i){
         assert(0);
     return 0;
 }
-int mesh_ivert_get(struct mesh *src, struct ivert *dst, int i){
+struct ivert mesh_ivert_get(struct mesh *src, int i){
+    struct ivert dst;
     if(src->type == MESH_STATIC){
         GLCall(glBindVertexArray(src->gl_vao));
-        return glbuf_get(&src->vboi, dst, sizeof(struct ivert) * i, sizeof(struct ivert));
+        glbuf_get(&src->vboi, &dst, sizeof(struct ivert) * i, sizeof(struct ivert));
     }
     else if(src->type == MESH_DYNAMIC){
-        *dst = src->iverts[i];
+        dst = src->iverts[i];
     }
     else
         assert(0);
-    return 0;
+    return dst;
 }
 int mesh_iverts_clear(struct mesh *dst){
     if(dst->type == MESH_STATIC){
@@ -424,3 +473,96 @@ int mesh_iverts_clear(struct mesh *dst){
         assert(0);
     return 0;
 }
+struct tri mesh_tri_get(struct mesh *src, size_t i){
+    struct tri dst;
+    if(src->type == MESH_DYNAMIC){
+        if(i < darray_len(&src->tris))
+            dst = src->tris[i];
+    }
+    else if(src->type == MESH_STATIC){
+        glbuf_get(&src->ibo, &dst, sizeof(struct tri) * i, sizeof(struct tri));
+    }
+    else
+        assert(0);
+    return dst;
+}
+size_t mesh_tri_count(struct mesh *src){
+    if(src->type == MESH_DYNAMIC){
+        return darray_len(&src->tris);
+    }
+    else if(src->type == MESH_STATIC){
+        return glbuf_size(&src->ibo) / sizeof(struct tri);
+    }
+    else
+        assert(0);
+    return 0;
+}
+int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst){
+    struct tri tri = mesh_tri_get(src, i);
+    if(src->type == MESH_DYNAMIC){
+        if(tri.idxs[0] < darray_len(&src->verts))
+            dst[0] = mesh_vert_get(src, tri.idxs[0]);
+        if(tri.idxs[1] < darray_len(&src->verts))
+            dst[1] = mesh_vert_get(src, tri.idxs[0]);
+        if(tri.idxs[2] < darray_len(&src->verts))
+            dst[2] = mesh_vert_get(src, tri.idxs[0]);
+    }
+    else if(src->type == MESH_STATIC){
+        if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
+            glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+            glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+            glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+    }
+    else
+        assert(0);
+    return 0;
+}
+int mesh_cull_from_normal(struct mesh *dst){
+    vec3 a, b;
+    vec3 norm_sum;
+    vec3 norm_gen;
+    struct vert verts[3];
+    struct tri tmptri;
+    for(size_t i = 0;i < mesh_tri_count(dst);i++){
+        mesh_tri_get_verts_i(dst, i, verts);
+        tmptri = mesh_tri_get(dst, i);
+
+        glm_vec3_sub(verts[1].pos, verts[0].pos, a);
+        glm_vec3_sub(verts[2].pos, verts[0].pos, a);
+        glm_cross(b, a, norm_gen);
+
+        glm_vec3_add(verts[0].normal, verts[1].normal, norm_sum);
+        glm_vec3_add(norm_sum, verts[2].normal, norm_sum);
+
+        if(glm_vec3_dot(norm_gen, norm_sum) < 0){
+            int tmp = tmptri.idxs[1];
+            tmptri.idxs[1] = tmptri.idxs[2];
+            tmptri.idxs[2] = tmp;
+            mesh_tri_set(dst, tmptri, i);
+        }
+    }
+}
+int mesh_normal_from_cull(struct mesh *dst){
+#if 0
+    vec3 a, b;
+    vec3 norm_sum;
+    vec3 norm_gen;
+    struct vert verts[3];
+    struct tri tmptri;
+    for(size_t i = 0;i < mesh_tri_count(dst);i++){
+        mesh_tri_get_verts_i(dst, i, verts);
+        tmptri = mesh_tri_get(dst, i);
+
+        glm_vec3_sub(verts[1].pos, verts[0].pos, a);
+        glm_vec3_sub(verts[2].pos, verts[0].pos, a);
+        glm_cross(b, a, norm_gen);
+
+        glm_vec3_add(verts[0].normal, verts[1].normal, norm_sum);
+        glm_vec3_add(norm_sum, verts[2].normal, norm_sum);
+
+    }
+#endif
+}
+

@@ -4,6 +4,8 @@
 
 int renderer_init(struct renderer *dst, int w, int h){
     //darray_init(&dst->instances, 10);
+    darray_init(&dst->meshes, 10);
+    darray_init(&dst->lights, 10);
     dst->w = w;
     dst->h = h;
     
@@ -11,10 +13,6 @@ int renderer_init(struct renderer *dst, int w, int h){
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
     shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
-
-    shader_load(&dst->shader_mul, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_mul.glsl");
-
-    shader_load(&dst->shader_add, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_add.glsl");
 
     shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow02.glsl", "shaders/lighting/frag_shadow_02.glsl");
 
@@ -31,7 +29,6 @@ int renderer_init(struct renderer *dst, int w, int h){
     // initializing camera
     cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
 
-    dst->scene = NULL;
     return 0;
 }
 void renderer_free(struct renderer *dst){
@@ -40,21 +37,12 @@ void renderer_free(struct renderer *dst){
     layer_free(&dst->light);
     layer_free(&dst->light_sum);
     shader_free(&dst->shader_forward);
-    shader_free(&dst->shader_add);
     shader_free(&dst->shader);
-}
-
-int renderer_push(struct renderer *dst){
-    // - clear all iverts from meshes
-    // - push all iverts from instances
-    // - update all meshes
-    
-    return 0;
+    darray_free(&dst->lights);
+    darray_free(&dst->meshes);
 }
 
 int renderer_render(struct renderer *src){
-    if(src->scene == NULL)
-        return 1;
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -62,17 +50,18 @@ int renderer_render(struct renderer *src){
     // render the scene to the gbuf
 
     gbuf_bind(&src->gbuf);
-    scene_draw(src->scene, &src->camera, &src->shader);
+    for(size_t i = 0;i < darray_len(&src->meshes);i++)
+        mesh_draw(src->meshes[i], &src->camera, &src->shader);
     gbuf_unbind(&src->gbuf);
 
     // clear the summ of lightess maps
     layer_bind(&src->light_sum);
     layer_unbind(&src->light_sum);
 
-    for(size_t i = 0;i < darray_len(&src->scene->lights);i++){
+    for(size_t i = 0;i < darray_len(&src->lights);i++){
         // render shadow cube map
         // calculate view projection of light
-        struct light *light_tmp = src->scene->lights[i];
+        struct light *light_tmp = src->lights[i];
         
         if(light_tmp->type == LIGHT_POINT){
             renderer_render_point_shadow(src, light_tmp);
@@ -112,11 +101,13 @@ int renderer_render(struct renderer *src){
 }
 
 
+#if 0
 int renderer_scene_set(struct renderer *dst, struct scene *src){
     dst->scene = src;
     src->shader = &dst->shader;
     return 0;
 }
+#endif
 int renderer_render_point_shadow(struct renderer *src, struct light *light){
         struct cvert cm_cameras[6];
         cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
@@ -141,10 +132,36 @@ int renderer_render_point_shadow(struct renderer *src, struct light *light){
         glm_look(light->pos, vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
 
         // calculate view projection of light
-        for(size_t j = 0;j < 6;j++){
-            cubelayer_bind(&src->cl_shadow, j);
-            scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
+        for(size_t i = 0;i < 6;i++){
+            cubelayer_bind(&src->cl_shadow, i);
+            for(size_t j = 0;j < darray_len(&src->meshes);j++)
+                mesh_draw_depth(src->meshes[j], &cm_cameras[i], &src->shader_shadow, light);
+            //scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
             cubelayer_unbind(&src->cl_shadow);
         }
         return 0;
+}
+int renderer_mesh_register(struct renderer *dst, struct mesh *src){
+    darray_push_back(&dst->meshes, src);
+    return 0;
+}
+int renderer_mesh_unregister(struct renderer *dst, struct mesh *target){
+    for(size_t i = 0;i < darray_len(&dst->meshes);i++){
+        if(dst->meshes[i] == target){
+            darray_pop(&dst->meshes, i);
+            return 0;
+        }
+    }
+}
+int renderer_light_register(struct renderer *dst, struct light *src){
+    darray_push_back(&dst->lights, src);
+    return 0;
+}
+int renderer_light_unregister(struct renderer *dst, struct light *target){
+    for(size_t i = 0;i < darray_len(&dst->lights);i++){
+        if(dst->lights[i] == target){
+            darray_pop(&dst->lights, i);
+            return 0;
+        }
+    }
 }

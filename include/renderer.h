@@ -15,7 +15,8 @@
 struct renderer{
     int w, h;
 
-    struct scene *scene;
+    darray(struct mesh *) meshes;
+    darray(struct light *) lights;
 
     struct cvert camera;
 
@@ -23,8 +24,6 @@ struct renderer{
 
     struct gbuf gbuf;
 
-    struct shader shader_add;
-    struct shader shader_mul;
     struct shader shader_forward;
     struct shader shader_shadow;
     struct shader shader_lighting;
@@ -38,10 +37,12 @@ struct renderer{
 int renderer_init(struct renderer *dst, int w, int h);
 void renderer_free(struct renderer *dst);
 
-int renderer_push(struct renderer *dst);
 int renderer_render(struct renderer *src);
 int renderer_render_point_shadow(struct renderer *src, struct light *light);
 
-int renderer_scene_set(struct renderer *dst, struct scene *src);
+int renderer_mesh_register(struct renderer *dst, struct mesh *src);
+int renderer_mesh_unregister(struct renderer *dst, struct mesh *target);
+int renderer_light_register(struct renderer *dst, struct light *src);
+int renderer_light_unregister(struct renderer *dst, struct light *target);
 
 #endif //RENDERER_H
