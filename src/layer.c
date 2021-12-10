@@ -85,6 +85,13 @@ int layer_bind(struct layer *dst){
 
     return 0;
 }
+int layer_rebind(struct layer *dst){
+    GLCall(glViewport(0, 0, dst->w, dst->h));
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
+    GLCall(glEnable(GL_DEPTH_TEST));
+    GLCall(glEnable(GL_BLEND));
+    return 0;
+}
 int layer_unbind(struct layer *dst){
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     GLCall(glClearColor(0, 0, 0, 1));
@@ -136,7 +143,7 @@ int layer_draw_n(struct layer *src, struct shader *shader){
     shader_unbind(shader);
     return 0;
 }
-int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct texture *light_prev, struct light *light, struct cvert *camera){
+int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera){
     if(darray_len(&src->textures) < 3)
         return -1;
 
@@ -147,7 +154,6 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     shader_uniform_tex(shader, &src->textures[1], "u_normal");
     shader_uniform_tex(shader, &src->textures[2], "u_color");
     shader_uniform_tex(shader, shadow_depth, "u_shadow_depth");
-    shader_uniform_tex(shader, light_prev, "u_light_prev");
 
     // set light parameters
     shader_uniform_vec4f(shader, "u_light_pos", light->pos);

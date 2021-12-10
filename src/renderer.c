@@ -59,8 +59,8 @@ int renderer_render(struct renderer *src){
     //gbuf_unbind(&src->gbuf);
 
     // clear the summ of lightess maps
-    layer_bind(&src->light_sum);
-    layer_unbind(&src->light_sum);
+    layer_bind(&src->light);
+    layer_unbind(&src->light);
 
     for(size_t i = 0;i < darray_len(&src->lights);i++){
         // render shadow cube map
@@ -71,23 +71,26 @@ int renderer_render(struct renderer *src){
             renderer_render_point_shadow(src, light_tmp);
 
             // render the light of the gbuf to the light layer
-            layer_bind(&src->light);
+            layer_rebind(&src->light);
+            GLCall(glBlendFunc(GL_ONE, GL_ZERO));
             // render the gbuf with the previous light 
             layer_draw_gbuf(
                     &src->gbuf,
                     &src->shader_lighting,
                     &src->cl_shadow.texture,
-                    &src->light_sum.textures[0],
                     light_tmp,
                     &src->camera);
+            layer_draw(&src->light_sum, &src->shader_forward);
             layer_unbind(&src->light);
         }
 
+#if 1
         // copy it to the light sum layer
         layer_bind(&src->light_sum);
         //layer_draw(&src->light_tmp, &src->shader_forward);
         layer_draw(&src->light, &src->shader_forward);
         layer_unbind(&src->light_sum);
+#endif
 
     }
 

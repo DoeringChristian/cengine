@@ -44,7 +44,7 @@ int main(){
     //monkey_mesh.has_shadow = 0;
 
     mesh_gen_tangent(&mesh);
-    mesh_gen_tangent(&monkey_mesh);
+    //mesh_gen_tangent(&monkey_mesh);
 
     //struct scene scene;
     //scene_init(&scene);
@@ -96,7 +96,7 @@ int main(){
     mesh_texture_albedo_set(&mesh, &tex1);
     mesh_texture_normal_set(&mesh, &tex1_normal);
     mesh_texture_albedo_set(&monkey_mesh, &tex1);
-    mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
+    //mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
     light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);

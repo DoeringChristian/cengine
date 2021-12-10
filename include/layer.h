@@ -33,11 +33,12 @@ void layer_free(struct layer *dst);
 int layer_clear(struct layer *dst);
 
 int layer_bind(struct layer *dst);
+int layer_rebind(struct layer *dst);
 int layer_unbind(struct layer *dst);
 
 int layer_draw(struct layer *dst, struct shader *shader);
 int layer_draw_n(struct layer *dst, struct shader *shader);
-int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct texture *light_prev, struct light *light, struct cvert *camera);
+int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera);
 int layer_draw_tex(struct layer *dst, struct shader *shader, struct texture *tex);
 
 //int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);
