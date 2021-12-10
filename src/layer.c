@@ -91,22 +91,90 @@ int layer_unbind(struct layer *dst){
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     return 0;
 }
-int layer_draw(struct layer *dst, struct shader *shader){
+int layer_draw(struct layer *src, struct shader *shader){
     if(shader == NULL)
         return -1;
 
     shader_bind(shader);
 
-    texture_bind(&dst->textures[0], 0);
+    texture_bind(&src->textures[0], 0);
     shader_uniform_i(shader, "u_texture", 0);
 
-    GLCall(glBindVertexArray(dst->gl_vao));
+    GLCall(glBindVertexArray(src->gl_vao));
 
-    glbuf_bind(&dst->ibo);
+    glbuf_bind(&src->ibo);
 
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
 
-    glbuf_unbind(&dst->ibo);
+    glbuf_unbind(&src->ibo);
+    GLCall(glBindVertexArray(0));
+    shader_unbind(shader);
+    return 0;
+}
+int layer_draw_n(struct layer *src, struct shader *shader){
+    shader_bind(shader);
+
+    for(size_t i = 0;i < darray_len(&src->textures);i++){
+        char buf[100];
+        sprintf(buf, "u_texture[%zu]", i);
+        texture_bind(&src->textures[i], i);
+        shader_uniform_i(shader, buf, i);
+    }
+
+    GLCall(glBindVertexArray(src->gl_vao));
+
+    glbuf_bind(&src->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+
+    glbuf_unbind(&src->ibo);
+
+    GLCall(glBindVertexArray(0));
+
+    shader_unbind(shader);
+    return 0;
+}
+int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct texture *light_prev, struct light *light, struct cvert *camera){
+    if(darray_len(&src->textures) < 3)
+        return -1;
+
+    shader_bind(shader);
+
+    // set textures
+    texture_bind(&src->textures[0], 0);
+    shader_uniform_i(shader, "u_pos", 0);
+
+    texture_bind(&src->textures[1], 1);
+    shader_uniform_i(shader, "u_normal", 1);
+
+    texture_bind(&src->textures[2], 2);
+    shader_uniform_i(shader, "u_color", 2);
+
+    texture_bind(shadow_depth, 3);
+    shader_uniform_i(shader, "u_shadow_depth", 3);
+
+    texture_bind(light_prev, 4);
+    shader_uniform_i(shader, "u_light_prev", 4);
+
+    // set light parameters
+    shader_uniform_vec4f(shader, "u_light_pos", light->pos);
+    shader_uniform_vec4f(shader, "u_light_color", light->color);
+    shader_uniform_f(shader, "u_light_c1", light->c1);
+    shader_uniform_f(shader, "u_light_c2", light->c2);
+
+    shader_uniform_f(shader, "u_shadow_len", light->shadow_len);
+
+    shader_uniform_vec4f(shader, "u_view_pos", camera->view[3]);
+
+    GLCall(glBindVertexArray(src->gl_vao));
+
+    glbuf_bind(&src->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+
+    glbuf_unbind(&src->ibo);
     GLCall(glBindVertexArray(0));
     shader_unbind(shader);
     return 0;

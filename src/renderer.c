@@ -19,7 +19,8 @@ int renderer_init(struct renderer *dst, int w, int h){
     shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
 
     // initializing layers
-    gbuf_init(&dst->gbuf, w, h);
+    //gbuf_init(&dst->gbuf, w, h);
+    layer_init_n(&dst->gbuf, w, h, 3);
 
     layer_init(&dst->light, w, h);
     layer_init(&dst->light_sum, w, h);
@@ -33,7 +34,8 @@ int renderer_init(struct renderer *dst, int w, int h){
 }
 void renderer_free(struct renderer *dst){
     shader_free(&dst->shader);
-    gbuf_free(&dst->gbuf);
+    //gbuf_free(&dst->gbuf);
+    layer_free(&dst->gbuf);
     layer_free(&dst->light);
     layer_free(&dst->light_sum);
     shader_free(&dst->shader_forward);
@@ -49,10 +51,12 @@ int renderer_render(struct renderer *src){
 
     // render the scene to the gbuf
 
-    gbuf_bind(&src->gbuf);
+    //gbuf_bind(&src->gbuf);
+    layer_bind(&src->gbuf);
     for(size_t i = 0;i < darray_len(&src->meshes);i++)
         mesh_draw(src->meshes[i], &src->camera, &src->shader);
-    gbuf_unbind(&src->gbuf);
+    layer_unbind(&src->gbuf);
+    //gbuf_unbind(&src->gbuf);
 
     // clear the summ of lightess maps
     layer_bind(&src->light_sum);
@@ -69,7 +73,7 @@ int renderer_render(struct renderer *src){
             // render the light of the gbuf to the light layer
             layer_bind(&src->light);
             // render the gbuf with the previous light 
-            gbuf_draw_ps(
+            layer_draw_gbuf(
                     &src->gbuf,
                     &src->shader_lighting,
                     &src->cl_shadow.texture,

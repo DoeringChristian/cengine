@@ -8,7 +8,6 @@
 #include "shader.h"
 #include "scene.h"
 #include "layer.h"
-#include "gbuf.h"
 #include "camera.h"
 #include "cubelayer.h"
 
@@ -22,7 +21,7 @@ struct renderer{
 
     struct shader shader;
 
-    struct gbuf gbuf;
+    struct layer gbuf;
 
     struct shader shader_forward;
     struct shader shader_shadow;
