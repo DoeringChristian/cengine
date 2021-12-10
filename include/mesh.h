@@ -48,6 +48,8 @@ struct mesh{
     struct texture *tex_spec;
 
     enum mesh_type type;
+
+    int has_shadow;
 };
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len);

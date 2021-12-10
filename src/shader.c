@@ -197,14 +197,14 @@ int shader_attach(struct shader *dst, const char *path, int shader_type){
     return 0;
 }
 
-int shader_uniform_i(struct shader *dst, const char *name, const int src){
+int shader_uniform_i(struct shader *dst, const char *name, int src){
     GLCall(glUseProgram(dst->program));
     int location;
     GLCall(location = glGetUniformLocation(dst->program, name));
     GLCall(glUniform1i(location, src));
     return 0;
 }
-int shader_uniform_f(struct shader *dst, const char *name, const float src){
+int shader_uniform_f(struct shader *dst, const char *name, float src){
     GLCall(glUseProgram(dst->program));
     int location;
     GLCall(location = glGetUniformLocation(dst->program, name));
@@ -229,6 +229,13 @@ int shader_uniform_tex(struct shader *dst, struct texture *src, const char *name
     texture_bind(src, dst->slot_count);
     shader_uniform_i(dst, name, dst->slot_count);
     dst->slot_count++;
+    return 0;
+}
+int shader_uniform_bool(struct shader *dst, const char *name, int src){
+    GLCall(glUseProgram(dst->program));
+    int location;
+    GLCall(location = glGetUniformLocation(dst->program, name));
+    GLCall(glUniform1i(location, src));
     return 0;
 }
 int shader_attr_push(struct shader *dst, GLsizei num, GLenum type, GLboolean normalized, GLsizei stride, const void *offset){

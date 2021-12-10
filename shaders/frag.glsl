@@ -16,16 +16,24 @@ uniform sampler2D u_albedo;
 uniform sampler2D u_normal;
 uniform sampler2D u_spec;
 
+uniform bool u_has_albedo;
+uniform bool u_has_normal;
+uniform bool u_has_spec;
+
 void main (void){
     o_pos = vec4(fs_in.pos, 1);
 
-    //o_normal = vec4(normalize(fs_in.tbn[2]), 1);
     o_normal = texture(u_normal, fs_in.uv);
-    // debug
-    o_normal = vec4(0, 0, 1, 1);
     o_normal = o_normal * 2.0 - 1.0;
-    o_normal = vec4(normalize(fs_in.tbn * vec3(o_normal)), 1);
-    o_normal = vec4(fs_in.tbn[2], 1);
+    o_normal = vec4(fs_in.tbn * vec3(o_normal), 1);
+    o_normal = vec4(vec3(normalize(o_normal)), 1);
+
+
+    if(!u_has_normal)
+        o_normal = vec4(fs_in.tbn[2], 1);
+    // debug
+    //o_normal = vec4(fs_in.tbn[2], 1);
 
     o_color = vec4(vec3(texture(u_albedo, fs_in.uv)), 1);
+    //o_color = vec4(texture(u_normal, fs_in.uv));
 }

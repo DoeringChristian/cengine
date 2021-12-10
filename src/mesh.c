@@ -6,6 +6,7 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     darray_init(&dst->iverts, 1);
     dst->type = MESH_STATIC;
     dst->name = NULL;
+    dst->has_shadow = 1;
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -103,14 +104,26 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
 
     size_t slot = 0;
 
-    if(src->tex_albedo != NULL)
+    if(src->tex_albedo != NULL){
         shader_uniform_tex(shader, src->tex_albedo, "u_albedo");
+        shader_uniform_i(shader, "u_has_albedo", 1);
+    }
+    else
+        shader_uniform_i(shader, "u_has_albedo", 0);
 
-    if(src->tex_normal != NULL)
+    if(src->tex_normal != NULL){
         shader_uniform_tex(shader, src->tex_normal, "u_normal");
+        shader_uniform_i(shader, "u_has_normal", 1);
+    }
+    else
+        shader_uniform_i(shader, "u_has_normal", 0);
 
-    if(src->tex_spec != NULL)
+    if(src->tex_spec != NULL){
         shader_uniform_tex(shader, src->tex_spec, "u_spec");
+        shader_uniform_i(shader, "u_has_spec", 1);
+    }
+    else
+        shader_uniform_i(shader, "u_has_spec", 0);
 
 #if 0
     for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){
@@ -134,6 +147,8 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
 }
 
 int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light){
+    if(!src->has_shadow)
+        return 0;
     if(src->type == MESH_DYNAMIC)
         mesh_push(src);
 

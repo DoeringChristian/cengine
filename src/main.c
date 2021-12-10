@@ -41,8 +41,10 @@ int main(){
     mesh_init_cube(&mesh);
     mesh_load_obj(&monkey_mesh, "res/models/monkey.obj");
     mesh_load_obj(&cube_mesh, "res/models/cube.obj");
+    //monkey_mesh.has_shadow = 0;
 
     mesh_gen_tangent(&mesh);
+    mesh_gen_tangent(&monkey_mesh);
 
     //struct scene scene;
     //scene_init(&scene);
@@ -63,6 +65,7 @@ int main(){
     glm_scale(iv.trans, vec3(0.2, 0.2, 0.2));
 
     mesh_ivert_push_back(&mesh, iv);
+    //glm_scale(iv.trans, vec3(3, 3, 3));
     mesh_ivert_push_back(&monkey_mesh, iv);
     glm_translate(iv.trans, vec3(0, 0, 10));
     mesh_ivert_push_back(&cube_mesh, iv);
@@ -85,12 +88,15 @@ int main(){
     
 
     // texture
-    struct texture tex1;
+    struct texture tex1, tex1_normal;
     texture_load(&tex1, "res/img/test01.jpg");
+    texture_load(&tex1_normal, "res/img/test01_normal.jpg");
 
     //mesh_texture_push(&mesh, tex1);
     mesh_texture_albedo_set(&mesh, &tex1);
+    mesh_texture_normal_set(&mesh, &tex1_normal);
     mesh_texture_albedo_set(&monkey_mesh, &tex1);
+    mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
     light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
