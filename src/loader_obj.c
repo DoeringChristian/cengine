@@ -32,7 +32,8 @@ int mesh_load_obj(struct mesh *dst, const char *path){
     darray_init(&vn, 100);
     darray_init(&vt, 100);
 
-    char line[500];
+    char line[500] = {0};
+    char name_buf[500];
 
     float px, py, pz;
     int idxs[16];
@@ -80,10 +81,6 @@ int mesh_load_obj(struct mesh *dst, const char *path){
             glm_vec3_copy(v[idxs[0]-1].pos, tmpv.pos);
             glm_vec3_copy(vn[idxs[6]-1].normal, tmpv.normal);
             glm_vec2_copy(vt[idxs[3]-1].uv, tmpv.uv);
-#if 0
-            printf("tmpv: (pos: %f %f %f, normal: %f %f %f)\n", tmpv.pos[0], tmpv.pos[1], tmpv.pos[2], tmpv.normal[0], tmpv.normal[1], tmpv.normal[2]);
-            printf("idxs[6]-1: %i\n", idxs[6]-1);
-#endif
             darray_push_back(&verts, tmpv);
 
             glm_vec3_copy(v[idxs[1]-1].pos, tmpv.pos);
@@ -96,20 +93,18 @@ int mesh_load_obj(struct mesh *dst, const char *path){
             glm_vec2_copy(vt[idxs[5]-1].uv, tmpv.uv);
             darray_push_back(&verts, tmpv);
 
-#if 0
-            glm_vec3_copy(vn[idxs[3]].normal, v[idxs[0]].normal);
-            glm_vec3_copy(vn[idxs[4]].normal, v[idxs[1]].normal);
-            glm_vec3_copy(vn[idxs[5]].normal, v[idxs[2]].normal);
-            glm_vec2_copy(vt[idxs[6]].uv, v[idxs[0]].uv);
-            glm_vec2_copy(vt[idxs[7]].uv, v[idxs[1]].uv);
-            glm_vec2_copy(vt[idxs[8]].uv, v[idxs[2]].uv);
-#endif
+        }
+        else if(sscanf(line, "o %500s", name_buf) == 1){
+
         }
         //printf("%s\n", line);
     }
 
 
     mesh_init(dst, verts, darray_len(&verts), tris, darray_len(&tris));
+
+    if(strlen(name_buf) > 0)
+        mesh_name_set(dst, name_buf);
 
     darray_free(&verts);
     darray_free(&v);

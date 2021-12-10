@@ -5,6 +5,7 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     darray_init(&dst->tris, 10);
     darray_init(&dst->iverts, 1);
     dst->type = MESH_STATIC;
+    dst->name = NULL;
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -77,6 +78,7 @@ void mesh_free(struct mesh *dst){
     darray_free(&dst->tris);
     darray_free(&dst->verts);
     darray_free(&dst->iverts);
+    free(dst->name);
 }
 
 int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
@@ -566,3 +568,11 @@ int mesh_normal_from_cull(struct mesh *dst){
 #endif
 }
 
+int mesh_name_set(struct mesh *dst, const char *name){
+    if(dst->name != NULL)
+        free(dst->name);
+    size_t name_size = strlen(name)+1;
+    dst->name = malloc(name_size);
+    memcpy(dst->name, name, name_size);
+    return 0;
+}

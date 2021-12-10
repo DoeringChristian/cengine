@@ -11,7 +11,6 @@
 #include "glbuf.h"
 #include "vert.h"
 #include "camera.h"
-//#include "cmesh.h"
 #include "light.h"
 
 #define MAX_TEXTURES 10
@@ -27,6 +26,8 @@ enum mesh_type{
 };
 
 struct mesh{
+    char *name;
+
     darray(struct vert) verts;
     darray(struct tri) tris;
     darray(struct ivert) iverts;
@@ -89,5 +90,7 @@ size_t mesh_tri_count(struct mesh *src);
 
 int mesh_cull_from_normal(struct mesh *dst);
 int mesh_normal_from_cull(struct mesh *dst);
+
+int mesh_name_set(struct mesh *dst, const char *name);
 
 #endif //MESH_H
