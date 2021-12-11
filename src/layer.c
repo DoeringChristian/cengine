@@ -152,7 +152,7 @@ int layer_draw_n(struct layer *src, struct shader *shader){
     return 0;
 }
 int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera){
-    if(darray_len(&src->textures) < 3)
+    if(darray_len(&src->textures) < 5)
         return -1;
 
     GLCall(glDisable(GL_DEPTH_TEST));
@@ -165,15 +165,15 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     shader_uniform_tex(shader, &src->textures[2], "u_albedo");
     shader_uniform_tex(shader, &src->textures[3], "u_mrao");
     shader_uniform_tex(shader, &src->textures[4], "u_emission");
-    shader_uniform_tex(shader, shadow_depth, "u_shadow_depth");
+    if(shadow_depth != NULL)
+        shader_uniform_tex(shader, shadow_depth, "u_shadow_depth");
 
     // set light parameters
-    shader_uniform_vec4f(shader, "u_light_pos", light->pos);
-    shader_uniform_vec4f(shader, "u_light_color", light->color);
-    shader_uniform_f(shader, "u_light_c1", light->c1);
-    shader_uniform_f(shader, "u_light_c2", light->c2);
-
-    shader_uniform_f(shader, "u_shadow_len", light->shadow_len);
+    if(light != NULL){
+        shader_uniform_vec4f(shader, "u_light_pos", light->pos);
+        shader_uniform_vec4f(shader, "u_light_color", light->color);
+        shader_uniform_f(shader, "u_shadow_len", light->shadow_len);
+    }
 
     shader_uniform_vec4f(shader, "u_view_pos", camera->view[3]);
 

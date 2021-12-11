@@ -33,7 +33,7 @@ struct lvert{
 // instance vertex
 struct ivert{
     mat4 trans;
-    float tex_idx_offset;
+    vec2 tex_offset;
 };
 
 

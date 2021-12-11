@@ -14,8 +14,6 @@ uniform samplerCube u_shadow_depth;
 
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
-uniform float u_light_c1;
-uniform float u_light_c2;
 
 uniform float u_shadow_len;
 
@@ -23,22 +21,8 @@ uniform vec4 u_view_pos;
 
 const float PI = 3.14159265359;
 
-float shadow(vec3 pos){
-    vec3 frag_to_light = pos - vec3(u_light_pos);
-    float depth_closest = texture(u_shadow_depth, frag_to_light).r;
-    depth_closest *= u_shadow_len;
 
-    float depth_cur = length(frag_to_light);
-
-    float bias = 0.05;
-
-    return depth_cur - bias > depth_closest ? 1.0 : 0.0;
-}
-
-float attenuation(float dist){
-    return 1.0/(1.0 + u_light_c2 * dist + u_light_c2 * dist * dist);
-}
-
+float shadow(vec3 pos);
 float distribution_ggx(vec3 N, vec3 H, float roughness);
 float geometry_schlick_ggx(float ndotv, float roughness);
 float geometry_smith(vec3 N, vec3 V, vec3 L, float roughness);
@@ -123,4 +107,15 @@ float geometry_smith(vec3 N, vec3 V, vec3 L, float roughness){
 }
 vec3 fresnel_schlick(float costheta, vec3 F0){
     return F0 + (1.0 - F0) * pow(clamp(1.0 - costheta, 0.0, 1.0), 5.0);
+}
+float shadow(vec3 pos){
+    vec3 frag_to_light = pos - vec3(u_light_pos);
+    float depth_closest = texture(u_shadow_depth, frag_to_light).r;
+    depth_closest *= u_shadow_len;
+
+    float depth_cur = length(frag_to_light);
+
+    float bias = 0.05;
+
+    return depth_cur - bias > depth_closest ? 1.0 : 0.0;
 }

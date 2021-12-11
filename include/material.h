@@ -9,6 +9,7 @@ struct material{
     vec4 albedo;
     vec4 mrao;
     vec4 emission;
+    float normal_scale;
 
     struct texture *albedo_map;
     struct texture *normal_map;
@@ -19,9 +20,9 @@ struct material{
 
 int material_init(struct material *dst);
 //void material_free(struct material *dst);
-void material_map_albedo_set(struct material *dst, struct texture *src);
-void material_map_normal_set(struct material *dst, struct texture *src);
-void material_map_mrao_set(struct material *dst, struct texture *src);
-void material_map_emission_set(struct material *dst, struct texture *src);
+void material_albedo_map_set(struct material *dst, struct texture *src);
+void material_normal_map_set(struct material *dst, struct texture *src, float normal_scale);
+void material_mrao_map_set(struct material *dst, struct texture *src);
+void material_emission_map_set(struct material *dst, struct texture *src);
 
 #endif //MATERIAL_H

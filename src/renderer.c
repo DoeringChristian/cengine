@@ -15,9 +15,10 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
 
-    shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow02.glsl", "shaders/lighting/frag_shadow_02.glsl");
+    shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
 
     shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+    shader_load(&dst->shader_emission, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_emission.glsl");
 
     shader_load(&dst->shader_clip, "shaders/layer/vert.glsl", "shaders/layer/frag_clip.glsl");
 
@@ -73,19 +74,13 @@ int renderer_render(struct renderer *src){
 
     // ------------------------------------------------
     // render the scene to the gbuf
-
-    //gbuf_bind(&src->gbuf);
     layer_bind(&src->gbuf);
-    // disable blend
     GLCall(glDisable(GL_BLEND));
-    //GLCall(glBlendFunc(GL_ONE, GL_ZERO));
-    //GLCall(glEnable(GL_DEPTH_TEST));
     for(size_t i = 0;i < darray_len(&src->meshes);i++)
         mesh_draw(src->meshes[i], &src->camera, &src->shader);
     layer_unbind(&src->gbuf);
-    //gbuf_unbind(&src->gbuf);
 
-    // clear the summ of lightess maps
+    // clear the summ of lights maps
 
     layer_bind(&src->light_out);
     layer_unbind(&src->light_out);
@@ -95,6 +90,11 @@ int renderer_render(struct renderer *src){
     GLCall(glEnable(GL_BLEND));
     GLCall(glDisable(GL_DEPTH_TEST));
     GLCall(glBlendFunc(GL_ONE, GL_ONE));
+
+    // -------------------------------------------------
+    // Render emission.
+    layer_draw_gbuf(&src->gbuf, &src->shader_emission, NULL, NULL, &src->camera);
+
     // -----------------------------------------------
     // Render lights
     for(size_t i = 0;i < darray_len(&src->lights);i++){

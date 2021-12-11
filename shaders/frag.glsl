@@ -28,11 +28,14 @@ uniform vec4 u_albedo;
 uniform vec4 u_mrao;
 uniform vec4 u_emission;
 
+uniform float u_normal_scale;
+
 void main (void){
     o_pos = vec4(fs_in.pos, 1);
 
     o_normal = texture(u_normal_map, fs_in.uv);
     o_normal = o_normal * 2.0 - 1.0;
+    o_normal.xy *= u_normal_scale;
     o_normal = vec4(fs_in.tbn * vec3(o_normal), 1);
     o_normal = vec4(vec3(normalize(o_normal)), 1);
 
@@ -40,7 +43,7 @@ void main (void){
 
     o_mrao = vec4(texture(u_mrao_map, fs_in.uv));
 
-    o_emission = texture(u_emission_map, fs_in.uv);
+    o_emission = texture(u_emission_map, fs_in.uv) * u_emission.a;
 
     if(!u_has_normal)
         o_normal = vec4(fs_in.tbn[2], 1);

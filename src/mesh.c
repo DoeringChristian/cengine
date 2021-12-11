@@ -48,7 +48,8 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     vao_attr_push_mat4f_div_inc(idx, GL_FLOAT, 0, struct ivert, trans);
 
     GLCall(glVertexAttribDivisor(idx, 1));
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct ivert, tex_idx_offset);
+    //vao_attr_push_inc(idx, GL_FLOAT, 0, struct ivert, tex_idx_offset);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct ivert, tex_offset);
 
 
     glbuf_unbind(&dst->vboi);
@@ -143,6 +144,7 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     shader_uniform_vec4f(shader, "u_albedo", src->material->albedo);
     shader_uniform_vec4f(shader, "u_mrao", src->material->mrao);
     shader_uniform_vec4f(shader, "u_emission", src->material->emission);
+    shader_uniform_f(shader, "u_normal_scale", src->material->normal_scale);
 
 #if 0
     for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){

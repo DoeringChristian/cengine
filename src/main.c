@@ -101,19 +101,21 @@ int main(){
     texture_load(&tex1, "res/img/test01.jpg");
     texture_load(&tex1_normal, "res/img/test01_normal.jpg");
 
-    struct texture tex2, tex2_normal, tex2_mrao;
-    texture_load(&tex2, "res/img/rustediron2_basecolor.png");
+    struct texture tex2, tex2_normal, tex2_mrao, tex2_emission;
+    texture_load(&tex2, "res/img/rustediron2_basecolor_linear.png");
     texture_load(&tex2_normal, "res/img/rustediron2_normal.png");
     texture_load(&tex2_mrao, "res/img/rustediron2_mrao.png");
+    texture_load(&tex2_emission, "res/img/monkey_emission.png");
     
-    material_map_albedo_set(&material0, &tex1);
-    material_map_normal_set(&material0, &tex1_normal);
+    material_albedo_map_set(&material0, &tex1);
+    material_normal_map_set(&material0, &tex1_normal, 0.01);
 
-    material_map_albedo_set(&material1, &tex2);
-    material_map_mrao_set(&material1, &tex2_mrao);
-    material_map_normal_set(&material1, &tex2_normal);
+    material_albedo_map_set(&material1, &tex2);
+    material_mrao_map_set(&material1, &tex2_mrao);
+    material_normal_map_set(&material1, &tex2_normal, 1.0);
+    material_emission_map_set(&material1, &tex2_emission);
     glm_vec4_copy(vec4(0, 1, 1, 0), material1.mrao);
-    glm_vec4_copy(vec4(1, 1, 1, 1), material1.emission);
+    glm_vec4_copy(vec4(1, 1, 1, 0.0), material1.emission);
 
 
     //mesh_texture_push(&mesh, tex1);
