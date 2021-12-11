@@ -4,19 +4,17 @@ int cmesh_init(struct cmesh *dst){
     darray_init(&dst->verts, 100);
     darray_init(&dst->tris, 100);
     
-    dst->pos[0] = 0;
-    dst->pos[1] = 0;
-    dst->pos[2] = 0;
+    mesh_init(&dst->mesh, NULL, 0, NULL, 0);
 
-    dst->rot[0] = 0;
-    dst->rot[1] = 0;
-    dst->rot[2] = 0;
-    dst->rot[3] = 1;
     return 0;
 }
 void cmesh_free(struct cmesh *dst){
     darray_free(&dst->verts);
     darray_free(&dst->tris);
+}
+
+void cmesh_push(struct cmesh *dst){
+
 }
 
 int cmesh_vert_push(struct cmesh *dst, struct vert src, size_t i){
@@ -75,17 +73,17 @@ int cmesh_append(struct cmesh *dst, const struct cmesh *src){
         dst_vert = src->verts[i];
         
         versor dst_rot_inv;
-        glm_quat_inv(dst->rot, dst_rot_inv);
+        glm_quat_inv(dst->mesh.rot, dst_rot_inv);
 
         vec3 tmpv3;
 
-        glm_vec3_add(dst_vert.pos, (float *)src->pos, dst_vert.pos);
-        glm_vec3_sub(dst_vert.pos, dst->pos, dst_vert.pos);
+        glm_vec3_add(dst_vert.pos, (float *)src->mesh.pos, dst_vert.pos);
+        glm_vec3_sub(dst_vert.pos, dst->mesh.pos, dst_vert.pos);
 
-        glm_quat_rotatev((float *)src->rot, dst_vert.pos, tmpv3);
+        glm_quat_rotatev((float *)src->mesh.rot, dst_vert.pos, tmpv3);
         glm_quat_rotatev(dst_rot_inv, tmpv3, dst_vert.pos);
 
-        glm_quat_rotatev((float *)src->rot, dst_vert.normal, tmpv3);
+        glm_quat_rotatev((float *)src->mesh.rot, dst_vert.normal, tmpv3);
         glm_quat_rotatev(dst_rot_inv, tmpv3, dst_vert.normal);
         
         cmesh_vert_push_back(dst, dst_vert);
@@ -105,8 +103,8 @@ int cmesh_append(struct cmesh *dst, const struct cmesh *src){
 }
 
 void cmesh_set_rot_axis(struct cmesh *dst, vec3 axis, float angle){
-    glm_quatv(dst->rot, angle, axis);
+    glm_quatv(dst->mesh.rot, angle, axis);
 }
 void cmesh_set_pos(struct cmesh *dst, vec3 pos){
-    glm_vec3_copy(pos, dst->pos);
+    glm_vec3_copy(pos, dst->mesh.pos);
 }

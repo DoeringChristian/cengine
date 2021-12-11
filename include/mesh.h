@@ -28,9 +28,11 @@ enum mesh_type{
 struct mesh{
     char *name;
 
+#if 0
     darray(struct vert) verts;
     darray(struct tri) tris;
     darray(struct ivert) iverts;
+#endif
 
     vec3 pos;
     versor rot;
@@ -46,8 +48,6 @@ struct mesh{
     struct texture *tex_albedo;
     struct texture *tex_normal;
     struct texture *tex_spec;
-
-    enum mesh_type type;
 
     int has_shadow;
 };

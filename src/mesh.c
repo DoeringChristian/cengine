@@ -1,22 +1,25 @@
 #include "mesh.h"
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
+#if 0
     darray_init(&dst->verts, 10);
     darray_init(&dst->tris, 10);
     darray_init(&dst->iverts, 1);
-    dst->type = MESH_STATIC;
+#endif
     dst->name = NULL;
     dst->has_shadow = 1;
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
+#if 0
     if(dst->type == MESH_DYNAMIC){
         if(verts != NULL)
             darray_append(&dst->verts, verts, verts_len);
         if(tris != NULL)
             darray_append(&dst->tris, tris, tris_len);
     }
+#endif
 
     glbuf_init(&dst->vbo, verts, verts_len * sizeof(struct vert), GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
@@ -77,15 +80,15 @@ void mesh_free(struct mesh *dst){
     glbuf_free(&dst->ibo);
     glbuf_free(&dst->vboi);
     GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
+#if 0
     darray_free(&dst->tris);
     darray_free(&dst->verts);
     darray_free(&dst->iverts);
+#endif
     free(dst->name);
 }
 
 int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
-    if(src->type == MESH_DYNAMIC)
-        mesh_push(src);
 
     GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -151,8 +154,6 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
 int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light){
     if(!src->has_shadow)
         return 0;
-    if(src->type == MESH_DYNAMIC)
-        mesh_push(src);
 
     GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -188,6 +189,7 @@ int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shade
 }
 
 int mesh_pull(struct mesh *dst){
+#if 0
     size_t vbo_size = glbuf_size(&dst->vbo);
     size_t ibo_size = glbuf_size(&dst->ibo);
     size_t vboi_size = glbuf_size(&dst->vboi);
@@ -212,9 +214,11 @@ int mesh_pull(struct mesh *dst){
         darray_append(&dst->iverts, buf, vboi_size / sizeof(struct ivert));
         free(buf);
     }
+#endif
     return 0;
 }
 int mesh_push(struct mesh *src){
+#if 0
     size_t vbo_size = glbuf_size(&src->vbo);
     size_t ibo_size = glbuf_size(&src->ibo);
     size_t vboi_size = glbuf_size(&src->vboi);
@@ -231,16 +235,12 @@ int mesh_push(struct mesh *src){
         glbuf_set(&src->vboi, src->iverts, 0, darray_size(&src->iverts));
     }
     return 0;
+#endif
 }
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src){
-    if(dst->type == MESH_DYNAMIC){
-        return darray_push_back(&dst->verts, src);
-    }
-    else if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_append(&dst->vbo, &src, sizeof(struct vert));
-    }
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_append(&dst->vbo, &src, sizeof(struct vert));
 }
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -263,39 +263,14 @@ int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
     return 0;
 }
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n){
-    if(dst->type == MESH_DYNAMIC){
-        return darray_append(&dst->verts, src, n);
-    }
-    else if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_append(&dst->vbo, src, n * sizeof(struct vert));
-    }
-    return 1;
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_append(&dst->vbo, src, n * sizeof(struct vert));
 }
 int mesh_vert_set(struct mesh *dst, struct vert src, size_t i){
-    if(dst->type == MESH_DYNAMIC){
-        if(i <= darray_len(&dst->verts))
-            dst->verts[i] = src;
-        return 0;
-    }
-    else if(dst->type == MESH_STATIC){
-        return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), sizeof(struct vert));
-    }
-    return 1;
+    return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), sizeof(struct vert));
 }
 int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i){
-    if(dst->type == MESH_DYNAMIC){
-        if(i <= darray_len(&dst->verts))
-            for(size_t j = 0;j < n;j++)
-                dst->verts[i+j] = src[j];
-        return 0;
-    }
-    else if(dst->type == MESH_STATIC){
-        return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), n * sizeof(struct vert));
-    }
-    else
-        assert(0);
-    return 1;
+    return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), n * sizeof(struct vert));
 }
 int mesh_vert_set_tri(struct mesh *dst, struct vert *src, struct tri target){
     mesh_vert_set(dst, src[0], target.idxs[0]);
@@ -305,28 +280,11 @@ int mesh_vert_set_tri(struct mesh *dst, struct vert *src, struct tri target){
 }
 struct vert mesh_vert_get(struct mesh *src, size_t i){
     struct vert dst;
-    if(src->type == MESH_DYNAMIC){
-        if(i <= darray_len(&src->verts)){
-            dst = src->verts[i];
-        }
-    }
-    else if(src->type == MESH_STATIC){
-        glbuf_get(&src->vbo, &dst, i * sizeof(struct vert), sizeof(struct vert));
-    }
-    else
-        assert(0);
+    glbuf_get(&src->vbo, &dst, i * sizeof(struct vert), sizeof(struct vert));
     return dst;
 }
 size_t mesh_vert_count(struct mesh *src){
-    if(src->type == MESH_DYNAMIC){
-        return darray_len(&src->verts);
-    }
-    else if(src->type == MESH_STATIC){
-        return glbuf_size(&src->vbo) / sizeof(struct vert);
-    }
-    else
-        assert(0);
-    return 0;
+    return glbuf_size(&src->vbo) / sizeof(struct vert);
 }
 int mesh_append(struct mesh *dst, const struct mesh *src){
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -335,12 +293,7 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
     size_t src_verts_len = glbuf_size(&src->vbo) / sizeof(struct vert);
     struct vert *append_verts = malloc(sizeof(struct vert) * src_verts_len);
     for(size_t i = 0;i < src_verts_len;i++){
-        if(dst->type == MESH_STATIC)
-            glbuf_get(&src->vbo, &src_vert, sizeof(struct vert) * i, sizeof(struct vert));
-        else if(dst->type == MESH_DYNAMIC)
-            src_vert = dst->verts[i];
-        else
-            assert(0);
+        glbuf_get(&src->vbo, &src_vert, sizeof(struct vert) * i, sizeof(struct vert));
 
         versor tmpq;
         vec3 tmpv3;
@@ -372,10 +325,7 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
     size_t dst_vert_len = glbuf_size(&dst->vbo) / sizeof(struct vert);
     struct tri *append_tris = malloc(sizeof(struct tri) * src_tris_len);
     for(size_t i = 0;i < src_tris_len;i++){
-        if(dst->type == MESH_STATIC)
-            glbuf_get(&src->ibo, &append_tris[i], i * sizeof(struct tri), sizeof(struct tri));
-        else if(dst->type == MESH_STATIC)
-            append_tris[i] = src->tris[i];
+        glbuf_get(&src->ibo, &append_tris[i], i * sizeof(struct tri), sizeof(struct tri));
         append_tris[i].idxs[0] += dst_vert_len;
         append_tris[i].idxs[1] += dst_vert_len;
         append_tris[i].idxs[2] += dst_vert_len;
@@ -389,69 +339,27 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
 }
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src){
-    if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_append(&dst->ibo, &src, sizeof(struct tri));
-    }
-    else if(dst->type == MESH_DYNAMIC){
-        darray_push_back(&dst->tris, src);
-        return 0;
-    }
-    else
-        assert(0);
-    return 0;
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_append(&dst->ibo, &src, sizeof(struct tri));
 }
 int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n){
-    if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_append(&dst->ibo, src, sizeof(struct tri) * n);
-    }
-    else if(dst->type == MESH_DYNAMIC){
-        darray_append(&dst->tris, src, n);
-        return 0;
-    }
-    else
-        assert(0);
-    return 0;
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_append(&dst->ibo, src, sizeof(struct tri) * n);
 }
 int mesh_tri_set(struct mesh *dst, struct tri src, size_t i){
-    if(dst->type == MESH_DYNAMIC){
-        if(i < darray_len(&dst->tris))
-            dst->tris[i] = src;
-        else
-            return 1;
-        return 0;
-    }
-    else if(dst->type == MESH_STATIC){
-        if(i < glbuf_size(&dst->ibo) / sizeof(struct tri))
-            glbuf_set(&dst->ibo, &src, sizeof(struct tri) * i, sizeof(struct tri));
-        else
-            return 1;
-        return 0;
-    }
+    if(i < glbuf_size(&dst->ibo) / sizeof(struct tri))
+        glbuf_set(&dst->ibo, &src, sizeof(struct tri) * i, sizeof(struct tri));
     else
-        assert(0);
-    return 1;
+        return 1;
+    return 0;
 }
 int mesh_tri_get_verts(struct mesh *src, struct tri tri, struct vert *dst){
-    if(src->type == MESH_DYNAMIC){
-        if(tri.idxs[0] < darray_len(&src->verts))
-            dst[0] = mesh_vert_get(src, tri.idxs[0]);
-        if(tri.idxs[1] < darray_len(&src->verts))
-            dst[1] = mesh_vert_get(src, tri.idxs[1]);
-        if(tri.idxs[2] < darray_len(&src->verts))
-            dst[2] = mesh_vert_get(src, tri.idxs[2]);
-    }
-    else if(src->type == MESH_STATIC){
-        if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
-            glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
-        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
-            glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[1], sizeof(struct vert));
-        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
-            glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[2], sizeof(struct vert));
-    }
-    else
-        assert(0);
+    if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
+        glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+    if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+        glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[1], sizeof(struct vert));
+    if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+        glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[2], sizeof(struct vert));
     return 0;
 }
 
@@ -465,101 +373,38 @@ void mesh_texture_spec_set(struct mesh *dst, struct texture *src){
     dst->tex_spec = src;
 }
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
-    if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_append(&dst->vboi, &src, sizeof(struct ivert));
-    }
-    else if(dst->type == MESH_DYNAMIC){
-        darray_push_back(&dst->iverts, src);
-        return 0;
-    }
-    else
-        assert(0);
-    return 0;
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_append(&dst->vboi, &src, sizeof(struct ivert));
 }
 int mesh_ivert_set(struct mesh *dst, struct ivert src, int i){
-    if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_set(&dst->vboi, &src, sizeof(struct ivert) * i, sizeof(struct ivert));
-    }
-    else if(dst->type == MESH_DYNAMIC){
-        dst->iverts[i] = src;
-    }
-    else
-        assert(0);
-    return 0;
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_set(&dst->vboi, &src, sizeof(struct ivert) * i, sizeof(struct ivert));
 }
 struct ivert mesh_ivert_get(struct mesh *src, int i){
     struct ivert dst;
-    if(src->type == MESH_STATIC){
-        GLCall(glBindVertexArray(src->gl_vao));
-        glbuf_get(&src->vboi, &dst, sizeof(struct ivert) * i, sizeof(struct ivert));
-    }
-    else if(src->type == MESH_DYNAMIC){
-        dst = src->iverts[i];
-    }
-    else
-        assert(0);
-    return dst;
+    GLCall(glBindVertexArray(src->gl_vao));
+    glbuf_get(&src->vboi, &dst, sizeof(struct ivert) * i, sizeof(struct ivert));
 }
 int mesh_iverts_clear(struct mesh *dst){
-    if(dst->type == MESH_STATIC){
-        GLCall(glBindVertexArray(dst->gl_vao));
-        return glbuf_resize(&dst->vboi, 0);
-    }
-    else if(dst->type == MESH_DYNAMIC){
-        darray_free(&dst->iverts);
-        darray_init(&dst->iverts, 10);
-        return 0;
-    }
-    else
-        assert(0);
-    return 0;
+    GLCall(glBindVertexArray(dst->gl_vao));
+    return glbuf_resize(&dst->vboi, 0);
 }
 struct tri mesh_tri_get(struct mesh *src, size_t i){
     struct tri dst;
-    if(src->type == MESH_DYNAMIC){
-        if(i < darray_len(&src->tris))
-            dst = src->tris[i];
-    }
-    else if(src->type == MESH_STATIC){
-        glbuf_get(&src->ibo, &dst, sizeof(struct tri) * i, sizeof(struct tri));
-    }
-    else
-        assert(0);
+    glbuf_get(&src->ibo, &dst, sizeof(struct tri) * i, sizeof(struct tri));
     return dst;
 }
 size_t mesh_tri_count(struct mesh *src){
-    if(src->type == MESH_DYNAMIC){
-        return darray_len(&src->tris);
-    }
-    else if(src->type == MESH_STATIC){
-        return glbuf_size(&src->ibo) / sizeof(struct tri);
-    }
-    else
-        assert(0);
-    return 0;
+    return glbuf_size(&src->ibo) / sizeof(struct tri);
 }
 int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst){
     struct tri tri = mesh_tri_get(src, i);
-    if(src->type == MESH_DYNAMIC){
-        if(tri.idxs[0] < darray_len(&src->verts))
-            dst[0] = mesh_vert_get(src, tri.idxs[0]);
-        if(tri.idxs[1] < darray_len(&src->verts))
-            dst[1] = mesh_vert_get(src, tri.idxs[0]);
-        if(tri.idxs[2] < darray_len(&src->verts))
-            dst[2] = mesh_vert_get(src, tri.idxs[0]);
-    }
-    else if(src->type == MESH_STATIC){
-        if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
-            glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
-        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
-            glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
-        if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
-            glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
-    }
-    else
-        assert(0);
+    if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
+        glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+    if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+        glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+    if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
+        glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
     return 0;
 }
 int mesh_cull_from_normal(struct mesh *dst){

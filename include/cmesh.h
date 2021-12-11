@@ -3,6 +3,7 @@
 
 #include "darray.h"
 #include "vert.h"
+#include "mesh.h"
 #include "cglm/cglm.h"
 
 /*
@@ -12,13 +13,15 @@
 struct cmesh{
     darray(struct vert) verts;
     darray(struct tri) tris;
+    darray(struct ivert) iverts;
 
-    vec3 pos;
-    versor rot;
+    struct mesh mesh;
 };
 
 int cmesh_init(struct cmesh *dst);
 void cmesh_free(struct cmesh *dst);
+
+void cmesh_push(struct cmesh *dst);
 
 int cmesh_vert_push(struct cmesh *dst, struct vert src, size_t i);
 int cmesh_vert_push_back(struct cmesh *dst, struct vert src);
