@@ -19,7 +19,8 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
     // push textures
     struct texture texture;
     for(size_t i = 0;i < num_textures;i++){
-        texture_init_f32(&texture, w, h, NULL);
+        // not shure weather to use f16 or f32
+        texture_init_f16(&texture, w, h, NULL);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.gl_tex, 0);
         darray_push_back(&dst->textures, texture);
     }

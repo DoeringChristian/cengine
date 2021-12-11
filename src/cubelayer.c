@@ -5,7 +5,7 @@ int cubelayer_init_depthcube(struct cubelayer *dst, int w, int h){
     dst->h = h;
 
     // texture
-    texture_init_f32_depthcube(&dst->texture, w, h, NULL);
+    texture_init_depthcube_f16(&dst->texture, w, h, NULL);
     // /texture
 
     GLCall(glGenFramebuffers(1, &dst->gl_fbo));
