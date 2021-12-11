@@ -16,9 +16,13 @@ struct light light0, light1;
 struct mesh mesh;
 struct mesh monkey_mesh;
 struct mesh cube_mesh;
+int time;
 
 int update(struct renderer *renderer, void *data){
-    int time = SDL_GetTicks();
+    int time_tmp = SDL_GetTicks();
+    //printf("FrameTime: %i ms FPS: %f\n", time_tmp - time, 1000/((float) time_tmp - (float) time));
+    time = time_tmp;
+
 
     light0.pos[0] = sinf((float)time / 1000);
     struct ivert tmp = mesh_ivert_get(&mesh, 0);
@@ -108,18 +112,22 @@ int main(){
     material_map_albedo_set(&material1, &tex2);
     material_map_mrao_set(&material1, &tex2_mrao);
     material_map_normal_set(&material1, &tex2_normal);
+    glm_vec4_copy(vec4(0, 1, 1, 0), material1.mrao);
+    glm_vec4_copy(vec4(1, 1, 1, 1), material1.emission);
 
 
     //mesh_texture_push(&mesh, tex1);
+#if 0
     mesh_texture_albedo_set(&mesh, &tex1);
     mesh_texture_normal_set(&mesh, &tex1_normal);
     mesh_texture_albedo_set(&monkey_mesh, &tex1);
+#endif
     mesh_material_set(&mesh, &material0);
     mesh_material_set(&monkey_mesh, &material1);
     //mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
-    light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(0, 1, 1, 0.5), LIGHT_POINT);
+    light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
 
     renderer_mesh_register(&win.renderer, &mesh);
     renderer_mesh_register(&win.renderer, &monkey_mesh);

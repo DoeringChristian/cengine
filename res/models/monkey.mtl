@@ -10,4 +10,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd /home/doeringc/Projects/cengine/res/img/test01.jpg
+map_Bump /home/doeringc/Projects/cengine/res/img/rustediron2_normal.png
+map_Kd /home/doeringc/Projects/cengine/res/img/rustediron2_basecolor.png

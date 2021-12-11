@@ -50,9 +50,9 @@ void main (void){
     vec3 pos = vec3(texture(u_pos, frag_uv));
     vec3 normal = vec3(texture(u_normal, frag_uv));
     vec3 albedo = vec3(texture(u_albedo, frag_uv));
-    float metallic = texture(u_mrao, frag_uv).x;
-    float roughness = texture(u_mrao, frag_uv).y;
-    float ao = texture(u_mrao, frag_uv).z;
+    float metallic = texture(u_mrao, frag_uv).r;
+    float roughness = texture(u_mrao, frag_uv).g;
+    float ao = texture(u_mrao, frag_uv).b;
     vec3 emission = texture(u_emission, frag_uv).rgb;
     float emission_strength = texture(u_emission, frag_uv).y;
 
@@ -88,7 +88,7 @@ void main (void){
 
     float ndotl = max(dot(N, L), 0.0);
 
-    vec3 lo = (kD * albedo / PI + specular) * radiance * ndotl;
+    vec3 lo = (kD * albedo / PI + specular) * radiance * ndotl * (1 - shadow(pos));
     o_color = vec4(lo, 1);
 }
 
