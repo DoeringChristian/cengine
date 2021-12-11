@@ -1,6 +1,6 @@
 #include "cubelayer.h"
 
-int cubelayer_init(struct cubelayer *dst, int w, int h){
+int cubelayer_init_depthcube(struct cubelayer *dst, int w, int h){
     dst->w = w;
     dst->h = h;
 

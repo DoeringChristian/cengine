@@ -22,7 +22,7 @@ struct cubelayer{
     struct texture texture;
 };
 
-int cubelayer_init(struct cubelayer *dst, int w, int h);
+int cubelayer_init_depthcube(struct cubelayer *dst, int w, int h);
 int cubelayer_free(struct cubelayer *dst);
 
 int cubelayer_bind(struct cubelayer *dst, int face);

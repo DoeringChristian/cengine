@@ -8,6 +8,7 @@ int renderer_init(struct renderer *dst, int w, int h){
     darray_init(&dst->lights, 10);
     dst->w = w;
     dst->h = h;
+    const int oversample = 2;
     
     // loading shaders
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
@@ -23,6 +24,8 @@ int renderer_init(struct renderer *dst, int w, int h){
     shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
     shader_load(&dst->shader_blurv,  "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
 
+    shader_load(&dst->shader_gamma, "shaders/layer/vert.glsl", "shaders/layer/frag_gamma_correct.glsl");
+
 #if 0
     shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
     shader_load(&dst->shader_blurv, "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
@@ -30,12 +33,13 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     // initializing layers
     //gbuf_init(&dst->gbuf, w, h);
-    layer_init_n(&dst->gbuf, w, h, 5);
+    layer_init_n(&dst->gbuf, w*oversample, h*oversample, 5);
 
-    layer_init(&dst->light, w, h);
-    layer_init(&dst->light_out, w, h);
+    //layer_init(&dst->light, w, h);
+    layer_init(&dst->light_out, w*oversample, h*oversample);
+    layer_init(&dst->layer_bloom, w, h);
 
-    cubelayer_init(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
+    cubelayer_init_depthcube(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
 
     // initializing camera
     cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
@@ -43,13 +47,21 @@ int renderer_init(struct renderer *dst, int w, int h){
     return 0;
 }
 void renderer_free(struct renderer *dst){
-    shader_free(&dst->shader);
     //gbuf_free(&dst->gbuf);
     layer_free(&dst->gbuf);
-    layer_free(&dst->light);
+    //layer_free(&dst->light);
     layer_free(&dst->light_out);
+    layer_free(&dst->layer_bloom);
+
+    shader_free(&dst->shader);
     shader_free(&dst->shader_forward);
     shader_free(&dst->shader);
+    shader_free(&dst->shader_clip);
+    shader_free(&dst->shader_blurh);
+    shader_free(&dst->shader_blurv);
+    shader_free(&dst->shader_gamma);
+    shader_free(&dst->shader_lighting);
+
     darray_free(&dst->lights);
     darray_free(&dst->meshes);
 }
@@ -109,6 +121,11 @@ int renderer_render(struct renderer *src){
 
     renderer_render_bloom(src);
 
+    layer_bind(&src->light_out);
+    shader_uniform_f(&src->shader_gamma, "u_gamma", 2.2);
+    layer_draw(&src->layer_bloom, &src->shader_gamma);
+    layer_unbind(&src->light_out);
+
     // reset viewport
     glViewport(0, 0, src->w, src->h);
 
@@ -122,8 +139,8 @@ int renderer_render(struct renderer *src){
 int renderer_render_bloom(struct renderer *src){
     const size_t bloom_passes = 8;
     struct layer layers_bloom[bloom_passes];
-    struct layer layer_tmp;
-    layer_init(&layer_tmp, src->w, src->h);
+    //struct layer layer_tmp;
+    //layer_init(&layer_tmp, src->w, src->h);
     for(size_t i = 0;i < bloom_passes;i++){
         layer_init(&layers_bloom[i], src->w/(i*2+1), src->h/(i*2+1));
     }
@@ -142,21 +159,23 @@ int renderer_render_bloom(struct renderer *src){
         }
     }
 
-    layer_bind(&layer_tmp);
+    layer_bind(&src->layer_bloom);
     layer_draw(&src->light_out, &src->shader_forward);
     for(size_t i = 0;i < bloom_passes;i++){
         layer_draw(&layers_bloom[i], &src->shader_forward);
     }
-    layer_unbind(&layer_tmp);
+    layer_unbind(&src->layer_bloom);
 
 
+#if 0
     layer_bind(&src->light_out);
     //layer_draw(&layers_bloom[15], &src->shader_forward);
     layer_draw(&layer_tmp, &src->shader_forward);
     layer_unbind(&src->light_out);
+#endif
 
 
-    layer_free(&layer_tmp);
+    //layer_free(&layer_tmp);
     for(size_t i = 0;i < bloom_passes;i++){
         layer_free(&layers_bloom[i]);
     }

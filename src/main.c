@@ -36,7 +36,7 @@ int update(struct renderer *renderer, void *data){
 int main(){
     struct window win;
 
-    window_init(&win, 0, 0, 800, 600, "test");
+    window_init(&win, 0, 0, 1000, 1000, "test");
 
     //mesh_init_quad(&mesh, &win.renderer.shader);
     mesh_init_cube(&mesh);
@@ -45,7 +45,7 @@ int main(){
     //monkey_mesh.has_shadow = 0;
 
     mesh_gen_tangent(&mesh);
-    //mesh_gen_tangent(&monkey_mesh);
+    mesh_gen_tangent(&monkey_mesh);
 
     //struct scene scene;
     //scene_init(&scene);
@@ -96,11 +96,19 @@ int main(){
     struct texture tex1, tex1_normal;
     texture_load(&tex1, "res/img/test01.jpg");
     texture_load(&tex1_normal, "res/img/test01_normal.jpg");
+
+    struct texture tex2, tex2_normal, tex2_mrao;
+    texture_load(&tex2, "res/img/rustediron2_basecolor.png");
+    texture_load(&tex2_normal, "res/img/rustediron2_normal.png");
+    texture_load(&tex2_mrao, "res/img/rustediron2_mrao.png");
     
     material_map_albedo_set(&material0, &tex1);
     material_map_normal_set(&material0, &tex1_normal);
 
-    material_map_albedo_set(&material1, &tex1);
+    material_map_albedo_set(&material1, &tex2);
+    material_map_mrao_set(&material1, &tex2_mrao);
+    material_map_normal_set(&material1, &tex2_normal);
+
 
     //mesh_texture_push(&mesh, tex1);
     mesh_texture_albedo_set(&mesh, &tex1);

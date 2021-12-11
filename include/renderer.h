@@ -29,9 +29,11 @@ struct renderer{
     struct shader shader_clip;
     struct shader shader_blurh;
     struct shader shader_blurv;
+    struct shader shader_gamma;
 
-    struct layer light;
+    //struct layer light;
     struct layer light_out;
+    struct layer layer_bloom;
     struct cubelayer cl_shadow;
 };
 
