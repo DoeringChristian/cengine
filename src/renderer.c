@@ -120,14 +120,15 @@ int renderer_render(struct renderer *src){
 }
 
 int renderer_render_bloom(struct renderer *src){
-    struct layer layers_bloom[16];
+    const size_t bloom_passes = 16;
+    struct layer layers_bloom[bloom_passes];
     struct layer layer_tmp;
     layer_init(&layer_tmp, src->w, src->h);
-    for(size_t i = 0;i < 16;i++){
-        layer_init(&layers_bloom[i], src->w/(i+1), src->h/(i+1));
+    for(size_t i = 0;i < bloom_passes;i++){
+        layer_init(&layers_bloom[i], src->w/(i*2+1), src->h/(i*2+1));
     }
 
-    for(size_t i = 0;i < 16;i++){
+    for(size_t i = 0;i < bloom_passes;i++){
         if(i == 0){
             layer_bind(&layers_bloom[0]);
             layer_draw(&src->light_out, &src->shader_clip);
@@ -143,25 +144,11 @@ int renderer_render_bloom(struct renderer *src){
 
     layer_bind(&layer_tmp);
     layer_draw(&src->light_out, &src->shader_forward);
-    for(size_t i = 0;i < 16;i++){
+    for(size_t i = 0;i < bloom_passes;i++){
         layer_draw(&layers_bloom[i], &src->shader_forward);
     }
     layer_unbind(&layer_tmp);
 
-
-#if 0
-
-    layer_bind(&layers_bloom[0]);
-    layer_draw(&src->light_out, &src->shader_clip);
-    layer_unbind(&layers_bloom[0]);
-
-    layer_bind(&layer_tmp);
-    layer_draw(&layers_bloom[0], &src->shader_blurv);
-    layer_draw(&layers_bloom[0], &src->shader_blurh);
-    layer_unbind(&layer_tmp);
-
-    layer_draw(&src->light_out, &src->shader_forward);
-#endif
 
     layer_bind(&src->light_out);
     layer_draw(&layer_tmp, &src->shader_forward);
@@ -169,39 +156,9 @@ int renderer_render_bloom(struct renderer *src){
 
 
     layer_free(&layer_tmp);
-    for(size_t i = 0;i < 16;i++){
+    for(size_t i = 0;i < bloom_passes;i++){
         layer_free(&layers_bloom[i]);
     }
-#if 0
-
-    for(size_t i = 0;i < 16;i++){
-        layer_bind(&layers_bloom[i]);
-        if(i == 0){
-            layer_draw(&src->light_out, &src->shader_clip);
-        }
-        else{
-            layer_draw(&layers_bloom[i-1], &src->shader_forward);
-        }
-        layer_unbind(&layers_bloom[i]);
-    }
-
-    layer_bind(&layer_tmp);
-    //GLCall(glBlendFunc(GL_ONE, GL_ONE));
-    layer_draw(&src->light_out, &src->shader_forward);
-    for(size_t i = 0;i < 16;i++){
-        layer_draw(&layers_bloom[i], &src->shader_forward);
-    }
-    layer_unbind(&layer_tmp);
-
-    layer_bind(&src->light_out);
-    layer_draw(&layer_tmp, &src->shader_forward);
-    layer_unbind(&src->light_out);
-
-    layer_free(&layer_tmp);
-    for(size_t i = 0;i < 16;i++){
-        layer_free(&layers_bloom[i]);
-    }
-#endif
     return 0;
 }
 
