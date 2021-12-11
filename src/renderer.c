@@ -120,7 +120,7 @@ int renderer_render(struct renderer *src){
 }
 
 int renderer_render_bloom(struct renderer *src){
-    const size_t bloom_passes = 16;
+    const size_t bloom_passes = 8;
     struct layer layers_bloom[bloom_passes];
     struct layer layer_tmp;
     layer_init(&layer_tmp, src->w, src->h);
@@ -136,9 +136,8 @@ int renderer_render_bloom(struct renderer *src){
         }
         else{
             layer_bind(&layers_bloom[i]);
-            //layer_draw(&layers_bloom[i-1], &src->shader_blurv);
-            //layer_draw(&layers_bloom[i-1], &src->shader_blurh);
-            layer_draw(&layers_bloom[i-1], &src->shader_forward);
+            layer_draw(&layers_bloom[i-1], &src->shader_blurv);
+            layer_draw(&layers_bloom[i-1], &src->shader_blurh);
             layer_unbind(&layers_bloom[i]);
         }
     }
@@ -146,9 +145,7 @@ int renderer_render_bloom(struct renderer *src){
     layer_bind(&layer_tmp);
     layer_draw(&src->light_out, &src->shader_forward);
     for(size_t i = 0;i < bloom_passes;i++){
-        //layer_draw(&layers_bloom[i], &src->shader_forward);
-        layer_draw(&layers_bloom[i], &src->shader_blurh);
-        layer_draw(&layers_bloom[i], &src->shader_blurv);
+        layer_draw(&layers_bloom[i], &src->shader_forward);
     }
     layer_unbind(&layer_tmp);
 
