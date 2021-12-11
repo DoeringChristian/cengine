@@ -6,17 +6,22 @@
 
 // either as pointer in mesh or directly
 struct material{
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
+    vec4 albedo;
+    vec4 mrao;
+    vec4 emission;
 
-    struct texture *map_albedo;
-    struct texture *map_normal;
-    struct texture *map_spec;
+    struct texture *albedo_map;
+    struct texture *normal_map;
+    // map metallic, roughness, ambient occlusion
+    struct texture *mrao_map;
+    struct texture *emission_map;
 };
 
 int material_init(struct material *dst);
-void material_free(struct material *dst);
+//void material_free(struct material *dst);
+void material_map_albedo_set(struct material *dst, struct texture *src);
+void material_map_normal_set(struct material *dst, struct texture *src);
+void material_map_mrao_set(struct material *dst, struct texture *src);
+void material_map_emission_set(struct material *dst, struct texture *src);
 
 #endif //MATERIAL_H

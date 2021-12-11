@@ -12,6 +12,7 @@
 #include "vert.h"
 #include "camera.h"
 #include "light.h"
+#include "material.h"
 
 #define MAX_TEXTURES 10
 #define MAX_LIGHTS 4
@@ -44,6 +45,8 @@ struct mesh{
     struct glbuf vboi;
 
     GLuint gl_vao;
+
+    struct material *material;
 
     struct texture *tex_albedo;
     struct texture *tex_normal;
@@ -97,5 +100,6 @@ int mesh_normal_from_cull(struct mesh *dst);
 int mesh_gen_tangent(struct mesh *dst);
 
 int mesh_name_set(struct mesh *dst, const char *name);
+int mesh_material_set(struct mesh *dst, struct material *src);
 
 #endif //MESH_H

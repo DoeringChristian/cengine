@@ -13,6 +13,6 @@ void main (void){
     vec2 tex_offset = 1.0/textureSize(u_texture, 0);
     
     for(int i = -5;i <= 5;i++){
-        o_color += vec4(texture(u_texture, frag_uv + vec2(0.0, tex_offset.x * i)).rgb * weights[i], 1.0);
+        o_color += vec4(texture(u_texture, frag_uv + vec2(0.0, tex_offset.x * i)).rgb * weights[abs(i)], 1.0);
     }
 }

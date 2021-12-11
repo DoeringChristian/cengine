@@ -10,6 +10,7 @@
 #include "cglm/cglm.h"
 #include "gl_util.h"
 #include "loader_obj.h"
+#include "material.h"
 
 struct light light0, light1;
 struct mesh mesh;
@@ -88,14 +89,25 @@ int main(){
     
 
     // texture
+    struct material material0, material1;
+    material_init(&material0);
+    material_init(&material1);
+
     struct texture tex1, tex1_normal;
     texture_load(&tex1, "res/img/test01.jpg");
     texture_load(&tex1_normal, "res/img/test01_normal.jpg");
+    
+    material_map_albedo_set(&material0, &tex1);
+    material_map_normal_set(&material0, &tex1_normal);
+
+    material_map_albedo_set(&material1, &tex1);
 
     //mesh_texture_push(&mesh, tex1);
     mesh_texture_albedo_set(&mesh, &tex1);
     mesh_texture_normal_set(&mesh, &tex1_normal);
     mesh_texture_albedo_set(&monkey_mesh, &tex1);
+    mesh_material_set(&mesh, &material0);
+    mesh_material_set(&monkey_mesh, &material1);
     //mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
@@ -106,6 +118,8 @@ int main(){
     renderer_mesh_register(&win.renderer, &cube_mesh);
     renderer_light_register(&win.renderer, &light0);
     renderer_light_register(&win.renderer, &light1);
+    
+    //glm_vec4_copy(vec4(1, 1, 1, 1), material1.emission);
 
     window_set_update(&win, update, NULL);
 

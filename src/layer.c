@@ -162,7 +162,9 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     // set textures
     shader_uniform_tex(shader, &src->textures[0], "u_pos");
     shader_uniform_tex(shader, &src->textures[1], "u_normal");
-    shader_uniform_tex(shader, &src->textures[2], "u_color");
+    shader_uniform_tex(shader, &src->textures[2], "u_albedo");
+    shader_uniform_tex(shader, &src->textures[3], "u_mrao");
+    shader_uniform_tex(shader, &src->textures[4], "u_emission");
     shader_uniform_tex(shader, shadow_depth, "u_shadow_depth");
 
     // set light parameters

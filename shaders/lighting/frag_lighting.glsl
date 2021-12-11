@@ -7,7 +7,9 @@ out vec4 o_color;
 
 uniform sampler2D u_pos;
 uniform sampler2D u_normal;
-uniform sampler2D u_color;
+uniform sampler2D u_albedo;
+uniform sampler2D u_mrao;
+uniform sampler2D u_emission;
 uniform samplerCube u_shadow_depth;
 
 uniform vec4 u_light_pos;
@@ -39,8 +41,14 @@ void main (void){
     //o_color = texture(u_color, frag_uv);
     vec3 pos = vec3(texture(u_pos, frag_uv));
     vec3 normal = vec3(texture(u_normal, frag_uv));
-    vec3 color = vec3(texture(u_color, frag_uv));
-    float spec_strength = texture(u_color, frag_uv).a;
+    vec3 albedo = vec3(texture(u_albedo, frag_uv));
+    float metallic = texture(u_mrao, frag_uv).x;
+    float roughness = texture(u_mrao, frag_uv).y;
+    float ao = texture(u_mrao, frag_uv).z;
+    vec3 emission = texture(u_emission, frag_uv).rgb;
+    float emission_strength = texture(u_emission, frag_uv).y;
+
+    float spec_strength = texture(u_albedo, frag_uv).a;
 
     vec3 light_dir = normalize(vec3(u_light_pos) - pos);
     float light_dist = length(vec3(u_light_pos) - pos);
@@ -62,6 +70,7 @@ void main (void){
     // ---------------------------------------------------
     // output calculation
 
-    o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color * attenuation(light_dist), 1.0);
+    o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * albedo * attenuation(light_dist), 1.0);
+    o_color += vec4(emission * emission_strength, 0);
     //o_color = vec4((1 - shadow(pos)) * (specular + diffuse) * color * attenuation(light_dist) * 2, 1.0);
 }

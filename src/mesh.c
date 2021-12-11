@@ -8,6 +8,7 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
 #endif
     dst->name = NULL;
     dst->has_shadow = 1;
+    dst->material = NULL;
 
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
@@ -89,6 +90,8 @@ void mesh_free(struct mesh *dst){
 }
 
 int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
+    if(src->material == NULL)
+        return -1;
 
     GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -109,26 +112,37 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
 
     size_t slot = 0;
 
-    if(src->tex_albedo != NULL){
-        shader_uniform_tex(shader, src->tex_albedo, "u_albedo");
+    if(src->material->albedo_map != NULL){
+        shader_uniform_tex(shader, src->material->albedo_map, "u_albedo_map");
         shader_uniform_i(shader, "u_has_albedo", 1);
     }
     else
         shader_uniform_i(shader, "u_has_albedo", 0);
 
-    if(src->tex_normal != NULL){
-        shader_uniform_tex(shader, src->tex_normal, "u_normal");
+    if(src->material->normal_map != NULL){
+        shader_uniform_tex(shader, src->material->normal_map, "u_normal_map");
         shader_uniform_i(shader, "u_has_normal", 1);
     }
     else
         shader_uniform_i(shader, "u_has_normal", 0);
 
-    if(src->tex_spec != NULL){
-        shader_uniform_tex(shader, src->tex_spec, "u_spec");
-        shader_uniform_i(shader, "u_has_spec", 1);
+    if(src->material->mrao_map != NULL){
+        shader_uniform_tex(shader, src->material->mrao_map, "u_mrao_map");
+        shader_uniform_i(shader, "u_has_mrao", 1);
     }
     else
-        shader_uniform_i(shader, "u_has_spec", 0);
+        shader_uniform_i(shader, "u_has_mrao", 0);
+
+    if(src->material->emission_map != NULL){
+        shader_uniform_tex(shader, src->material->emission_map, "u_emission_map");
+        shader_uniform_i(shader, "u_has_emission", 1);
+    }
+    else
+        shader_uniform_i(shader, "u_has_emission", 0);
+
+    shader_uniform_vec4f(shader, "u_albedo", src->material->albedo);
+    shader_uniform_vec4f(shader, "u_mrao", src->material->mrao);
+    shader_uniform_vec4f(shader, "u_emission", src->material->emission);
 
 #if 0
     for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){
@@ -464,5 +478,9 @@ int mesh_name_set(struct mesh *dst, const char *name){
     size_t name_size = strlen(name)+1;
     dst->name = malloc(name_size);
     memcpy(dst->name, name, name_size);
+    return 0;
+}
+int mesh_material_set(struct mesh *dst, struct material *src){
+    dst->material = src;
     return 0;
 }

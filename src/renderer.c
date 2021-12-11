@@ -30,7 +30,7 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     // initializing layers
     //gbuf_init(&dst->gbuf, w, h);
-    layer_init_n(&dst->gbuf, w, h, 3);
+    layer_init_n(&dst->gbuf, w, h, 5);
 
     layer_init(&dst->light, w, h);
     layer_init(&dst->light_out, w, h);
@@ -136,8 +136,9 @@ int renderer_render_bloom(struct renderer *src){
         }
         else{
             layer_bind(&layers_bloom[i]);
-            layer_draw(&layers_bloom[i-1], &src->shader_blurv);
-            layer_draw(&layers_bloom[i-1], &src->shader_blurh);
+            //layer_draw(&layers_bloom[i-1], &src->shader_blurv);
+            //layer_draw(&layers_bloom[i-1], &src->shader_blurh);
+            layer_draw(&layers_bloom[i-1], &src->shader_forward);
             layer_unbind(&layers_bloom[i]);
         }
     }
@@ -145,12 +146,15 @@ int renderer_render_bloom(struct renderer *src){
     layer_bind(&layer_tmp);
     layer_draw(&src->light_out, &src->shader_forward);
     for(size_t i = 0;i < bloom_passes;i++){
-        layer_draw(&layers_bloom[i], &src->shader_forward);
+        //layer_draw(&layers_bloom[i], &src->shader_forward);
+        layer_draw(&layers_bloom[i], &src->shader_blurh);
+        layer_draw(&layers_bloom[i], &src->shader_blurv);
     }
     layer_unbind(&layer_tmp);
 
 
     layer_bind(&src->light_out);
+    //layer_draw(&layers_bloom[15], &src->shader_forward);
     layer_draw(&layer_tmp, &src->shader_forward);
     layer_unbind(&src->light_out);
 
