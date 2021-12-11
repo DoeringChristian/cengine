@@ -188,54 +188,20 @@ int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shade
     return 0;
 }
 
-int mesh_pull(struct mesh *dst){
-#if 0
-    size_t vbo_size = glbuf_size(&dst->vbo);
-    size_t ibo_size = glbuf_size(&dst->ibo);
-    size_t vboi_size = glbuf_size(&dst->vboi);
-    if(vboi_size != darray_size(&dst->verts)){
-        darray_free(&dst->verts);
-        darray_init(&dst->verts, vbo_size / sizeof(struct vert));
-        struct vert *buf = malloc(vbo_size);
-        darray_append(&dst->verts, buf, vbo_size / sizeof(struct vert));
-        free(buf);
+int mesh_set_to(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len, struct ivert *iverts, size_t iverts_len){
+    if(verts != NULL){
+        glbuf_resize(&dst->vbo, sizeof(struct vert) * verts_len);
+        glbuf_set(&dst->vbo, verts, 0, sizeof(struct vert) * verts_len);
     }
-    if(ibo_size != darray_size(&dst->tris)){
-        darray_free(&dst->tris);
-        darray_init(&dst->tris, ibo_size / sizeof(struct tri));
-        struct tri *buf = malloc(ibo_size);
-        darray_append(&dst->tris, buf, ibo_size / sizeof(struct tri));
-        free(buf);
+    if(tris != NULL){
+        glbuf_resize(&dst->ibo, sizeof(struct tri) * tris_len);
+        glbuf_set(&dst->ibo, tris, 0, sizeof(struct tri) * tris_len);
     }
-    if(vboi_size != darray_size(&dst->iverts)){
-        darray_free(&dst->iverts);
-        darray_init(&dst->iverts, vboi_size / sizeof(struct ivert));
-        struct ivert *buf = malloc(vboi_size);
-        darray_append(&dst->iverts, buf, vboi_size / sizeof(struct ivert));
-        free(buf);
-    }
-#endif
-    return 0;
-}
-int mesh_push(struct mesh *src){
-#if 0
-    size_t vbo_size = glbuf_size(&src->vbo);
-    size_t ibo_size = glbuf_size(&src->ibo);
-    size_t vboi_size = glbuf_size(&src->vboi);
-    if(vbo_size != darray_size(&src->verts)){
-        glbuf_resize(&src->vbo, darray_size(&src->verts));
-        glbuf_set(&src->vbo, src->verts, 0, darray_size(&src->verts));
-    }
-    if(ibo_size != darray_size(&src->tris)){
-        glbuf_resize(&src->ibo, darray_size(&src->tris));
-        glbuf_set(&src->ibo, src->tris, 0, darray_size(&src->tris));
-    }
-    if(vboi_size != darray_size(&src->iverts)){
-        glbuf_resize(&src->vboi, darray_size(&src->iverts));
-        glbuf_set(&src->vboi, src->iverts, 0, darray_size(&src->iverts));
+    if(iverts != NULL){
+        glbuf_resize(&dst->vboi, sizeof(struct ivert) * iverts_len);
+        glbuf_set(&dst->vboi, iverts, 0, sizeof(struct ivert) * iverts_len);
     }
     return 0;
-#endif
 }
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src){
@@ -384,6 +350,7 @@ struct ivert mesh_ivert_get(struct mesh *src, int i){
     struct ivert dst;
     GLCall(glBindVertexArray(src->gl_vao));
     glbuf_get(&src->vboi, &dst, sizeof(struct ivert) * i, sizeof(struct ivert));
+    return dst;
 }
 int mesh_iverts_clear(struct mesh *dst){
     GLCall(glBindVertexArray(dst->gl_vao));

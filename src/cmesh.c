@@ -13,8 +13,11 @@ void cmesh_free(struct cmesh *dst){
     darray_free(&dst->tris);
 }
 
-void cmesh_push(struct cmesh *dst){
-
+void cmesh_push(struct cmesh *src){
+    mesh_set_to(&src->mesh, 
+            src->verts, darray_size(&src->verts), 
+            src->tris, darray_size(&src->tris), 
+            src->iverts, darray_size(&src->iverts));
 }
 
 int cmesh_vert_push(struct cmesh *dst, struct vert src, size_t i){
