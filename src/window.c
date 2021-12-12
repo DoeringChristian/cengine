@@ -23,6 +23,7 @@ int window_init(struct window *dst, int x, int y, int w, int h, const char *titl
 
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);  
     //glEnable(GL_BLEND);
     //glEnable(GL_CULL_FACE);
 

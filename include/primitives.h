@@ -224,4 +224,37 @@ static struct tri primitive_tris_cube[] = {
         {22, 23, 21},
 };
 
+static float primitive_cube_idxs_floats[] = {
+    // front
+    -1.0, -1.0,  1.0,
+    1.0, -1.0,  1.0,
+    1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    // back
+    -1.0, -1.0, -1.0,
+    1.0, -1.0, -1.0,
+    1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0
+};
+static int primitive_cube_idxs_ints[] = {
+    // front
+    2, 1, 0,
+    0, 3, 2,
+    // right
+    6, 5, 1,
+    1, 2, 6,
+    // back
+    5, 6, 7,
+    7, 4, 5,
+    // left
+    3, 0, 4,
+    4, 7, 3,
+    // bottom
+    1, 5, 4,
+    4, 0, 1,
+    // top
+    6, 2, 3,
+    3, 7, 6
+};
+
 #endif //PRIMITIVES_H

@@ -31,6 +31,8 @@ int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalf
 
     GLCall(glTexImage2D(dst->type, 0, dst->internalformat, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, src));
 
+    //GLCall(glGenerateMipmap(dst->type));
+
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(dst->type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -44,7 +46,10 @@ int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalf
 int texture_init_f32(struct texture *dst, int w, int h, float *src){
     return texture_init(dst, w, h, src, GL_RGBA32F);
 }
-int texture_init_f16(struct texture *dst, int w, int h, float *src){
+int texture_init_rgbf16(struct texture *dst, int w, int h, float *src){
+    return texture_init(dst, w, h, src, GL_RGBA16F);
+}
+int texture_init_rgbaf16(struct texture *dst, int w, int h, float *src){
     return texture_init(dst, w, h, src, GL_RGBA16F);
 }
 int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat){

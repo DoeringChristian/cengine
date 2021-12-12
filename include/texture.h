@@ -25,7 +25,8 @@ struct texture{
 };
 
 int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat);
-int texture_init_f16(struct texture *dst, int w, int h, float *src);
+int texture_init_rgbf16(struct texture *dst, int w, int h, float *src);
+int texture_init_rgbaf16(struct texture *dst, int w, int h, float *src);
 int texture_init_f32(struct texture *dst, int w, int h, float *src);
 int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const char *name);
 int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat);

@@ -33,6 +33,7 @@ struct renderer{
     struct shader shader_gamma;
     struct shader shader_emission;
     struct shader shader_skybox;
+    struct shader shader_ambient;
 
     //struct layer light;
     struct layer light_out;

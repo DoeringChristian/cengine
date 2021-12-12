@@ -12,6 +12,10 @@ uniform sampler2D u_mrao;
 uniform sampler2D u_emission;
 uniform samplerCube u_shadow_depth;
 
+//uniform samplerCube u_irr;
+//uniform samplerCube u_ref;
+//uniform sampler2D u_brdf;
+
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
 uniform float u_shadow_len;
@@ -83,6 +87,7 @@ void main (void){
 
     // debug
     //o_color = vec4(texture(u_albedo, frag_uv).a, 0, 0, 1);
+    //o_color = vec4(texture(u_brdf, frag_uv).xyz, 1);
 }
 
 float distribution_ggx(vec3 N, vec3 H, float roughness){

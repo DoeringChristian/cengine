@@ -20,8 +20,8 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
     struct texture texture;
     for(size_t i = 0;i < num_textures;i++){
         // not shure weather to use f16 or f32
-        texture_init_f16(&texture, w, h, NULL);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.gl_tex, 0);
+        texture_init_rgbaf16(&texture, w, h, NULL);
+        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.gl_tex, 0);
         darray_push_back(&dst->textures, texture);
     }
 
@@ -160,10 +160,15 @@ void layer_free(struct layer *dst){
 int layer_bind(struct layer *dst){
     GLCall(glViewport(0, 0, dst->w, dst->h));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
+
+    for(size_t i = 0;i < darray_len(&dst->textures);i++)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, dst->textures[i].gl_tex, 0);
+
     GLCall(glClearColor(0, 0, 0, 0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_ONE, GL_ONE));
+
 
     return 0;
 }
@@ -178,6 +183,8 @@ int layer_rebind(struct layer *dst){
     return 0;
 }
 int layer_unbind(struct layer *dst){
+    for(size_t i = 0;i < darray_len(&dst->textures);i++)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, 0, 0);
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     GLCall(glClearColor(0, 0, 0, 0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -232,7 +239,7 @@ int layer_draw_n(struct layer *src, struct shader *shader){
     shader_unbind(shader);
     return 0;
 }
-int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct cvert *camera){
+int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct envmap *env, struct cvert *camera){
     if(darray_len(&src->textures) < 5)
         return -1;
 
@@ -254,6 +261,13 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
         shader_uniform_vec4f(shader, "u_light_pos", light->pos);
         shader_uniform_vec4f(shader, "u_light_color", light->color);
         shader_uniform_f(shader, "u_shadow_len", light->shadow_len);
+        shader_uniform_i(shader, "u_ref_lod_max", env->mmlvl);
+    }
+
+    // set environment parameters:
+    if(env != NULL){
+        //shader_uniform_tex(shader, &env->brdf_int, "u_brdf");
+        //shader_uniform_tex(shader, &env->ref, "u_ref");
     }
 
     shader_uniform_vec4f(shader, "u_view_pos", camera->view[3]);
@@ -270,6 +284,46 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     GLCall(glBindVertexArray(0));
     shader_unbind(shader);
     return 0;
+}
+int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct envmap *env, struct cvert *camera){
+    if(darray_len(&src->textures) < 5)
+        return -1;
+
+    GLCall(glDisable(GL_DEPTH_TEST));
+
+    shader_bind(shader);
+
+    // set textures
+    shader_uniform_tex(shader, &src->textures[0], "u_pos");
+    shader_uniform_tex(shader, &src->textures[1], "u_normal");
+    shader_uniform_tex(shader, &src->textures[2], "u_albedo");
+    shader_uniform_tex(shader, &src->textures[3], "u_mrao");
+    shader_uniform_tex(shader, &src->textures[4], "u_emission");
+
+    if(env != NULL){
+        //shader_uniform_tex(shader, &env->hdr, "u_hdr");
+        shader_uniform_tex(shader, &env->irr, "u_irr");
+        shader_uniform_tex(shader, &env->brdf_int, "u_brdf");
+        shader_uniform_tex(shader, &env->ref, "u_ref");
+    }
+
+    // set camera parameters
+
+    shader_uniform_vec4f(shader, "u_view_pos", camera->view[3]);
+
+    GLCall(glBindVertexArray(src->gl_vao));
+
+    glbuf_bind(&src->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+
+    glbuf_unbind(&src->ibo);
+    GLCall(glBindVertexArray(0));
+    shader_unbind(shader);
+    return 0;
+
 }
 int layer_draw_tex(struct layer *dst, struct shader *shader, struct texture *tex){
     if(shader == NULL)
