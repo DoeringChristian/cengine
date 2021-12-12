@@ -473,3 +473,89 @@ int mesh_material_set(struct mesh *dst, struct material *src){
     dst->material = src;
     return 0;
 }
+
+// ------------------------------------------------------------
+// mesh2:
+
+int mesh2_init(struct mesh2 *dst, struct vert2 *verts, size_t verts_len, int *idxs, size_t idxs_len){
+    GLCall(glGenVertexArrays(1, &dst->gl_vao));
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_init(&dst->vbo, verts, verts_len * sizeof(struct vert2), GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+
+    glbuf_init(&dst->ibo, idxs, idxs_len * sizeof(int), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+
+    glbuf_bind(&dst->vbo);
+
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, pos);
+
+    glbuf_unbind(&dst->vbo);
+
+    GLCall(glBindVertexArray(0));
+
+    return 0;
+}
+void mesh2_free(struct mesh2 *dst){
+    glbuf_free(&dst->vbo);
+    glbuf_free(&dst->ibo);
+
+    GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
+}
+
+int mesh2_draw(struct mesh2 *dst){
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_bind(&dst->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, glbuf_size(&dst->ibo), GL_UNSIGNED_INT, NULL));
+
+    glbuf_unbind(&dst->ibo);
+
+    GLCall(glBindVertexArray(0));
+
+    return 0;
+}
+
+// ------------------------------------------------------------
+// mesh2:
+
+int mesh3_init(struct mesh3 *dst, struct vert3 *verts, size_t verts_len, int *idxs, size_t idxs_len){
+    GLCall(glGenVertexArrays(1, &dst->gl_vao));
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_init(&dst->vbo, verts, verts_len * sizeof(struct vert3), GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+
+    glbuf_init(&dst->ibo, idxs, idxs_len * sizeof(int), GL_ELEMENT_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
+
+    glbuf_bind(&dst->vbo);
+
+    int idx = 0;
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert3, pos);
+
+    glbuf_unbind(&dst->vbo);
+
+    GLCall(glBindVertexArray(0));
+
+    return 0;
+}
+void mesh3_free(struct mesh3 *dst){
+    glbuf_free(&dst->vbo);
+    glbuf_free(&dst->ibo);
+
+    GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
+}
+
+int mesh3_draw(struct mesh3 *dst){
+    GLCall(glBindVertexArray(dst->gl_vao));
+
+    glbuf_bind(&dst->ibo);
+
+    GLCall(glDrawElements(GL_TRIANGLES, glbuf_size(&dst->ibo), GL_UNSIGNED_INT, NULL));
+
+    glbuf_unbind(&dst->ibo);
+
+    GLCall(glBindVertexArray(0));
+
+    return 0;
+}

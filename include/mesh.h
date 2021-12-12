@@ -21,11 +21,6 @@
  * mesh is a mesh that lives on the gpu
  */
 
-enum mesh_type{
-    MESH_STATIC,
-    MESH_DYNAMIC,
-};
-
 struct mesh{
     char *name;
 
@@ -95,5 +90,29 @@ int mesh_gen_tangent(struct mesh *dst);
 
 int mesh_name_set(struct mesh *dst, const char *name);
 int mesh_material_set(struct mesh *dst, struct material *src);
+
+struct mesh2{
+    struct glbuf vbo;
+    struct glbuf ibo;
+
+    GLuint gl_vao;
+};
+
+int mesh2_init(struct mesh2 *dst, struct vert2 *verts, size_t verts_len, int *idxs, size_t idxs_len);
+void mesh2_free(struct mesh2 *dst);
+
+int mesh2_draw(struct mesh2 *dst);
+
+struct mesh3{
+    struct glbuf vbo;
+    struct glbuf ibo;
+
+    GLuint gl_vao;
+};
+int mesh3_init(struct mesh3 *dst, struct vert3 *verts, size_t verts_len, int *idxs, size_t idxs_len);
+void mesh3_free(struct mesh3 *dst);
+
+int mesh3_draw(struct mesh3 *dst);
+
 
 #endif //MESH_H

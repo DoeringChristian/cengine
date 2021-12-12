@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.12)
 set(PROJECT_NAME cengine)
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 
+include("cmake/FileEmbed.cmake")
+
 project(${PROJECT_NAME})
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -13,6 +15,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 file(GLOB SRC_FILES "src/*.c" "lib/mathc/mathc.c")
+file(GLOB GLSL_FILES "shaders/*.glsl" "shaders/layer/*.glsl")
 file(COPY "shaders" DESTINATION "./")
 file(COPY "res" DESTINATION "./")
 
@@ -25,6 +28,11 @@ include_directories("lib/cgltf/")
 #include_directories("lib/mathc/")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+FileEmbedSetup()
+foreach(file ${GLSL_FILES})
+    FileEmbedAdd(${file})
+endforeach()
 
 add_subdirectory(lib/cglm/ EXCLUDE_FROM_ALL)
 

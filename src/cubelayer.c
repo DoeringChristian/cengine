@@ -39,7 +39,7 @@ int cubelayer_init_rgbf16(struct cubelayer *dst, int w, int h){
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
-    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    glbuf_init(&dst->vbo, vert2_quad, sizeof(vert2_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
@@ -80,7 +80,7 @@ int cubelayer_init_depthcube(struct cubelayer *dst, int w, int h){
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
-    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    glbuf_init(&dst->vbo, vert2_quad, sizeof(vert2_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 

@@ -4,7 +4,9 @@
 #define SHADOW_SIZE 1024
 
 int renderer_init(struct renderer *dst, int w, int h){
-    //darray_init(&dst->instances, 10);
+    // eventually in engine initialization.
+    primitives_init();
+
     darray_init(&dst->meshes, 10);
     darray_init(&dst->lights, 10);
     dst->w = w;
@@ -14,19 +16,20 @@ int renderer_init(struct renderer *dst, int w, int h){
     // loading shaders
     shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
 
-    shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag.glsl");
+    //shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag_forward.glsl");
+    shader_init_src(&dst->shader_forward, shader_vert_quad_src, shader_frag_forward_src);
 
     shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
 
     shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
     shader_load(&dst->shader_emission, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_emission.glsl");
 
-    shader_load(&dst->shader_clip, "shaders/layer/vert.glsl", "shaders/layer/frag_clip.glsl");
+    shader_load(&dst->shader_clip, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_clip.glsl");
 
-    shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
-    shader_load(&dst->shader_blurv,  "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
+    shader_load(&dst->shader_blurh, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_blurh.glsl");
+    shader_load(&dst->shader_blurv,  "shaders/layer/vert_quad.glsl", "shaders/layer/frag_blurv.glsl");
 
-    shader_load(&dst->shader_gamma, "shaders/layer/vert.glsl", "shaders/layer/frag_gamma_correct.glsl");
+    shader_load(&dst->shader_gamma, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_gamma_correct.glsl");
 
     shader_load(&dst->shader_skybox, "shaders/lighting/vert_skybox.glsl", "shaders/lighting/frag_skybox.glsl");
 

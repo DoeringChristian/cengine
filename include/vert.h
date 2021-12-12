@@ -51,7 +51,8 @@ static struct tri tri(size_t v1_idx, size_t v2_idx, size_t v3_idx){
 
 
 
-static struct vert2 svert_quad[] = {
+#if 0
+static struct vert2 vert2_quad[] = {
         {
             .pos = {-1, -1},
         },
@@ -70,5 +71,38 @@ static GLint idxs_quad[] = {
     0, 1, 2,
     2, 3, 1,
 };
+static struct vert3 vert3_cube[] = {
+    // front
+    -1.0, -1.0,  1.0,
+    1.0, -1.0,  1.0,
+    1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    // back
+    -1.0, -1.0, -1.0,
+    1.0, -1.0, -1.0,
+    1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0
+};
+static int idxs_cube[] = {
+    // front
+    2, 1, 0,
+    0, 3, 2,
+    // right
+    6, 5, 1,
+    1, 2, 6,
+    // back
+    5, 6, 7,
+    7, 4, 5,
+    // left
+    3, 0, 4,
+    4, 7, 3,
+    // bottom
+    1, 5, 4,
+    4, 0, 1,
+    // top
+    6, 2, 3,
+    3, 7, 6
+};
+#endif
 
 #endif //VERT_H

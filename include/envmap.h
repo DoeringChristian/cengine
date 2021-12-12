@@ -15,9 +15,7 @@ struct envmap{
     struct texture ref;
     struct texture brdf_int;
 
-    struct glbuf vbo;
-    struct glbuf ibo;
-    GLuint gl_vao, gl_fbo, gl_rbo;
+    GLuint gl_fbo, gl_rbo;
 
     struct shader shader_eqr_to_cm;
     struct shader shader_irr;

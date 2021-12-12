@@ -51,7 +51,7 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
-    glbuf_init(&dst->vbo, svert_quad, sizeof(svert_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    glbuf_init(&dst->vbo, vert2_quad, sizeof(vert2_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 

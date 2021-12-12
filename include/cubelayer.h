@@ -7,6 +7,7 @@
 #include "glbuf.h"
 #include "texture.h"
 #include "vert.h"
+#include "primitives.h"
 #include "shader.h"
 
 struct cubelayer{
