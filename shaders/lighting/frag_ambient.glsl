@@ -72,6 +72,7 @@ void main (void){
     // debug
     //o_color = vec4(diffuse, 1);
     //o_color = vec4(ref_color, 1);
+    //o_color = vec4(ref_color, 1);
 
 
 

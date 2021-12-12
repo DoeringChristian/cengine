@@ -10,10 +10,15 @@ struct envmap{
     int res;
     int mmlvl;
 
-    struct texture hdr;
+    // temporary textures in screen space
+    struct texture hdr_s;
+    struct texture irr_s;
+    struct texture ref_s;
+
+    // textures transformed into worldspace
+    struct texture brdf_int;
     struct texture irr;
     struct texture ref;
-    struct texture brdf_int;
 
     struct glbuf vbo;
     struct glbuf ibo;
@@ -23,12 +28,14 @@ struct envmap{
     struct shader shader_irr;
     struct shader shader_ref;
     struct shader shader_brdf_int;
+    struct shader shader_cm_pv;
 };
 
 int envmap_init(struct envmap *dst, int w);
 void envmap_free(struct envmap *dst);
 
 int envmap_draw(struct envmap *dst, struct shader *shader, struct cvert *camera);
+int envmap_update(struct envmap *dst, struct cvert *camera);
 
 int envmap_draw_cube();
 

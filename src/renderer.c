@@ -74,6 +74,8 @@ int renderer_render(struct renderer *src){
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // -------------------------------------------------
+    // update environment irr and ref
 
     // ------------------------------------------------
     // render the scene to the gbuf
@@ -87,6 +89,8 @@ int renderer_render(struct renderer *src){
 
     layer_bind(&src->light_out);
     layer_unbind(&src->light_out);
+
+    envmap_update(&src->environment, &src->camera);
 
     layer_bind(&src->light_out);
     // TODO: move enable/disable GL_DEPTH_TEST to draw functions.
@@ -106,7 +110,7 @@ int renderer_render(struct renderer *src){
     
     layer_draw_gbuf_ambient(&src->gbuf, &src->shader_ambient, &src->environment, &src->camera);
 
-#if 1
+#if 0
     // -----------------------------------------------
     // Render lights
     for(size_t i = 0;i < darray_len(&src->lights);i++){
