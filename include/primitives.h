@@ -319,6 +319,30 @@ static int idxs_cube[] = {
     3, 7, 6
 };
 
+extern const char shader_vert_quad_src[];
+extern const char shader_vert_cm_src[];
+extern const char shader_vert_src[];
+extern const char shader_vert_shadow_src[];
+
+extern const char shader_frag_src[];
+extern const char shader_frag_forward_src[];
+extern const char shader_frag_shadow_src[];
+extern const char shader_frag_lighting_src[];
+extern const char shader_frag_emission_src[];
+extern const char shader_frag_clib_src[];
+extern const char shader_frag_blurh_src[];
+extern const char shader_frag_blurv_src[];
+extern const char shader_frag_gamma_correct_src[];
+extern const char shader_frag_skybox_src[];
+extern const char shader_frag_ambient_src[];
+extern const char shader_frag_eqr_to_cm_src[];
+extern const char shader_frag_irr_src[];
+extern const char shader_frag_ref_src[];
+extern const char shader_frag_brdf_int_src[];
+
+
+
+#if 0
 static const char shader_vert_quad_src[] = {
 #include "vert_quad.glsl"
 };
@@ -328,6 +352,16 @@ static const char shader_vert_cm_src[] = {
 static const char shader_frag_forward_src[] = {
 #include "frag_forward.glsl"
 };
+static const char shader_frag_blurh_src[] = {
+#include "frag_blurh.glsl"
+};
+static const char shader_frag_blurv_src[] = {
+#include "frag_blurv.glsl"
+};
+static const char shader_frag_clib_src[] = {
+#include "frag_clip.glsl"
+};
+#endif
 
 
 #endif //PRIMITIVES_H

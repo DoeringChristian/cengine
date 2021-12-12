@@ -3,6 +3,65 @@
 struct mesh2 mesh2_quad;
 struct mesh3 mesh3_cube;
 
+const char shader_vert_quad_src[] = {
+#include "vert_quad.glsl"
+};
+const char shader_vert_cm_src[] = {
+#include "vert_cm.glsl"
+};
+const char shader_vert_src[] = {
+#include "vert.glsl"
+};
+const char shader_vert_shadow_src[] = {
+#include "vert_shadow.glsl"
+};
+
+const char shader_frag_src[] = {
+#include "frag.glsl"
+};
+const char shader_frag_forward_src[] = {
+#include "frag_forward.glsl"
+};
+const char shader_frag_shadow_src[] = {
+#include "frag_shadow.glsl"
+};
+const char shader_frag_lighting_src[] = {
+#include "frag_lighting.glsl"
+};
+const char shader_frag_emission_src[] = {
+#include "frag_emission.glsl"
+};
+const char shader_frag_clib_src[] = {
+#include "frag_clip.glsl"
+};
+const char shader_frag_blurh_src[] = {
+#include "frag_blurh.glsl"
+};
+const char shader_frag_blurv_src[] = {
+#include "frag_blurv.glsl"
+};
+const char shader_frag_gamma_correct_src[] = {
+#include "frag_gamma_correct.glsl"
+};
+const char shader_frag_skybox_src[] = {
+#include "frag_skybox.glsl"
+};
+const char shader_frag_ambient_src[] = {
+#include "frag_ambient.glsl"
+};
+const char shader_frag_eqr_to_cm_src[] = {
+#include "frag_eqr_to_cm.glsl"
+};
+const char shader_frag_irr_src[] = {
+#include "frag_irr.glsl"
+};
+const char shader_frag_ref_src[] = {
+#include "frag_ref.glsl"
+};
+const char shader_frag_brdf_int_src[] = {
+#include "frag_brdf_int.glsl"
+};
+
 int mesh_init_quad(struct mesh *dst){
     mesh_init(dst, vert_quad, 4, tri_quad, 2);
 

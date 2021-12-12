@@ -15,7 +15,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 file(GLOB SRC_FILES "src/*.c" "lib/mathc/mathc.c")
-file(GLOB GLSL_FILES "shaders/*.glsl" "shaders/layer/*.glsl")
+file(GLOB GLSL_FILES "shaders/*.glsl" "shaders/layer/*.glsl" "shaders/lighting/*.glsl")
 file(COPY "shaders" DESTINATION "./")
 file(COPY "res" DESTINATION "./")
 

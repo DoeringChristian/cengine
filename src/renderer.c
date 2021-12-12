@@ -14,26 +14,36 @@ int renderer_init(struct renderer *dst, int w, int h){
     const int oversample = 2;
     
     // loading shaders
-    shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
+    //shader_load(&dst->shader, "shaders/vert.glsl", "shaders/frag.glsl");
+    shader_init_src(&dst->shader, shader_vert_src, shader_frag_src);
 
     //shader_load(&dst->shader_forward, "shaders/lighting/vert_ssp.glsl", "shaders/layer/frag_forward.glsl");
     shader_init_src(&dst->shader_forward, shader_vert_quad_src, shader_frag_forward_src);
 
-    shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
+    //shader_load(&dst->shader_shadow, "shaders/lighting/vert_shadow.glsl", "shaders/lighting/frag_shadow.glsl");
+    shader_init_src(&dst->shader_shadow, shader_vert_shadow_src, shader_frag_shadow_src);
 
-    shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
-    shader_load(&dst->shader_emission, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_emission.glsl");
+    //shader_load(&dst->shader_lighting, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_lighting.glsl");
+    //shader_load(&dst->shader_emission, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_emission.glsl");
+    shader_init_src(&dst->shader_lighting, shader_vert_quad_src, shader_frag_lighting_src);
+    shader_init_src(&dst->shader_emission, shader_vert_quad_src, shader_frag_emission_src);
 
-    shader_load(&dst->shader_clip, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_clip.glsl");
+    //shader_load(&dst->shader_clip, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_clip.glsl");
+    shader_init_src(&dst->shader_clip, shader_vert_quad_src, shader_frag_clib_src);
 
-    shader_load(&dst->shader_blurh, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_blurh.glsl");
-    shader_load(&dst->shader_blurv,  "shaders/layer/vert_quad.glsl", "shaders/layer/frag_blurv.glsl");
+    //shader_load(&dst->shader_blurh, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_blurh.glsl");
+    //shader_load(&dst->shader_blurv,  "shaders/layer/vert_quad.glsl", "shaders/layer/frag_blurv.glsl");
+    shader_init_src(&dst->shader_blurh, shader_vert_quad_src, shader_frag_blurh_src);
+    shader_init_src(&dst->shader_blurv, shader_vert_quad_src, shader_frag_blurv_src);
 
-    shader_load(&dst->shader_gamma, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_gamma_correct.glsl");
+    //shader_load(&dst->shader_gamma, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_gamma_correct.glsl");
+    shader_init_src(&dst->shader_gamma, shader_vert_quad_src, shader_frag_gamma_correct_src);
 
-    shader_load(&dst->shader_skybox, "shaders/lighting/vert_skybox.glsl", "shaders/lighting/frag_skybox.glsl");
+    //shader_load(&dst->shader_skybox, "shaders/lighting/vert_skybox.glsl", "shaders/lighting/frag_skybox.glsl");
+    shader_init_src(&dst->shader_skybox, shader_vert_cm_src, shader_frag_skybox_src);
 
-    shader_load(&dst->shader_ambient, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_ambient.glsl");
+    //shader_load(&dst->shader_ambient, "shaders/lighting/vert_ssp.glsl", "shaders/lighting/frag_ambient.glsl");
+    shader_init_src(&dst->shader_ambient, shader_vert_quad_src, shader_frag_ambient_src);
 
 
     // initializing layers

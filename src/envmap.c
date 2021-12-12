@@ -4,7 +4,7 @@ int envmap_init(struct envmap *dst, int res){
     dst->res = res;
     dst->mmlvl = 5;
 
-#if 1
+#if 0
     shader_load(&dst->shader_eqr_to_cm, "shaders/layer/vert_cm.glsl", "shaders/layer/frag_eqr_to_cm.glsl");
     shader_load(&dst->shader_irr, "shaders/layer/vert_cm.glsl", "shaders/layer/frag_irr.glsl");
     shader_load(&dst->shader_ref, "shaders/layer/vert_cm.glsl", "shaders/layer/frag_ref.glsl");
