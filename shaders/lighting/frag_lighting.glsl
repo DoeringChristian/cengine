@@ -88,6 +88,7 @@ void main (void){
     // debug
     //o_color = vec4(texture(u_albedo, frag_uv).a, 0, 0, 1);
     //o_color = vec4(texture(u_brdf, frag_uv).xyz, 1);
+    //o_color = vec4(vec3(length(vec3(u_view_pos) - pos) / far) , 1);
 }
 
 float distribution_ggx(vec3 N, vec3 H, float roughness){

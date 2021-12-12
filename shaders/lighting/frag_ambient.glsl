@@ -65,16 +65,19 @@ void main (void){
 
     vec3 ambient = (kD * diffuse + specular) * ao;
 
-    o_color = vec4(ambient, 1);
+    o_color = vec4(ambient, texture(u_albedo, frag_uv).a);
+
+    // TODO: need to transform u_ref
 
     // debug
-    //o_color = vec4(irradiance, 1);
+    //o_color = vec4(diffuse, 1);
     //o_color = vec4(ref_color, 1);
 
 
 
     // debug
     //o_color = vec4(texture(u_albedo, frag_uv).a, 0, 0, 1);
+    //o_color = vec4(vec3(length(vec3(u_view_pos) - pos)/100), 1);
 }
 
 float distribution_ggx(vec3 N, vec3 H, float roughness){

@@ -34,6 +34,16 @@ int update(struct renderer *renderer, void *data){
     glm_scale(tmp.trans, vec3(0.2, 0.2, 0.2));
     mesh_ivert_set(&mesh, tmp, 0);
 
+    int mx, my;
+    mat4 cr;
+    SDL_PumpEvents();
+    SDL_GetMouseState(&mx, &my);
+    glm_rotate_make(cr, (float)mx / 100, vec3(0, 1, 0));
+    glm_rotate(cr, (float)my / 100, vec3(1, 0, 0));
+    glm_translate(cr, vec3(0, -1, 0));
+    glm_mat4_copy(cr, renderer->camera.view);
+
+
     return 0;
 }
 

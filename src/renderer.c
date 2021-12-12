@@ -93,7 +93,8 @@ int renderer_render(struct renderer *src){
     GLCall(glEnable(GL_BLEND));
     GLCall(glEnable(GL_DEPTH_TEST));
 
-    GLCall(glBlendFunc(GL_ONE, GL_ONE));
+    //GLCall(glBlendFunc(GL_ONE, GL_ONE));
+    GLCall(glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE));
 
     // -------------------------------------------------
     // Render emission.
@@ -135,9 +136,9 @@ int renderer_render(struct renderer *src){
     // -------------------------------------------------
     // Render skybox: TODO: render skybox.
     GLCall(glBlendFuncSeparate(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ZERO));
-    GLCall(glBlendFunc(GL_ZERO, GL_ONE));
+    //GLCall(glBlendFunc(GL_ZERO, GL_ONE));
 
-    envmap_draw(&src->environment, &src->shader_skybox, &src->camera);
+    //envmap_draw(&src->environment, &src->shader_skybox, &src->camera);
 
     layer_unbind(&src->light_out);
 
