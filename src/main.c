@@ -88,7 +88,7 @@ int main(){
     mesh_ivert_push_back(&mesh, iv);
 
     cvert_translate(&win.renderer.camera, vec3(-0.5, -0.5, -1));
-    cvert_rotate(&win.renderer.camera, vec3(1, 0, 0), 1);
+    cvert_rotate(&win.renderer.camera, vec3(1, 0, 0), 0.1);
     cvert_rotate(&win.renderer.camera, vec3(0, 1, 0), -0.5);
     
 
@@ -130,12 +130,18 @@ int main(){
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
     light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
+    //light1.shadow_len = 1;
 
     renderer_mesh_register(&win.renderer, &mesh);
     renderer_mesh_register(&win.renderer, &monkey_mesh);
     renderer_mesh_register(&win.renderer, &cube_mesh);
     renderer_light_register(&win.renderer, &light0);
     renderer_light_register(&win.renderer, &light1);
+
+    struct texture hdri;
+    texture_load_hdr(&hdri, "res/img/dreifaltigkeitsberg_4k.hdr");
+    
+    envmap_hdr_set(&win.renderer.environment, &hdri);
     
     //glm_vec4_copy(vec4(1, 1, 1, 1), material1.emission);
 

@@ -27,6 +27,8 @@ int renderer_init(struct renderer *dst, int w, int h){
 
     shader_load(&dst->shader_gamma, "shaders/layer/vert.glsl", "shaders/layer/frag_gamma_correct.glsl");
 
+    shader_load(&dst->shader_skybox, "shaders/lighting/vert_skybox.glsl", "shaders/lighting/frag_skybox.glsl");
+
 #if 0
     shader_load(&dst->shader_blurh, "shaders/layer/vert.glsl", "shaders/layer/frag_blurh.glsl");
     shader_load(&dst->shader_blurv, "shaders/layer/vert.glsl", "shaders/layer/frag_blurv.glsl");
@@ -41,6 +43,63 @@ int renderer_init(struct renderer *dst, int w, int h){
     layer_init(&dst->layer_bloom, w, h);
 
     cubelayer_init_depthcube(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
+    cubelayer_init_rgbf16(&dst->cl_hdr, 512, 512);
+    envmap_init(&dst->environment, 512, 512);
+
+#if 0
+    // -------------------------------------------------
+    // TEST begin:
+    // -------------------------------------------------
+    
+    struct texture hdri;
+    texture_load_hdr(&hdri, "res/img/christmas_photo_studio_05_4k.hdr");
+    struct shader test_shader;
+    shader_load(&test_shader, "shaders/layer/vert_cm.glsl", "shaders/layer/frag_eqr_to_cm.glsl");
+
+    struct cvert cm_cameras[6];
+    cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
+    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
+    cm_cameras[0].far = 100;
+    cm_cameras[1].far = 100;
+    cm_cameras[2].far = 100;
+    cm_cameras[3].far = 100;
+    cm_cameras[4].far = 100;
+    cm_cameras[5].far = 100;
+
+    glm_look(vec3(0, 0, 0), vec3(1, 0, 0), vec3(0, -1, 0), cm_cameras[0].view);
+    glm_look(vec3(0, 0, 0), vec3(-1, 0, 0), vec3(0, -1, 0), cm_cameras[1].view);
+    glm_look(vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1), cm_cameras[2].view);
+    glm_look(vec3(0, 0, 0), vec3(0, -1, 0), vec3(0, 0, -1), cm_cameras[3].view);
+    glm_look(vec3(0, 0, 0), vec3(0, 0, 1), vec3(0, -1, 0), cm_cameras[4].view);
+    glm_look(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
+
+    // calculate view projection of light
+    for(size_t i = 0;i < 6;i++){
+        cubelayer_bind(&dst->cl_hdr, i);
+
+        shader_bind(&test_shader);
+
+        shader_uniform_mat4f(&test_shader, "u_proj", (float *)cm_cameras[0].proj);
+        shader_uniform_mat4f(&test_shader, "u_view", (float *)cm_cameras[i].view);
+        shader_uniform_tex(&test_shader, &hdri, "u_texture");
+
+        envmap_draw_cube();
+
+        shader_unbind(&test_shader);
+
+        //scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
+        cubelayer_unbind(&dst->cl_hdr);
+    }
+
+    // -------------------------------------------------
+    // TEST end.
+    // -------------------------------------------------
+#endif
 
     // initializing camera
     cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
@@ -88,11 +147,13 @@ int renderer_render(struct renderer *src){
     layer_bind(&src->light_out);
     // TODO: move enable/disable GL_DEPTH_TEST to draw functions.
     GLCall(glEnable(GL_BLEND));
-    GLCall(glDisable(GL_DEPTH_TEST));
+    GLCall(glEnable(GL_DEPTH_TEST));
+
     GLCall(glBlendFunc(GL_ONE, GL_ONE));
 
     // -------------------------------------------------
     // Render emission.
+
     layer_draw_gbuf(&src->gbuf, &src->shader_emission, NULL, NULL, &src->camera);
 
     // -----------------------------------------------
@@ -117,7 +178,18 @@ int renderer_render(struct renderer *src){
 
         }
     }
+
+
+    // -------------------------------------------------
+    // Render skybox: TODO: render skybox.
+    //GLCall(glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA));
+
+    envmap_draw(&src->environment, &src->shader_skybox, &src->camera);
+
     layer_unbind(&src->light_out);
+
+
+
 
     renderer_render_bloom(src);
 
@@ -125,6 +197,45 @@ int renderer_render(struct renderer *src){
     shader_uniform_f(&src->shader_gamma, "u_gamma", 2.2);
     layer_draw(&src->layer_bloom, &src->shader_gamma);
     layer_unbind(&src->light_out);
+
+
+#if 0
+    // -------------------------------------------------
+    // TEST begin:
+    // -------------------------------------------------
+
+    struct envmap test;
+    struct texture test_tex;
+    struct shader test_shader;
+    texture_load_hdr(&test_tex, "res/img/christmas_photo_studio_05_4k.hdr");
+    envmap_init(&test, 512, 512, &test_tex);
+    shader_load(&test_shader, "shaders/layer/vert_test01.glsl", "shaders/layer/frag_test01.glsl");
+
+
+    //glDepthFunc(GL_LEQUAL);
+
+    shader_bind(&test_shader);
+    shader_uniform_tex(&test_shader, &test.irr, "u_texture");
+    shader_uniform_mat4f(&test_shader, "u_view", (float *)src->camera.view);
+    shader_uniform_mat4f(&test_shader, "u_proj", (float *)src->camera.proj);
+
+    envmap_draw_cube();
+
+    shader_unbind(&test_shader);
+
+    layer_bind(&src->light_out);
+    struct shader ts2;
+    //shader_load(&ts2, "shaders/layer/vert.glsl", "shaders/layer/frag_cube.glsl");
+    //cubelayer_draw(&src->cl_hdr, &ts2);
+    envmap_draw_cube();
+    shader_free(&ts2);
+    layer_unbind(&src->light_out);
+
+    // -------------------------------------------------
+    // TEST end.
+    // -------------------------------------------------
+#endif
+    
 
     // reset viewport
     glViewport(0, 0, src->w, src->h);
@@ -137,7 +248,7 @@ int renderer_render(struct renderer *src){
 }
 
 int renderer_render_bloom(struct renderer *src){
-    const size_t bloom_passes = 8;
+    const size_t bloom_passes = 0;
     struct layer layers_bloom[bloom_passes];
     //struct layer layer_tmp;
     //layer_init(&layer_tmp, src->w, src->h);
@@ -191,12 +302,12 @@ int renderer_render_point_shadow(struct renderer *src, struct light *light){
     glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
     glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
     glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
-    cm_cameras[0].far = 100;
-    cm_cameras[1].far = 100;
-    cm_cameras[2].far = 100;
-    cm_cameras[3].far = 100;
-    cm_cameras[4].far = 100;
-    cm_cameras[5].far = 100;
+    cm_cameras[0].far = light->shadow_len;
+    cm_cameras[1].far = light->shadow_len;
+    cm_cameras[2].far = light->shadow_len;
+    cm_cameras[3].far = light->shadow_len;
+    cm_cameras[4].far = light->shadow_len;
+    cm_cameras[5].far = light->shadow_len;
 
     glm_look(light->pos, vec3(1, 0, 0), vec3(0, -1, 0), cm_cameras[0].view);
     glm_look(light->pos, vec3(-1, 0, 0), vec3(0, -1, 0), cm_cameras[1].view);

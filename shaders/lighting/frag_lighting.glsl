@@ -14,7 +14,6 @@ uniform samplerCube u_shadow_depth;
 
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
-
 uniform float u_shadow_len;
 
 uniform vec4 u_view_pos;
@@ -32,6 +31,12 @@ void main (void){
     // ------------------------------------------------
     // Initialize the values from the deferred rederer textures.
     vec3 pos = vec3(texture(u_pos, frag_uv));
+
+    if(length(vec3(u_light_pos) - pos) > u_shadow_len){
+        o_color = vec4(0, 0, 0, 1);
+        return;
+    }
+
     vec3 normal = vec3(texture(u_normal, frag_uv));
     vec3 albedo = vec3(texture(u_albedo, frag_uv));
     float metallic = texture(u_mrao, frag_uv).r;
@@ -39,6 +44,7 @@ void main (void){
     float ao = texture(u_mrao, frag_uv).b;
     vec3 emission = texture(u_emission, frag_uv).rgb;
     float emission_strength = texture(u_emission, frag_uv).y;
+
 
     vec3 N = normalize(normal);
     vec3 V = normalize(vec3(u_view_pos) - pos);
@@ -73,7 +79,10 @@ void main (void){
     float ndotl = max(dot(N, L), 0.0);
 
     vec3 lo = (kD * albedo / PI + specular) * radiance * ndotl * (1 - shadow(pos));
-    o_color = vec4(lo, 1);
+    o_color = vec4(lo, texture(u_albedo, frag_uv).a);
+
+    // debug
+    //o_color = vec4(texture(u_albedo, frag_uv).a, 0, 0, 1);
 }
 
 float distribution_ggx(vec3 N, vec3 H, float roughness){

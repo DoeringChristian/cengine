@@ -10,6 +10,7 @@
 #include "layer.h"
 #include "camera.h"
 #include "cubelayer.h"
+#include "envmap.h"
 
 struct renderer{
     int w, h;
@@ -31,11 +32,18 @@ struct renderer{
     struct shader shader_blurv;
     struct shader shader_gamma;
     struct shader shader_emission;
+    struct shader shader_skybox;
 
     //struct layer light;
     struct layer light_out;
     struct layer layer_bloom;
     struct cubelayer cl_shadow;
+
+    struct cubelayer cl_hdr;
+
+    struct envmap environment;
+
+    vec4 ambient;
 };
 
 int renderer_init(struct renderer *dst, int w, int h);

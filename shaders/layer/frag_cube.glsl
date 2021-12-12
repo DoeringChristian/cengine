@@ -28,5 +28,5 @@ void main (void){
         o_color = vec4(texture(u_texture, 4*vec3(frag_uv.x-0.5, 1, frag_uv.y-0.5)).r, 0, 0, 1);
     }
     else
-        o_color = vec4(0, 0, 0, 1);
+        o_color = vec4(1, 0, 0, 1);
 }

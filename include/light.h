@@ -15,7 +15,7 @@ struct light{
 
     float shadow_len;
 
-    float c1, c2;
+    int casts_shadow;
 };
 
 int light_init(struct light *dst, vec4 pos, vec4 color, enum light_type type);

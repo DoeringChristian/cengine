@@ -28,10 +28,16 @@ int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalf
 int texture_init_f16(struct texture *dst, int w, int h, float *src);
 int texture_init_f32(struct texture *dst, int w, int h, float *src);
 int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const char *name);
+int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat);
+int texture_init_cube_rgbf16(struct texture *dst, int w, int h, float *src);
+int texture_init_cube_rgbaf16(struct texture *dst, int w, int h, float *src);
+int texture_init_cube_f32(struct texture *dst, int w, int h, float *src);
 int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum internalformat);
 int texture_init_depthcube_f16(struct texture *dst, int w, int h, float *src);
 int texture_init_depthcube_f32(struct texture *dst, int w, int h, float *src);
 int texture_load(struct texture *dst, const char *path);
+int texture_load_hdr(struct texture *dst, const char *path);
+int texture_load_hdr_cube(struct texture *dst, const char *path, int w, int h);
 void texture_free(struct texture *dst);
 
 int texture_resize_f32(struct texture *dst, int w, int h);

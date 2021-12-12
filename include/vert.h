@@ -9,10 +9,12 @@
 struct svert{
     vec2 pos;
     vec2 uv;
-#if 0
-    float pos[2];
-    float uv[2];
-#endif
+};
+
+// cubvemap vertex
+struct cmvert{
+    vec3 pos;
+    vec2 uv;
 };
 
 // mesh vertex
@@ -35,8 +37,6 @@ struct ivert{
     mat4 trans;
     vec2 tex_offset;
 };
-
-
 
 struct tri{
     GLuint idxs[3];

@@ -12,6 +12,13 @@
 #include "light.h"
 #include "camera.h"
 
+// eventualy use global definitions for primitives
+static GLuint layer_gl_vao = 0;
+static struct glbuf layer_ibo_plane;
+static struct glbuf layer_vbo_plane;
+static struct glbuf layer_ibo_cube;
+static struct glbuf layer_vbo_cube;
+
 struct layer{
     struct glbuf vbo;
     struct glbuf ibo;
@@ -28,6 +35,7 @@ struct layer{
 
 int layer_init(struct layer *dst, int w, int h);
 int layer_init_n(struct layer *dst, int w, int h, int num_textures);
+int layer_init_env(struct layer *dst, int w, int h);
 void layer_free(struct layer *dst);
 
 int layer_clear(struct layer *dst);
