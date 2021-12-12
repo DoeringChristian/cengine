@@ -270,7 +270,9 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
         //shader_uniform_tex(shader, &env->ref, "u_ref");
     }
 
-    shader_uniform_vec4f(shader, "u_view_pos", camera->view[3]);
+    mat4 view_inv;
+    glm_mat4_inv(camera->view, view_inv);
+    shader_uniform_vec4f(shader, "u_view_pos", view_inv[3]);
 
     GLCall(glBindVertexArray(src->gl_vao));
 
@@ -308,8 +310,10 @@ int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct env
     }
 
     // set camera parameters
+    mat4 view_inv;
+    glm_mat4_inv(camera->view, view_inv);
 
-    shader_uniform_vec4f(shader, "u_view_pos", camera->view[3]);
+    shader_uniform_vec4f(shader, "u_view_pos", view_inv[3]);
 
     GLCall(glBindVertexArray(src->gl_vao));
 
