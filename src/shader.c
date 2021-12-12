@@ -1,5 +1,31 @@
 #include "shader.h"
 
+int _shader_init_src(GLuint *dst, const char *src, int shader_type){
+
+    size_t src_size = strlen(src);
+    int status;
+
+    *dst = glCreateShader(shader_type);
+    GLCall(glShaderSource(*dst, 1, &src, (int *)&src_size));
+    GLCall(glCompileShader(*dst));
+
+    glGetShaderiv(*dst, GL_COMPILE_STATUS, &status);
+    if(status == GL_FALSE){
+        int log_len;
+        glGetShaderiv(*dst, GL_INFO_LOG_LENGTH, &log_len);
+
+        char buf[log_len + 1];
+        glGetShaderInfoLog(*dst, log_len, NULL, buf);
+
+        printf("[Error compiling shader] type: %i, log: %ssrc: %s\n", shader_type, buf, src);
+
+        glDeleteShader(*dst);
+        *dst = 0;
+        return -1;
+    }
+    return 0;
+}
+
 int _shader_load(GLuint *dst, const char *path, int shader_type){
     FILE *fp = fopen(path, "r");
     if(fp == NULL){
@@ -59,6 +85,57 @@ int shader_load(struct shader *dst, const char *vert_path, const char *frag_path
     GLuint vert, frag;
     _shader_load(&vert, vert_path, GL_VERTEX_SHADER);
     _shader_load(&frag, frag_path, GL_FRAGMENT_SHADER);
+
+    glAttachShader(dst->program, vert);
+    glAttachShader(dst->program, frag);
+
+    glLinkProgram(dst->program);
+
+    glGetProgramiv(dst->program, GL_LINK_STATUS, &status);
+    if(status == GL_FALSE){
+        int log_len = 0;
+        glGetProgramiv(dst->program, GL_INFO_LOG_LENGTH, &log_len);
+
+        char buf[log_len +1];
+        glGetProgramInfoLog(dst->program, log_len, NULL, buf);
+
+        printf("[Error linking program] %s\n", buf);
+
+        glDetachShader(dst->program, vert);
+        glDetachShader(dst->program, frag);
+
+        glDeleteShader(vert);
+        glDeleteShader(frag);
+
+        glDeleteProgram(dst->program);
+        dst->program = 0;
+
+        return -1;
+    }
+    glDetachShader(dst->program, vert);
+    glDetachShader(dst->program, frag);
+
+    glDeleteShader(vert);
+    glDeleteShader(frag);
+
+
+    dst->attr_idx = 0;
+
+
+    return 0;
+}
+int shader_init_src(struct shader *dst, const char *vert_src, const char *frag_src){
+    int status;
+    dst->program = glCreateProgram();
+    dst->slot_count = 0;
+
+    if(!dst->program){
+        printf("[Error creating program]\n");
+    }
+
+    GLuint vert, frag;
+    _shader_init_src(&vert, vert_src, GL_VERTEX_SHADER);
+    _shader_init_src(&frag, frag_src, GL_FRAGMENT_SHADER);
 
     glAttachShader(dst->program, vert);
     glAttachShader(dst->program, frag);

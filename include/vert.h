@@ -6,9 +6,12 @@
 #include "cglm/cglm.h"
 
 // screen space vertex
-struct svert{
+struct vert2{
     vec2 pos;
-    vec2 uv;
+};
+
+struct vert3{
+    vec3 pos;
 };
 
 // cubvemap vertex
@@ -48,22 +51,18 @@ static struct tri tri(size_t v1_idx, size_t v2_idx, size_t v3_idx){
 
 
 
-static struct svert svert_quad[] = {
+static struct vert2 svert_quad[] = {
         {
             .pos = {-1, -1},
-            .uv = {0, 0},
         },
         {
             .pos = {-1, 1},
-            .uv = {0, 1},
         },
         {
             .pos = {1, -1},
-            .uv = {1, 0},
         },
         {
             .pos = {1, 1},
-            .uv = {1, 1},
         },
 };
 

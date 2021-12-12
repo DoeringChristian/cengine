@@ -15,6 +15,10 @@
     gl_err_print(__FILE__, __func__, __LINE__);\
 }
 
+#ifndef STR
+#define STR(...) #__VA_ARGS__
+#endif
+
 #ifndef MIN
 #define MIN(_x, _y) ((_x) < (_y) ? (_x) : (_y))
 #endif

@@ -29,12 +29,6 @@ enum mesh_type{
 struct mesh{
     char *name;
 
-#if 0
-    darray(struct vert) verts;
-    darray(struct tri) tris;
-    darray(struct ivert) iverts;
-#endif
-
     vec3 pos;
     versor rot;
 

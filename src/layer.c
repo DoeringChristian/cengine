@@ -58,8 +58,8 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
     glbuf_bind(&dst->vbo);
 
     int idx = 0;
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, pos);
+    //vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, uv);
 
     glbuf_unbind(&dst->vbo);
 

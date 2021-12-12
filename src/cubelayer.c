@@ -46,8 +46,8 @@ int cubelayer_init_rgbf16(struct cubelayer *dst, int w, int h){
     glbuf_bind(&dst->vbo);
 
     int idx = 0;
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, pos);
+    //vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, uv);
 
     glbuf_unbind(&dst->vbo);
 
@@ -87,8 +87,8 @@ int cubelayer_init_depthcube(struct cubelayer *dst, int w, int h){
     glbuf_bind(&dst->vbo);
 
     int idx = 0;
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, pos);
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct svert, uv);
+    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, pos);
+    //vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, uv);
 
     glbuf_unbind(&dst->vbo);
 

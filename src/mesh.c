@@ -1,11 +1,6 @@
 #include "mesh.h"
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
-#if 0
-    darray_init(&dst->verts, 10);
-    darray_init(&dst->tris, 10);
-    darray_init(&dst->iverts, 1);
-#endif
     dst->name = NULL;
     dst->has_shadow = 1;
     dst->material = NULL;
@@ -13,14 +8,6 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
     GLCall(glGenVertexArrays(1, &dst->gl_vao));
     GLCall(glBindVertexArray(dst->gl_vao));
 
-#if 0
-    if(dst->type == MESH_DYNAMIC){
-        if(verts != NULL)
-            darray_append(&dst->verts, verts, verts_len);
-        if(tris != NULL)
-            darray_append(&dst->tris, tris, tris_len);
-    }
-#endif
 
     glbuf_init(&dst->vbo, verts, verts_len * sizeof(struct vert), GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW);
 
