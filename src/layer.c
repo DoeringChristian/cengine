@@ -45,26 +45,6 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
-    // -----------------------------------------
-    // output side
-
-    GLCall(glGenVertexArrays(1, &dst->gl_vao));
-    GLCall(glBindVertexArray(dst->gl_vao));
-
-    glbuf_init(&dst->vbo, vert2_quad, sizeof(vert2_quad), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-
-    glbuf_init(&dst->ibo, idxs_quad, sizeof(idxs_quad), GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
-
-    glbuf_bind(&dst->vbo);
-
-    int idx = 0;
-    vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, pos);
-    //vao_attr_push_inc(idx, GL_FLOAT, 0, struct vert2, uv);
-
-    glbuf_unbind(&dst->vbo);
-
-    GLCall(glBindVertexArray(0));
-
     return 0;
 }
 int layer_init_env(struct layer *dst, int w, int h){
@@ -91,6 +71,7 @@ int layer_init_env(struct layer *dst, int w, int h){
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
+#if 0
 
     // -------------------------------------------------
     // output side
@@ -143,6 +124,7 @@ int layer_init_env(struct layer *dst, int w, int h){
     glbuf_unbind(&dst->vbo);
 
     GLCall(glBindVertexArray(0));
+#endif
 
     return 0;
 
@@ -153,9 +135,6 @@ void layer_free(struct layer *dst){
     darray_free(&dst->textures);
     GLCall(glDeleteFramebuffers(1, &dst->gl_fbo));
     GLCall(glDeleteRenderbuffers(1, &dst->gl_rbo));
-    GLCall(glDeleteVertexArrays(1, &dst->gl_vao));
-    glbuf_free(&dst->vbo);
-    glbuf_free(&dst->ibo);
 }
 int layer_bind(struct layer *dst){
     GLCall(glViewport(0, 0, dst->w, dst->h));
@@ -204,14 +183,8 @@ int layer_draw(struct layer *src, struct shader *shader){
     //texture_bind(&src->textures[0], 0);
     //shader_uniform_i(shader, "u_texture", 0);
 
-    GLCall(glBindVertexArray(src->gl_vao));
+    mesh2_draw(&mesh2_quad);
 
-    glbuf_bind(&src->ibo);
-
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
-
-    glbuf_unbind(&src->ibo);
-    GLCall(glBindVertexArray(0));
     shader_unbind(shader);
     return 0;
 }
@@ -226,15 +199,7 @@ int layer_draw_n(struct layer *src, struct shader *shader){
         //shader_uniform_i(shader, buf, i);
     }
 
-    GLCall(glBindVertexArray(src->gl_vao));
-
-    glbuf_bind(&src->ibo);
-
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
-
-    glbuf_unbind(&src->ibo);
-
-    GLCall(glBindVertexArray(0));
+    mesh2_draw(&mesh2_quad);
 
     shader_unbind(shader);
     return 0;
@@ -274,16 +239,8 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     glm_mat4_inv(camera->view, view_inv);
     shader_uniform_vec4f(shader, "u_view_pos", view_inv[3]);
 
-    GLCall(glBindVertexArray(src->gl_vao));
+    mesh2_draw(&mesh2_quad);
 
-    glbuf_bind(&src->ibo);
-
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
-
-    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
-
-    glbuf_unbind(&src->ibo);
-    GLCall(glBindVertexArray(0));
     shader_unbind(shader);
     return 0;
 }
@@ -315,16 +272,8 @@ int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct env
 
     shader_uniform_vec4f(shader, "u_view_pos", view_inv[3]);
 
-    GLCall(glBindVertexArray(src->gl_vao));
+    mesh2_draw(&mesh2_quad);
 
-    glbuf_bind(&src->ibo);
-
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
-
-    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
-
-    glbuf_unbind(&src->ibo);
-    GLCall(glBindVertexArray(0));
     shader_unbind(shader);
     return 0;
 
@@ -341,14 +290,8 @@ int layer_draw_tex(struct layer *dst, struct shader *shader, struct texture *tex
     texture_bind(tex, 1);
     shader_uniform_i(shader, "u_texture2", 1);
 
-    GLCall(glBindVertexArray(dst->gl_vao));
+    mesh2_draw(&mesh2_quad);
 
-    glbuf_bind(&dst->ibo);
-
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
-
-    glbuf_unbind(&dst->ibo);
-    GLCall(glBindVertexArray(0));
     shader_unbind(shader);
     return 0;
 }
@@ -363,14 +306,7 @@ int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struc
     texture_bind(&src2->textures[0], 1);
     shader_uniform_i(bshader, "u_texture2", 1);
 
-    GLCall(glBindVertexArray(src1->gl_vao));
-
-    glbuf_bind(&src1->ibo);
-
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
-
-    glbuf_unbind(&src1->ibo);
-    GLCall(glBindVertexArray(0));
+    mesh2_draw(&mesh2_quad);
 
     layer_unbind(dst);
 

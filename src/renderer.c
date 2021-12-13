@@ -4,8 +4,8 @@
 #define SHADOW_SIZE 1024
 
 int renderer_init(struct renderer *dst, int w, int h){
-    // eventually in engine initialization.
-    primitives_init();
+    if(!primitives_initialized)
+        assert(0);
 
     darray_init(&dst->meshes, 10);
     darray_init(&dst->lights, 10);
@@ -13,29 +13,6 @@ int renderer_init(struct renderer *dst, int w, int h){
     dst->h = h;
     const int oversample = 2;
     
-    // loading shaders
-#if 0
-    shader_init_src(&dst->shader, shader_vert_src, shader_frag_src);
-
-    shader_init_src(&dst->shader_forward, shader_vert_quad_src, shader_frag_forward_src);
-
-    shader_init_src(&dst->shader_shadow, shader_vert_shadow_src, shader_frag_shadow_src);
-
-    shader_init_src(&dst->shader_lighting, shader_vert_quad_src, shader_frag_lighting_src);
-    shader_init_src(&dst->shader_emission, shader_vert_quad_src, shader_frag_emission_src);
-
-    shader_init_src(&dst->shader_clip, shader_vert_quad_src, shader_frag_clip_src);
-
-    shader_init_src(&dst->shader_blurh, shader_vert_quad_src, shader_frag_blurh_src);
-    shader_init_src(&dst->shader_blurv, shader_vert_quad_src, shader_frag_blurv_src);
-
-    shader_init_src(&dst->shader_gamma, shader_vert_quad_src, shader_frag_gamma_correct_src);
-
-    shader_init_src(&dst->shader_skybox, shader_vert_cm_src, shader_frag_skybox_src);
-
-    shader_init_src(&dst->shader_ambient, shader_vert_quad_src, shader_frag_ambient_src);
-#else
-
     // setting shaders to primitive shaders.
 
     dst->shader          = &primitive_shader_gbuf;
@@ -50,8 +27,6 @@ int renderer_init(struct renderer *dst, int w, int h){
     dst->shader_gamma    = &primitive_shader_gamma;
     dst->shader_skybox   = &primitive_shader_skybox;
 
-#endif
-
 
     // initializing layers
     //gbuf_init(&dst->gbuf, w, h);
@@ -62,7 +37,7 @@ int renderer_init(struct renderer *dst, int w, int h){
     layer_init(&dst->layer_bloom, w, h);
 
     cubelayer_init_depthcube(&dst->cl_shadow, SHADOW_SIZE, SHADOW_SIZE);
-    cubelayer_init_rgbf16(&dst->cl_hdr, 512, 512);
+    //cubelayer_init_rgbf16(&dst->cl_hdr, 512, 512);
     envmap_init(&dst->environment, 512);
 
     // initializing camera
@@ -76,17 +51,6 @@ void renderer_free(struct renderer *dst){
     //layer_free(&dst->light);
     layer_free(&dst->light_out);
     layer_free(&dst->layer_bloom);
-
-#if 0
-    shader_free(&dst->shader);
-    shader_free(&dst->shader_forward);
-    shader_free(&dst->shader);
-    shader_free(&dst->shader_clip);
-    shader_free(&dst->shader_blurh);
-    shader_free(&dst->shader_blurv);
-    shader_free(&dst->shader_gamma);
-    shader_free(&dst->shader_lighting);
-#endif
 
     darray_free(&dst->lights);
     darray_free(&dst->meshes);

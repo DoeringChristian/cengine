@@ -24,13 +24,9 @@ static struct glbuf layer_ibo_cube;
 static struct glbuf layer_vbo_cube;
 
 struct layer{
-    struct glbuf vbo;
-    struct glbuf ibo;
-
     int w, h;
 
     GLuint gl_fbo;
-    GLuint gl_vao;
     GLuint gl_rbo;
 
     //struct texture texture;

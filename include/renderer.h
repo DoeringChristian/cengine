@@ -20,21 +20,7 @@ struct renderer{
 
     struct cvert camera;
 
-
-    struct layer gbuf;
-
-#if 0
-    struct shader shader_forward;
-    struct shader shader_shadow;
-    struct shader shader_lighting;
-    struct shader shader_clip;
-    struct shader shader_blurh;
-    struct shader shader_blurv;
-    struct shader shader_gamma;
-    struct shader shader_emission;
-    struct shader shader_skybox;
-    struct shader shader_ambient;
-#else
+    // shaders
     struct shader *shader;
     struct shader *shader_forward;
     struct shader *shader_shadow;
@@ -46,14 +32,14 @@ struct renderer{
     struct shader *shader_emission;
     struct shader *shader_skybox;
     struct shader *shader_ambient;
-#endif
 
     //struct layer light;
     struct layer light_out;
     struct layer layer_bloom;
-    struct cubelayer cl_shadow;
+    struct layer gbuf;
 
-    struct cubelayer cl_hdr;
+    struct cubelayer cl_shadow;
+    //struct cubelayer cl_hdr;
 
     struct envmap environment;
 

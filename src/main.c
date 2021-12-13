@@ -157,7 +157,7 @@ int main(){
     renderer_light_register(&win.renderer, &light1);
 
     struct texture hdri;
-    texture_load_hdr(&hdri, "res/img/lush_dirt_path_4k.hdr");
+    texture_load_hdr(&hdri, "res/img/christmas_photo_studio_05_4k.hdr");
     
     envmap_hdr_set(&win.renderer.environment, &hdri);
     

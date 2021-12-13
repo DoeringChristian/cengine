@@ -119,7 +119,7 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
     glm_look(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
 
     // -------------------------------------------------
-    // calculate view projection of light
+    // calculate view projection of hdr
     for(size_t i = 0;i < 6;i++){
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, dst->hdr.gl_tex, 0));
