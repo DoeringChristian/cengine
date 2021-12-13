@@ -13,6 +13,10 @@ int window_init(struct window *dst, int x, int y, int w, int h, const char *titl
     if(!dst->window)
         return -1;
 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
     dst->gl_ctx = SDL_GL_CreateContext(dst->window);
 
     GLenum err = glewInit();
