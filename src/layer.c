@@ -4,10 +4,14 @@ int layer_init(struct layer *dst, int w, int h){
     return layer_init_n(dst, w, h, 1);
 }
 int layer_init_n(struct layer *dst, int w, int h, int num_textures){
+    return layer_init_nm(dst, w, h, num_textures, 0);
+}
+int layer_init_nm(struct layer *dst, int w, int h, int num_textures, GLsizei mmlvl){
     if(num_textures > 16)
         return -1;
     dst->w = w;
     dst->h = h;
+    dst->mip_bound = 0;
     darray_init(&dst->textures, num_textures);
 
     // -----------------------------------------
@@ -20,7 +24,7 @@ int layer_init_n(struct layer *dst, int w, int h, int num_textures){
     struct texture texture;
     for(size_t i = 0;i < num_textures;i++){
         // not shure weather to use f16 or f32
-        texture_init_rgbaf16(&texture, w, h, NULL);
+        texture_init_rgbaf16_m(&texture, w, h, NULL, mmlvl);
         //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.gl_tex, 0);
         darray_push_back(&dst->textures, texture);
     }
@@ -55,19 +59,21 @@ void layer_free(struct layer *dst){
     GLCall(glDeleteRenderbuffers(1, &dst->gl_rbo));
 }
 int layer_bind(struct layer *dst){
+    return layer_bind_m(dst, 0);
+}
+int layer_bind_m(struct layer *dst, GLsizei mip){
+    dst->mip_bound = mip;
     GLCall(glViewport(0, 0, dst->w, dst->h));
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
 
     for(size_t i = 0;i < darray_len(&dst->textures);i++)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, dst->textures[i].gl_tex, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, dst->textures[i].gl_tex, mip);
 
     GLCall(glClearColor(0, 0, 0, 0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_ONE, GL_ONE));
     GLCall(glBlendEquation(GL_FUNC_ADD));
-
-
     return 0;
 }
 int layer_rebind(struct layer *dst){

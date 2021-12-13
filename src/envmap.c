@@ -61,7 +61,7 @@ int envmap_draw(struct envmap *src, struct shader *shader, struct cvert *camera)
     //glEnable(GL_CULL_FACE);
     //glFrontFace(GL_CCW);
 
-    shader_uniform_tex(shader, &src->ref, "u_hdr");
+    shader_uniform_tex(shader, &src->hdr, "u_hdr");
     shader_uniform_mat4f(shader, "u_view", (float *)camera->view);
     shader_uniform_mat4f(shader, "u_proj", (float *)camera->proj);
 

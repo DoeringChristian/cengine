@@ -14,6 +14,7 @@
 struct texture{
     int w, h;
     int bpp;
+    int mmlvl;
 
     //GLuint gl_buf;
     GLuint gl_tex;
@@ -24,16 +25,17 @@ struct texture{
     char *uname;
 };
 
-int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat);
+int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat, GLsizei mmlvl);
 int texture_init_rgbf16(struct texture *dst, int w, int h, float *src);
 int texture_init_rgbaf16(struct texture *dst, int w, int h, float *src);
+int texture_init_rgbaf16_m(struct texture *dst, int w, int h, float *src, GLsizei mmlvl);
 int texture_init_f32(struct texture *dst, int w, int h, float *src);
 int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const char *name);
-int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat);
+int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat, GLsizei mmlvl);
 int texture_init_cube_rgbf16(struct texture *dst, int w, int h, float *src);
 int texture_init_cube_rgbaf16(struct texture *dst, int w, int h, float *src);
 int texture_init_cube_f32(struct texture *dst, int w, int h, float *src);
-int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum internalformat);
+int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum internalformat, GLsizei mmlvl);
 int texture_init_depthcube_f16(struct texture *dst, int w, int h, float *src);
 int texture_init_depthcube_f32(struct texture *dst, int w, int h, float *src);
 int texture_load(struct texture *dst, const char *path);

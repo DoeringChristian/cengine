@@ -3,7 +3,8 @@
 in vec2 frag_pos;
 in vec2 frag_uv;
 
-out vec4 o_color;
+layout (location = 0) out vec4 o_color;
+layout (location = 1) out vec4 o_pos;
 
 uniform sampler2D u_pos;
 uniform sampler2D u_normal;
@@ -80,6 +81,9 @@ void main (void){
 
     vec3 lo = (kD * albedo / PI + specular) * radiance * ndotl * (1 - shadow(pos));
     o_color = vec4(lo, texture(u_albedo, frag_uv).a);
+
+    // output position for further blur effect
+    o_pos = vec4(pos, 1);
     //o_color = vec4(lo, );
 
     // debug

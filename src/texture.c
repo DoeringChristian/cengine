@@ -8,13 +8,14 @@ int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const 
     dst->uname[uname_size-1] = 0;
     return 0;
 }
-int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat){
+int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat, GLsizei mmlvl){
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
     dst->uname = NULL;
     dst->type = GL_TEXTURE_2D;
     dst->internalformat = internalformat;
+    dst->mmlvl = mmlvl;
 
     size_t buf_size;
     float *buf = NULL;
@@ -29,7 +30,7 @@ int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalf
     GLCall(glGenTextures(1, &dst->gl_tex));
     GLCall(glBindTexture(dst->type, dst->gl_tex));
 
-    GLCall(glTexImage2D(dst->type, 0, dst->internalformat, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, src));
+    GLCall(glTexImage2D(dst->type, mmlvl, dst->internalformat, dst->w, dst->h, 0, GL_RGBA, GL_FLOAT, src));
 
     //GLCall(glGenerateMipmap(dst->type));
 
@@ -44,27 +45,31 @@ int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalf
     return 0;
 }
 int texture_init_f32(struct texture *dst, int w, int h, float *src){
-    return texture_init(dst, w, h, src, GL_RGBA32F);
+    return texture_init(dst, w, h, src, GL_RGBA32F, 0);
 }
 int texture_init_rgbf16(struct texture *dst, int w, int h, float *src){
-    return texture_init(dst, w, h, src, GL_RGBA16F);
+    return texture_init(dst, w, h, src, GL_RGBA16F, 0);
 }
 int texture_init_rgbaf16(struct texture *dst, int w, int h, float *src){
-    return texture_init(dst, w, h, src, GL_RGBA16F);
+    return texture_init(dst, w, h, src, GL_RGBA16F, 0);
 }
-int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat){
+int texture_init_rgbaf16_m(struct texture *dst, int w, int h, float *src, GLsizei mmlvl){
+    return texture_init(dst, w, h, src, GL_RGBA16F, mmlvl);
+}
+int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat, GLsizei mmlvl){
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
     dst->uname = NULL;
     dst->type = GL_TEXTURE_CUBE_MAP;
     dst->internalformat = internalformat;
+    dst->mmlvl = mmlvl;
 
     GLCall(glGenTextures(1, &dst->gl_tex));
     GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, dst->gl_tex));
 
     for(size_t i = 0;i < 6;i++){
-        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, dst->internalformat, w, h, 0, GL_RGBA, GL_FLOAT, src));
+        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, mmlvl, dst->internalformat, w, h, 0, GL_RGBA, GL_FLOAT, src));
     }
 
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
@@ -78,27 +83,28 @@ int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum inte
     return 0;
 }
 int texture_init_cube_rgbaf16(struct texture *dst, int w, int h, float *src){
-    return texture_init_cube(dst, w, h, src, GL_RGBA16F);
+    return texture_init_cube(dst, w, h, src, GL_RGBA16F, 0);
 }
 int texture_init_cube_rgbf16(struct texture *dst, int w, int h, float *src){
-    return texture_init_cube(dst, w, h, src, GL_RGB16F);
+    return texture_init_cube(dst, w, h, src, GL_RGB16F, 0);
 }
 int texture_init_cube_f32(struct texture *dst, int w, int h, float *src){
-    return texture_init_cube(dst, w, h, src, GL_RGBA32F);
+    return texture_init_cube(dst, w, h, src, GL_RGBA32F, 0);
 }
-int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum internalformat){
+int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum internalformat, GLsizei mmlvl){
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
     dst->uname = NULL;
     dst->type = GL_TEXTURE_CUBE_MAP;
     dst->internalformat = internalformat;
+    dst->mmlvl = mmlvl;
 
     GLCall(glGenTextures(1, &dst->gl_tex));
     GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, dst->gl_tex));
 
     for(size_t i = 0;i < 6;i++){
-        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, dst->internalformat, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
+        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, mmlvl, dst->internalformat, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
     }
 
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
@@ -112,34 +118,10 @@ int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum
     return 0;
 }
 int texture_init_depthcube_f16(struct texture *dst, int w, int h, float *src){
-    return texture_init_depthcube(dst, w, h, src, GL_DEPTH_COMPONENT16);
+    return texture_init_depthcube(dst, w, h, src, GL_DEPTH_COMPONENT16, 0);
 }
 int texture_init_depthcube_f32(struct texture *dst, int w, int h, float *src){
-    return texture_init_depthcube(dst, w, h, src, GL_DEPTH_COMPONENT32);
-#if 0
-    dst->w = w;
-    dst->h = h;
-    dst->bpp = 4;
-    dst->uname = NULL;
-    dst->type = GL_TEXTURE_CUBE_MAP;
-
-    GLCall(glGenTextures(1, &dst->gl_tex));
-    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, dst->gl_tex));
-
-    for(size_t i = 0;i < 6;i++){
-        GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT16, w, h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, src));
-    }
-
-    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
-
-    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
-
-    return 0;
-#endif
+    return texture_init_depthcube(dst, w, h, src, GL_DEPTH_COMPONENT32, 0);
 }
 
 int texture_load(struct texture *dst, const char *path){
@@ -290,4 +272,5 @@ int texture_load_hdr_cube(struct texture *dst, const char *path, int w, int h){
     texture_init_cube_rgbf16(dst, w, h, NULL);
 
     texture_free(&tmp_tex);
+    return 0;
 }

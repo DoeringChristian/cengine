@@ -25,6 +25,7 @@ static struct glbuf layer_vbo_cube;
 
 struct layer{
     int w, h;
+    int mip_bound;
 
     GLuint gl_fbo;
     GLuint gl_rbo;
@@ -35,11 +36,13 @@ struct layer{
 
 int layer_init(struct layer *dst, int w, int h);
 int layer_init_n(struct layer *dst, int w, int h, int num_textures);
+int layer_init_nm(struct layer *dst, int w, int h, int num_textures, GLsizei mmlvl);
 void layer_free(struct layer *dst);
 
 int layer_clear(struct layer *dst);
 
 int layer_bind(struct layer *dst);
+int layer_bind_m(struct layer *dst, GLsizei mip);
 int layer_rebind(struct layer *dst);
 int layer_unbind(struct layer *dst);
 

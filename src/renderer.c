@@ -160,11 +160,23 @@ int renderer_render(struct renderer *src){
 
 int renderer_render_bloom(struct renderer *src){
     const size_t bloom_passes = 0;
+    struct layer layer_bloom;
+    //layer_init_n(&layer_bloom, src->w, src->h, 1);
+    layer_init_nm(&layer_bloom, src->w, src->h, 1, bloom_passes);
+
+    for(size_t i = 0;i < bloom_passes;i++){
+        layer_bind_m(&layer_bloom, i);
+
+        layer_unbind(&layer_bloom);
+    }
+#if 1
     struct layer layers_bloom[bloom_passes];
     //struct layer layer_tmp;
     //layer_init(&layer_tmp, src->w, src->h);
     for(size_t i = 0;i < bloom_passes;i++){
-        layer_init(&layers_bloom[i], src->w/(i*2+1), src->h/(i*2+1));
+        int resw = src->w - (i + 1) * (src->w-15)/bloom_passes;
+        int resh = src->h - (i + 1) * (src->h-15)/bloom_passes;
+        layer_init(&layers_bloom[i], resw, resh);
     }
 
     for(size_t i = 0;i < bloom_passes;i++){
@@ -184,7 +196,8 @@ int renderer_render_bloom(struct renderer *src){
     layer_bind(&src->layer_bloom);
     layer_draw(&src->light_out, src->shader_forward);
     for(size_t i = 0;i < bloom_passes;i++){
-        layer_draw(&layers_bloom[i], src->shader_forward);
+        layer_draw(&layers_bloom[i], src->shader_blurh);
+        layer_draw(&layers_bloom[i], src->shader_blurv);
     }
     layer_unbind(&src->layer_bloom);
 
@@ -194,6 +207,8 @@ int renderer_render_bloom(struct renderer *src){
     for(size_t i = 0;i < bloom_passes;i++){
         layer_free(&layers_bloom[i]);
     }
+#endif
+    layer_free(&layer_bloom);
     return 0;
 }
 
