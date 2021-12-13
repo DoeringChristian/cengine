@@ -10,11 +10,17 @@ int envmap_init(struct envmap *dst, int res){
     shader_load(&dst->shader_ref, "shaders/layer/vert_cm.glsl", "shaders/layer/frag_ref.glsl");
     shader_load(&dst->shader_brdf_int, "shaders/layer/vert_quad.glsl", "shaders/layer/frag_brdf_int.glsl");
 
-#else
     shader_init_src(&dst->shader_eqr_to_cm, shader_vert_cm_src, shader_frag_eqr_to_cm_src);
     shader_init_src(&dst->shader_irr, shader_vert_cm_src, shader_frag_irr_src);
     shader_init_src(&dst->shader_ref, shader_vert_cm_src, shader_frag_ref_src);
     shader_init_src(&dst->shader_brdf_int, shader_vert_quad_src, shader_frag_brdf_int_src);
+#else
+
+    dst->shader_eqr_to_cm = &primitive_shader_eqr_to_cm;
+    dst->shader_irr       = &primitive_shader_irr;
+    dst->shader_ref       = &primitive_shader_ref;
+    dst->shader_brdf_int  = &primitive_shader_brdf_int;
+
 #endif
 
 
@@ -119,17 +125,17 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, dst->hdr.gl_tex, 0));
 
 
-        shader_bind(&dst->shader_eqr_to_cm);
+        shader_bind(dst->shader_eqr_to_cm);
 
         GLCall(glDisable(GL_DEPTH_TEST));
 
-        shader_uniform_tex(&dst->shader_eqr_to_cm, src, "u_texture");
-        shader_uniform_mat4f(&dst->shader_eqr_to_cm, "u_view", (float *)cm_cameras[i].view);
-        shader_uniform_mat4f(&dst->shader_eqr_to_cm, "u_proj", (float *)cm_cameras[i].proj);
+        shader_uniform_tex(dst->shader_eqr_to_cm, src, "u_texture");
+        shader_uniform_mat4f(dst->shader_eqr_to_cm, "u_view", (float *)cm_cameras[i].view);
+        shader_uniform_mat4f(dst->shader_eqr_to_cm, "u_proj", (float *)cm_cameras[i].proj);
 
         mesh3_draw(&mesh3_cube);
 
-        shader_unbind(&dst->shader_eqr_to_cm);
+        shader_unbind(dst->shader_eqr_to_cm);
     }
 
     // -------------------------------------------------
@@ -140,17 +146,17 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, dst->irr.gl_tex, 0));
 
 
-        shader_bind(&dst->shader_irr);
+        shader_bind(dst->shader_irr);
 
         GLCall(glDisable(GL_DEPTH_TEST));
 
-        shader_uniform_tex(&dst->shader_irr, &dst->hdr, "u_hdr");
-        shader_uniform_mat4f(&dst->shader_irr, "u_view", (float *)cm_cameras[i].view);
-        shader_uniform_mat4f(&dst->shader_irr, "u_proj", (float *)cm_cameras[i].proj);
+        shader_uniform_tex(dst->shader_irr, &dst->hdr, "u_hdr");
+        shader_uniform_mat4f(dst->shader_irr, "u_view", (float *)cm_cameras[i].view);
+        shader_uniform_mat4f(dst->shader_irr, "u_proj", (float *)cm_cameras[i].proj);
 
         mesh3_draw(&mesh3_cube);
 
-        shader_unbind(&dst->shader_irr);
+        shader_unbind(dst->shader_irr);
     }
 
     // -------------------------------------------------
@@ -161,7 +167,7 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
     texture_bind(&dst->ref, 0);
     
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, dst->gl_fbo));
-    shader_bind(&dst->shader_ref);
+    shader_bind(dst->shader_ref);
     for(size_t mip = 0;mip < dst->mmlvl;mip++){
         //GLCall(glFramebufferTexture2D());
         GLCall(glBindRenderbuffer(GL_RENDERBUFFER, dst->gl_rbo));
@@ -170,12 +176,12 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
         GLCall(glViewport(0, 0, mmw, mmh));
 
         float roughness = (float)mip / (float)(dst->mmlvl - 1);
-        shader_uniform_f(&dst->shader_ref, "u_roughness", roughness);
-        shader_uniform_tex(&dst->shader_ref, &dst->hdr, "u_hdr");
-        shader_uniform_i(&dst->shader_ref, "u_resolution", dst->res);
+        shader_uniform_f(dst->shader_ref, "u_roughness", roughness);
+        shader_uniform_tex(dst->shader_ref, &dst->hdr, "u_hdr");
+        shader_uniform_i(dst->shader_ref, "u_resolution", dst->res);
         for(size_t i = 0;i < 6;i++){
-            shader_uniform_mat4f(&dst->shader_ref, "u_view", (float *)cm_cameras[i].view);
-            shader_uniform_mat4f(&dst->shader_ref, "u_proj", (float *)cm_cameras[i].proj);
+            shader_uniform_mat4f(dst->shader_ref, "u_view", (float *)cm_cameras[i].view);
+            shader_uniform_mat4f(dst->shader_ref, "u_proj", (float *)cm_cameras[i].proj);
 
             GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, dst->ref.gl_tex, mip));
 
@@ -190,7 +196,7 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
         mmh *= 0.5;
 
     }
-    shader_unbind(&dst->shader_ref);
+    shader_unbind(dst->shader_ref);
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
     // -------------------------------------------------
@@ -208,11 +214,11 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
 
     GLCall(glViewport(0, 0, dst->res, dst->res));
 
-    shader_bind(&dst->shader_brdf_int);
+    shader_bind(dst->shader_brdf_int);
 
     mesh2_draw(&mesh2_quad);
 
-    shader_unbind(&dst->shader_brdf_int);
+    shader_unbind(dst->shader_brdf_int);
 
 
     GLCall(glDeleteVertexArrays(1, &vao));

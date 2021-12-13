@@ -17,10 +17,16 @@ struct envmap{
 
     GLuint gl_fbo, gl_rbo;
 
+#if 0
     struct shader shader_eqr_to_cm;
     struct shader shader_irr;
     struct shader shader_ref;
     struct shader shader_brdf_int;
+#endif
+    struct shader *shader_eqr_to_cm;
+    struct shader *shader_irr;
+    struct shader *shader_ref;
+    struct shader *shader_brdf_int;
 };
 
 int envmap_init(struct envmap *dst, int w);
