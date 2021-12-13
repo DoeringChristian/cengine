@@ -14,7 +14,6 @@ uniform samplerCube u_shadow_depth;
 
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
-
 uniform float u_shadow_len;
 
 uniform vec4 u_view_pos;

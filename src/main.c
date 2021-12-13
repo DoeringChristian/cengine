@@ -66,6 +66,8 @@ int main(){
     mesh_gen_tangent(&mesh);
     mesh_gen_tangent(&monkey_mesh);
 
+    //monkey_mesh.has_shadow = 0;
+
     //struct scene scene;
     //scene_init(&scene);
     //scene_mesh_push_back(&scene, &mesh);
@@ -146,6 +148,7 @@ int main(){
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);
     light_init(&light1, vec4(-0.4, 0, 0, 1), vec4(1, 1, 1, 0.5), LIGHT_POINT);
     //light1.shadow_len = 1;
+    //light0.casts_shadow = 0;
 
     renderer_mesh_register(&win.renderer, &mesh);
     renderer_mesh_register(&win.renderer, &monkey_mesh);

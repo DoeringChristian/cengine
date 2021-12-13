@@ -12,10 +12,6 @@ uniform sampler2D u_mrao;
 uniform sampler2D u_emission;
 uniform samplerCube u_shadow_depth;
 
-//uniform samplerCube u_irr;
-//uniform samplerCube u_ref;
-//uniform sampler2D u_brdf;
-
 uniform vec4 u_light_pos;
 uniform vec4 u_light_color;
 uniform float u_shadow_len;
