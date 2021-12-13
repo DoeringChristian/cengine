@@ -137,6 +137,10 @@ int main(){
 
     mesh_ivert_push_back(c1.meshes[0], iv2);
 
+    mesh_material_set(c1.meshes[0], c1.materials[0]);
+
+    mesh_gen_tangent(c1.meshes[0]);
+
     
 
     // texture
@@ -160,7 +164,7 @@ int main(){
 
     material_albedo_map_set(&material1, &tex2);
     material_mrao_map_set(&material1, &tex2_mrao);
-    material_normal_map_set(&material1, &tex2_normal, 1.0);
+    //material_normal_map_set(&material1, &tex2_normal, 1.0);
     //material_emission_map_set(&material1, &tex2_emission);
     glm_vec4_copy(vec4(0, 1, 1, 0), material1.mrao);
     glm_vec4_copy(vec4(1, 1, 1, 0.0), material1.emission);
@@ -173,7 +177,7 @@ int main(){
     mesh_texture_albedo_set(&monkey_mesh, &tex1);
 #endif
     mesh_material_set(&mesh, &material0);
-    mesh_material_set(&monkey_mesh, &material1);
+    //mesh_material_set(&monkey_mesh, &material1);
     //mesh_texture_normal_set(&monkey_mesh, &tex1_normal);
 
     light_init(&light0, vec4(0, 1, -0.5, 1), vec4(1, 1, 1, 1), LIGHT_POINT);

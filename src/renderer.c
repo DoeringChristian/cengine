@@ -123,8 +123,6 @@ int renderer_render(struct renderer *src){
 
         }
     }
-
-
 #endif
     // -------------------------------------------------
     // Render skybox: TODO: render skybox.

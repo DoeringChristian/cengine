@@ -5,10 +5,13 @@ static ssize_t readline(FILE *fp, char *buf, size_t buf_size){
     int c = 0;
     for(i = 0;i < buf_size;i++){
         c = getc(fp);
-        if(c == EOF)
+        if(c == EOF){
+            return -1;
             break;
-        else if(c == '\n')
+        }
+        else if(c == '\n'){
             break;
+        }
         buf[i] = c;
     }
     if(i < buf_size - 1){
@@ -39,7 +42,7 @@ int mesh_load_obj(struct mesh *dst, const char *path){
     int idxs[16];
     struct vert tmpv;
     struct tri tmptri;
-    for(;readline(fp, line, 500) > 0;){
+    for(;readline(fp, line, 500) >= 0;){
         if(sscanf(line, "v %f %f %f", &px, &py, &pz) == 3){
             tmpv.pos[0] = px;
             tmpv.pos[1] = py;
@@ -125,7 +128,7 @@ int container_load_mtl(struct container *dst, const char *path){
     struct texture *tex_cur = NULL;
     vec3 color_tmp;
 
-    for(;readline(fp, buf, 500) > 0;){
+    for(;readline(fp, buf, 500) >= 0;){
         if(sscanf(buf, "newmtl %500s", buf_mtl_name) == 1){
             mat_cur = malloc(sizeof(struct material));
             material_init(mat_cur);
