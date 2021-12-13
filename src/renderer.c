@@ -66,7 +66,7 @@ int renderer_render(struct renderer *src){
     layer_bind(&src->gbuf);
     GLCall(glDisable(GL_BLEND));
     for(size_t i = 0;i < darray_len(&src->meshes);i++)
-        mesh_draw(src->meshes[i], &src->camera, src->shader);
+        mesh_render(src->meshes[i], &src->camera, src->shader);
     layer_unbind(&src->gbuf);
 
     // clear the summ of lights maps
@@ -80,12 +80,12 @@ int renderer_render(struct renderer *src){
     GLCall(glEnable(GL_DEPTH_TEST));
 
     //GLCall(glBlendFunc(GL_ONE, GL_ONE));
-    GLCall(glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE));
+    GLCall(glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ZERO));
 
     // -------------------------------------------------
     // Render emission.
 
-    //layer_draw_gbuf(&src->gbuf, &src->shader_emission, NULL, NULL, NULL, &src->camera);
+    //layer_draw_gbuf(&src->gbuf, src->shader_emission, NULL, NULL, NULL, &src->camera);
 
     // -------------------------------------------------
     // Render ambient.
@@ -106,6 +106,9 @@ int renderer_render(struct renderer *src){
 
                 layer_rebind(&src->light_out);
 
+                // TODO: more efficient skybox.
+                GLCall(glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE));
+                GLCall(glBlendEquationSeparate(GL_FUNC_ADD, GL_MAX));
                 layer_draw_gbuf(
                         &src->gbuf,
                         src->shader_lighting,
@@ -128,7 +131,7 @@ int renderer_render(struct renderer *src){
     GLCall(glBlendFuncSeparate(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA, GL_ONE, GL_ZERO));
     //GLCall(glBlendFunc(GL_ZERO, GL_ONE));
 
-    //envmap_draw(&src->environment, &src->shader_skybox, &src->camera);
+    envmap_draw(&src->environment, src->shader_skybox, &src->camera);
 
     layer_unbind(&src->light_out);
 
@@ -186,13 +189,6 @@ int renderer_render_bloom(struct renderer *src){
     layer_unbind(&src->layer_bloom);
 
 
-#if 0
-    layer_bind(&src->light_out);
-    //layer_draw(&layers_bloom[15], &src->shader_forward);
-    layer_draw(&layer_tmp, &src->shader_forward);
-    layer_unbind(&src->light_out);
-#endif
-
 
     //layer_free(&layer_tmp);
     for(size_t i = 0;i < bloom_passes;i++){
@@ -204,34 +200,13 @@ int renderer_render_bloom(struct renderer *src){
 int renderer_render_point_shadow(struct renderer *src, struct light *light){
     struct cvert cm_cameras[6];
     cverts_init_cube(cm_cameras, light->pos, light->shadow_len);
-#if 0
-    cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
-    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
-    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
-    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[2].proj);
-    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[3].proj);
-    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[4].proj);
-    glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[5].proj);
-    cm_cameras[0].far = light->shadow_len;
-    cm_cameras[1].far = light->shadow_len;
-    cm_cameras[2].far = light->shadow_len;
-    cm_cameras[3].far = light->shadow_len;
-    cm_cameras[4].far = light->shadow_len;
-    cm_cameras[5].far = light->shadow_len;
 
-    glm_look(light->pos, vec3(1, 0, 0), vec3(0, -1, 0), cm_cameras[0].view);
-    glm_look(light->pos, vec3(-1, 0, 0), vec3(0, -1, 0), cm_cameras[1].view);
-    glm_look(light->pos, vec3(0, 1, 0), vec3(0, 0, 1), cm_cameras[2].view);
-    glm_look(light->pos, vec3(0, -1, 0), vec3(0, 0, -1), cm_cameras[3].view);
-    glm_look(light->pos, vec3(0, 0, 1), vec3(0, -1, 0), cm_cameras[4].view);
-    glm_look(light->pos, vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
-#endif
     // calculate view projection of light
     for(size_t i = 0;i < 6;i++){
         cubelayer_bind(&src->cl_shadow, i);
 
         for(size_t j = 0;j < darray_len(&src->meshes);j++)
-            mesh_draw_depth(src->meshes[j], &cm_cameras[i], src->shader_shadow, light);
+            mesh_render_depth(src->meshes[j], &cm_cameras[i], src->shader_shadow, light);
         //scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
         cubelayer_unbind(&src->cl_shadow);
     }

@@ -65,6 +65,7 @@ int layer_bind(struct layer *dst){
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_ONE, GL_ONE));
+    GLCall(glBlendEquation(GL_FUNC_ADD));
 
 
     return 0;
@@ -75,6 +76,7 @@ int layer_rebind(struct layer *dst){
     GLCall(glDisable(GL_DEPTH_TEST));
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_ONE, GL_ONE));
+    GLCall(glBlendEquation(GL_FUNC_ADD));
     //GLCall(glEnable(GL_DEPTH_TEST));
     //GLCall(glEnable(GL_BLEND));
     return 0;

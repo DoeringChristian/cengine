@@ -81,7 +81,6 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
     GLCall(glClearColor(0, 0, 0, 0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-
     struct cvert cm_cameras[6];
     cverts_init_cube(cm_cameras, vec3(0, 0, 0), 10);
 
@@ -169,13 +168,13 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
     shader_unbind(dst->shader_ref);
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
+    // -----------------------------------------------------------------------------
+    // Calculate the brdf integral LUT.
     envmap_calc_brdf_lut(dst);
 
     return 0;
 }
 int envmap_calc_brdf_lut(struct envmap *dst){
-    // -----------------------------------------------------------------------------
-    // Calculate the brdf integral LUT.
 
     struct glbuf ibo;
     struct glbuf vbo;

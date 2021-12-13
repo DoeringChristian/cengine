@@ -115,15 +115,16 @@ int main(){
     material_init(&material0);
     material_init(&material1);
 
-    struct texture tex1, tex1_normal;
-    texture_load(&tex1, "res/img/test01.jpg");
-    texture_load(&tex1_normal, "res/img/test01_normal.jpg");
+    struct texture tex1, tex1_normal, tex1_mrao;
+    texture_load(&tex1, "res/img/wood_table/wood_table_001_diff_4k.jpg");
+    texture_load(&tex1_normal, "res/img/wood_table/wood_table_001_nor_gl_4k.jpg");
+    texture_load(&tex1_mrao, "res/img/wood_table/wood_table_001_mra_4k.jpg");
 
     struct texture tex2, tex2_normal, tex2_mrao, tex2_emission;
     texture_load(&tex2, "res/img/rustediron2_basecolor_linear.png");
     texture_load(&tex2_normal, "res/img/rustediron2_normal.png");
     texture_load(&tex2_mrao, "res/img/rustediron2_mrao.png");
-    texture_load(&tex2_emission, "res/img/monkey_emission.png");
+    //texture_load(&tex2_emission, "res/img/monkey_emission.png");
     
     material_albedo_map_set(&material0, &tex1);
     material_normal_map_set(&material0, &tex1_normal, 0.01);
@@ -131,7 +132,7 @@ int main(){
     material_albedo_map_set(&material1, &tex2);
     material_mrao_map_set(&material1, &tex2_mrao);
     material_normal_map_set(&material1, &tex2_normal, 1.0);
-    material_emission_map_set(&material1, &tex2_emission);
+    //material_emission_map_set(&material1, &tex2_emission);
     glm_vec4_copy(vec4(0, 1, 1, 0), material1.mrao);
     glm_vec4_copy(vec4(1, 1, 1, 0.0), material1.emission);
 

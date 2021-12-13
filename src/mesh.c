@@ -77,7 +77,23 @@ void mesh_free(struct mesh *dst){
     free(dst->name);
 }
 
-int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
+int mesh_draw(struct mesh *src){
+    GLCall(glBindVertexArray(src->gl_vao));
+
+    glbuf_bind(&src->ibo);
+
+    size_t count = glbuf_size(&src->ibo) / sizeof(float);
+    size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
+
+    GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
+
+    glbuf_unbind(&src->ibo);
+    
+    GLCall(glBindVertexArray(0));
+    return 0;
+}
+
+int mesh_render(struct mesh *src, struct cvert *camera, struct shader *shader){
     if(src->material == NULL)
         return -1;
 
@@ -133,36 +149,19 @@ int mesh_draw(struct mesh *src, struct cvert *camera, struct shader *shader){
     shader_uniform_vec4f(shader, "u_emission", src->material->emission);
     shader_uniform_f(shader, "u_normal_scale", src->material->normal_scale);
 
-#if 0
-    for(slot = 0;slot < darray_len(&src->textures) && slot < MAX_TEXTURES;slot++){
-        texture_bind(&src->textures[slot], slot);
-        char buf[100] = {0};
-        snprintf(buf, 100, "u_sampler[%zu]", slot);
-        shader_uniform_i(shader, buf, slot);
-    }
-#endif
-
-
-    GLCall(glBindVertexArray(src->gl_vao));
-    glbuf_bind(&src->ibo);
-    //GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL));
-    size_t count = glbuf_size(&src->ibo) / sizeof(float);
-    size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
-    GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
+    mesh_draw(src);
 
     shader_unbind(shader);
     return 0;
 }
 
-int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light){
+int mesh_render_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light){
     if(!src->has_shadow)
         return 0;
 
     GLCall(glEnable(GL_DEPTH_TEST));
 
     shader_bind(shader);
-
-    GLCall(glBindVertexArray(src->gl_vao));
 
     mat4 mat_tmp;
     
@@ -179,13 +178,7 @@ int mesh_draw_depth(struct mesh *src, struct cvert *camera, struct shader *shade
 
     shader_uniform_mat4f(shader, "u_view", (float *)camera->view);
 
-    glbuf_bind(&src->ibo);
-
-    size_t count = glbuf_size(&src->ibo) / sizeof(float);
-    size_t count_inst = glbuf_size(&src->vboi) / sizeof(struct ivert);
-    GLCall(glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL, count_inst));
-
-    GLCall(glBindVertexArray(0));
+    mesh_draw(src);
 
     shader_unbind(shader);
     return 0;

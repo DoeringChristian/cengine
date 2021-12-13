@@ -80,9 +80,10 @@ void main (void){
 
     vec3 lo = (kD * albedo / PI + specular) * radiance * ndotl * (1 - shadow(pos));
     o_color = vec4(lo, texture(u_albedo, frag_uv).a);
+    //o_color = vec4(lo, );
 
     // debug
-    //o_color = vec4(texture(u_albedo, frag_uv).a, 0, 0, 1);
+    //o_color = vec4(texture(u_albedo, frag_uv).a > 0.9 ? 1 : 0, 0, 0, 1);
     //o_color = vec4(texture(u_brdf, frag_uv).xyz, 1);
     //o_color = vec4(vec3(length(vec3(u_view_pos) - pos) / far) , 1);
 }
