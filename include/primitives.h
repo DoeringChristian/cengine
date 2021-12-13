@@ -340,22 +340,22 @@ extern const char shader_frag_irr_src[];
 extern const char shader_frag_ref_src[];
 extern const char shader_frag_brdf_int_src[];
 
-static struct shader primitive_shader_gbuf;
-static struct shader primitive_shader_quad_forward;
-static struct shader primitive_shader_shadow;
-static struct shader primitive_shader_lighting;
-static struct shader primitive_shader_emission;
-static struct shader primitive_shader_clip;
-static struct shader primitive_shader_bulh;
-static struct shader primitive_shader_blurh;
-static struct shader primitive_shader_blurv;
-static struct shader primitive_shader_gamma;
-static struct shader primitive_shader_skybox;
-static struct shader primitive_shader_ambient;
-static struct shader primitive_shader_eqr_to_cm;
-static struct shader primitive_shader_irr;
-static struct shader primitive_shader_ref;
-static struct shader primitive_shader_brdf_int;
+extern struct shader primitive_shader_gbuf;
+extern struct shader primitive_shader_quad_forward;
+extern struct shader primitive_shader_shadow;
+extern struct shader primitive_shader_lighting;
+extern struct shader primitive_shader_emission;
+extern struct shader primitive_shader_clip;
+extern struct shader primitive_shader_bulh;
+extern struct shader primitive_shader_blurh;
+extern struct shader primitive_shader_blurv;
+extern struct shader primitive_shader_gamma;
+extern struct shader primitive_shader_skybox;
+extern struct shader primitive_shader_ambient;
+extern struct shader primitive_shader_eqr_to_cm;
+extern struct shader primitive_shader_irr;
+extern struct shader primitive_shader_ref;
+extern struct shader primitive_shader_brdf_int;
 
 
 #if 0

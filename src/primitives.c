@@ -3,6 +3,23 @@
 struct mesh2 mesh2_quad;
 struct mesh3 mesh3_cube;
 
+struct shader primitive_shader_gbuf;
+struct shader primitive_shader_quad_forward;
+struct shader primitive_shader_shadow;
+struct shader primitive_shader_lighting;
+struct shader primitive_shader_emission;
+struct shader primitive_shader_clip;
+struct shader primitive_shader_bulh;
+struct shader primitive_shader_blurh;
+struct shader primitive_shader_blurv;
+struct shader primitive_shader_gamma;
+struct shader primitive_shader_skybox;
+struct shader primitive_shader_ambient;
+struct shader primitive_shader_eqr_to_cm;
+struct shader primitive_shader_irr;
+struct shader primitive_shader_ref;
+struct shader primitive_shader_brdf_int;
+
 const char shader_vert_quad_src[] = {
 #include "vert_quad.glsl"
     0x00
@@ -120,6 +137,7 @@ int primitives_init(){
     // load primitive shaders
     shader_init_src(&primitive_shader_gbuf, shader_vert_src, shader_frag_src);
     shader_init_src(&primitive_shader_quad_forward, shader_vert_quad_src, shader_frag_forward_src);
+    shader_init_src(&primitive_shader_shadow, shader_vert_shadow_src, shader_frag_shadow_src);
     shader_init_src(&primitive_shader_lighting, shader_vert_quad_src, shader_frag_lighting_src);
     shader_init_src(&primitive_shader_emission, shader_vert_quad_src, shader_frag_emission_src);
     shader_init_src(&primitive_shader_clip, shader_vert_quad_src, shader_frag_clip_src);

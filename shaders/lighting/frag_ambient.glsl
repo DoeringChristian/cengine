@@ -11,7 +11,6 @@ uniform sampler2D u_albedo;
 uniform sampler2D u_mrao;
 uniform sampler2D u_emission;
 
-//uniform samplerCube u_hdr;
 uniform samplerCube u_irr;
 uniform samplerCube u_ref;
 uniform sampler2D u_brdf;
