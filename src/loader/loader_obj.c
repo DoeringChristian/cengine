@@ -115,3 +115,92 @@ int mesh_load_obj(struct mesh *dst, const char *path){
     fclose(fp);
     return 0;
 }
+int container_load_mtl(struct container *dst, const char *path){
+    FILE *fp = fopen(path, "r");
+
+    char buf[500] = {0};
+    char buf_mtl_name[500] = {0};
+    char buf_dir[256] = {0};
+    struct material *mat_cur = NULL;
+    struct texture *tex_cur = NULL;
+    vec3 color_tmp;
+
+    for(;readline(fp, buf, 500) > 0;){
+        if(sscanf(buf, "newmtl %500s", buf_mtl_name) == 1){
+            mat_cur = malloc(sizeof(struct material));
+            material_init(mat_cur);
+            darray_push_back(&dst->materials, mat_cur);
+        }
+        else if(sscanf(buf, "Kd %f %f %f", &color_tmp[0], &color_tmp[1], &color_tmp[2]) == 3){
+            if(mat_cur != NULL)
+                glm_vec3_copy(color_tmp, mat_cur->albedo);
+        }
+        else if(sscanf(buf, "Ks %f %f %f", &color_tmp[0], &color_tmp[1], &color_tmp[2]) == 3){
+            if(mat_cur != NULL)
+                glm_vec3_copy(color_tmp, mat_cur->mrao);
+        }
+        else if(sscanf(buf, "map_Kd %s", buf_mtl_name) == 1){
+            if(mat_cur != NULL){
+                char tmp[256] = {0};
+                char *slash_last = strrchr(path, '/');
+                memcpy(buf_dir, path, slash_last - path);
+                sprintf(tmp, "%s/%s", buf_dir, buf_mtl_name);
+                tex_cur = malloc(sizeof(struct texture));
+                texture_load(tex_cur, tmp);
+                darray_push_back(&dst->textures, tex_cur);
+                material_albedo_map_set(mat_cur, tex_cur);
+                tex_cur = NULL;
+            }
+        }
+        else if(sscanf(buf, "map_Bump %s", buf_mtl_name) == 1){
+            if(mat_cur != NULL){
+                char tmp[256] = {0};
+                char *slash_last = strrchr(path, '/');
+                memcpy(buf_dir, path, slash_last - path);
+                sprintf(tmp, "%s/%s", buf_dir, buf_mtl_name);
+                tex_cur = malloc(sizeof(struct texture));
+                texture_load(tex_cur, tmp);
+                darray_push_back(&dst->textures, tex_cur);
+                material_normal_map_set(mat_cur, tex_cur, 1);
+                tex_cur = NULL;
+            }
+        }
+        else{
+
+        }
+    }
+
+    return 0;
+}
+int container_load_obj(struct container *dst, const char *path){
+
+    struct mesh *tmp_mesh = malloc(sizeof(struct mesh));
+    mesh_load_obj(tmp_mesh, path);
+    darray_push_back(&dst->meshes, tmp_mesh);
+
+    FILE *fp = fopen(path, "r");
+
+    char buf[500] = {0};
+    char buf_mtllib[500] = {0};
+    char buf_usemtl[500] = {0};
+    char buf_dir[256] = {0};
+
+    for(;readline(fp, buf, 500) > 0;){
+        if(sscanf(buf, "mtllib %500s", buf_mtllib) == 1){
+            char tmp[256] = {0};
+            char *slash_last = strrchr(path, '/');
+            memcpy(buf_dir, path, slash_last - path);
+            sprintf(tmp, "%s/%s", buf_dir, buf_mtllib);
+            container_load_mtl(dst, tmp);
+        }
+        else if(sscanf(buf, "usemtl %500s", buf_usemtl) == 1){
+
+        }
+        else{
+
+        }
+    }
+
+    fclose(fp);
+    return 0;
+}

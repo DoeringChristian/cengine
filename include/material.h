@@ -25,4 +25,6 @@ void material_normal_map_set(struct material *dst, struct texture *src, float no
 void material_mrao_map_set(struct material *dst, struct texture *src);
 void material_emission_map_set(struct material *dst, struct texture *src);
 
+void material_free(struct material *dst);
+
 #endif //MATERIAL_H

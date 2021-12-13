@@ -401,25 +401,6 @@ int mesh_cull_from_normal(struct mesh *dst){
     return 0;
 }
 int mesh_normal_from_cull(struct mesh *dst){
-#if 0
-    vec3 a, b;
-    vec3 norm_sum;
-    vec3 norm_gen;
-    struct vert verts[3];
-    struct tri tmptri;
-    for(size_t i = 0;i < mesh_tri_count(dst);i++){
-        mesh_tri_get_verts_i(dst, i, verts);
-        tmptri = mesh_tri_get(dst, i);
-
-        glm_vec3_sub(verts[1].pos, verts[0].pos, a);
-        glm_vec3_sub(verts[2].pos, verts[0].pos, a);
-        glm_cross(b, a, norm_gen);
-
-        glm_vec3_add(verts[0].normal, verts[1].normal, norm_sum);
-        glm_vec3_add(norm_sum, verts[2].normal, norm_sum);
-
-    }
-#endif
 }
 int mesh_gen_tangent(struct mesh *dst){
     struct tri tmptri;

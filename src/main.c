@@ -11,6 +11,7 @@
 #include "gl_util.h"
 #include "loader_obj.h"
 #include "material.h"
+#include "container.h"
 
 struct light light0, light1;
 struct mesh mesh;
@@ -110,6 +111,32 @@ int main(){
     cvert_translate(&win.renderer.camera, vec3(-0.5, -0.5, -1));
     cvert_rotate(&win.renderer.camera, vec3(1, 0, 0), 0.1);
     cvert_rotate(&win.renderer.camera, vec3(0, 1, 0), -0.5);
+
+    // -----------------------------------------------------------------------------
+    // test for container
+
+    struct ivert iv2 = {
+        .trans = {
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0
+        }
+        ,0
+    };
+    glm_translate_make(iv2.trans, vec3(0, 0, -0.6));
+    glm_rotate(iv2.trans, 2, vec3(1, 0, 0));
+    glm_scale(iv2.trans, vec3(0.2, 0.2, 0.2));
+
+    struct container c1;
+    container_init(&c1);
+    container_load_obj(&c1, "res/models/monkey.obj");
+    printf("%zu\n", darray_len(&c1.materials));
+
+    renderer_mesh_register(&win.renderer, c1.meshes[0]);
+
+    mesh_ivert_push_back(c1.meshes[0], iv2);
+
     
 
     // texture
