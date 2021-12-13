@@ -164,6 +164,7 @@ int main(){
 
     material_albedo_map_set(&material1, &tex2);
     material_mrao_map_set(&material1, &tex2_mrao);
+    //mesh_material_set(c1.meshes[0], c1.materials[0]);
     //material_normal_map_set(&material1, &tex2_normal, 1.0);
     //material_emission_map_set(&material1, &tex2_emission);
     glm_vec4_copy(vec4(0, 1, 1, 0), material1.mrao);
@@ -186,7 +187,7 @@ int main(){
     //light0.casts_shadow = 0;
 
     renderer_mesh_register(&win.renderer, &mesh);
-    renderer_mesh_register(&win.renderer, &monkey_mesh);
+    //renderer_mesh_register(&win.renderer, &monkey_mesh);
     renderer_mesh_register(&win.renderer, &cube_mesh);
     renderer_light_register(&win.renderer, &light0);
     renderer_light_register(&win.renderer, &light1);
