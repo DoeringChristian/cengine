@@ -17,12 +17,6 @@ struct envmap{
 
     GLuint gl_fbo, gl_rbo;
 
-#if 0
-    struct shader shader_eqr_to_cm;
-    struct shader shader_irr;
-    struct shader shader_ref;
-    struct shader shader_brdf_int;
-#endif
     struct shader *shader_eqr_to_cm;
     struct shader *shader_irr;
     struct shader *shader_ref;
@@ -37,5 +31,8 @@ int envmap_draw(struct envmap *dst, struct shader *shader, struct cvert *camera)
 int envmap_draw_cube();
 
 int envmap_hdr_set(struct envmap *dst, struct texture *src);
+
+int envmap_calc_brdf_lut(struct envmap *dst);
+int envmap_calc_hdr_cm(struct envmap *dst, struct texture *src);
 
 #endif //ENVMAP_H

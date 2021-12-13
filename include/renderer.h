@@ -58,4 +58,6 @@ int renderer_mesh_unregister(struct renderer *dst, struct mesh *target);
 int renderer_light_register(struct renderer *dst, struct light *src);
 int renderer_light_unregister(struct renderer *dst, struct light *target);
 
+int renderer_envmap_set(struct renderer *dst, struct texture *hdri);
+
 #endif //RENDERER_H

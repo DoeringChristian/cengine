@@ -53,6 +53,7 @@ int update(struct renderer *renderer, void *data){
 }
 
 int main(){
+    
     struct window win;
 
     window_init(&win, 0, 0, 1000, 1000, "test");

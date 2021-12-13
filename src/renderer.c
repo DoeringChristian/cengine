@@ -203,6 +203,8 @@ int renderer_render_bloom(struct renderer *src){
 
 int renderer_render_point_shadow(struct renderer *src, struct light *light){
     struct cvert cm_cameras[6];
+    cverts_init_cube(cm_cameras, light->pos, light->shadow_len);
+#if 0
     cvert_init(&cm_cameras[0], 1, 1, glm_rad(90));
     glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[0].proj);
     glm_perspective(glm_rad(90), 1, 0.1, 100, cm_cameras[1].proj);
@@ -223,10 +225,11 @@ int renderer_render_point_shadow(struct renderer *src, struct light *light){
     glm_look(light->pos, vec3(0, -1, 0), vec3(0, 0, -1), cm_cameras[3].view);
     glm_look(light->pos, vec3(0, 0, 1), vec3(0, -1, 0), cm_cameras[4].view);
     glm_look(light->pos, vec3(0, 0, -1), vec3(0, -1, 0), cm_cameras[5].view);
-
+#endif
     // calculate view projection of light
     for(size_t i = 0;i < 6;i++){
         cubelayer_bind(&src->cl_shadow, i);
+
         for(size_t j = 0;j < darray_len(&src->meshes);j++)
             mesh_draw_depth(src->meshes[j], &cm_cameras[i], src->shader_shadow, light);
         //scene_draw_shadow_depth(src->scene, &cm_cameras[j], &src->shader_shadow, light);
@@ -257,4 +260,9 @@ int renderer_light_unregister(struct renderer *dst, struct light *target){
             return 0;
         }
     }
+    return 0;
+}
+int renderer_envmap_set(struct renderer *dst, struct texture *hdri){
+    envmap_hdr_set(&dst->environment, hdri);
+    return 0;
 }

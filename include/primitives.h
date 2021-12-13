@@ -357,6 +357,51 @@ extern struct shader primitive_shader_irr;
 extern struct shader primitive_shader_ref;
 extern struct shader primitive_shader_brdf_int;
 
+static mat4 primitive_cm_cameras_view[] = {
+    {
+        0, 0, -1, 0,
+        0, -1, 0, 0,
+        -1, 0, 0, 0,
+        0, 0, 0, 1,
+    },
+    {
+        0, 0, 1, 0,
+        0, -1, 0, 0,
+        1, 0, 0, 0,
+        0, 0, 0, 1,
+    },
+    {
+        1, 0, 0, 0,
+        0, 0, -1, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 1,
+    },
+    {
+        1, 0, 0, 0, 
+        0, 0, 1, 0,
+        0, -1, 0, 0,
+        0, 0, 0, 1
+    },
+    {
+        1, 0, 0, 0,
+        0, -1, 0, 0,
+        0, 0, -1, 0,
+        0, 0, 0, 1
+    },
+    {
+        -1, 0, 0, 0,
+        0, -1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    }
+};
+
+static mat4 primitive_cm_cameras_proj = {
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, -1.002002, -1,
+    0, 0, -0.200200, 0,
+};
 
 #if 0
 static const char shader_vert_quad_src[] = {

@@ -35,7 +35,6 @@ struct layer{
 
 int layer_init(struct layer *dst, int w, int h);
 int layer_init_n(struct layer *dst, int w, int h, int num_textures);
-int layer_init_env(struct layer *dst, int w, int h);
 void layer_free(struct layer *dst);
 
 int layer_clear(struct layer *dst);
