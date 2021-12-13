@@ -63,6 +63,8 @@ int main(){
     mesh_load_obj(&monkey_mesh, "res/models/monkey.obj");
     mesh_load_obj(&cube_mesh, "res/models/cube.obj");
     //monkey_mesh.has_shadow = 0;
+    mesh_cull_from_normal(&mesh);
+    mesh_cull_from_normal(&cube_mesh);
 
     mesh_gen_tangent(&mesh);
     mesh_gen_tangent(&monkey_mesh);
@@ -121,9 +123,9 @@ int main(){
     texture_load(&tex1_mrao, "res/img/wood_table/wood_table_001_mra_4k.jpg");
 
     struct texture tex2, tex2_normal, tex2_mrao, tex2_emission;
-    texture_load(&tex2, "res/img/rustediron2_basecolor_linear.png");
-    texture_load(&tex2_normal, "res/img/rustediron2_normal.png");
-    texture_load(&tex2_mrao, "res/img/rustediron2_mrao.png");
+    texture_load_m(&tex2, "res/img/rustediron2_basecolor_linear.png", - 0.4);
+    texture_load_m(&tex2_normal, "res/img/rustediron2_normal.png", -0.4);
+    texture_load_m(&tex2_mrao, "res/img/rustediron2_mrao.png", -0.4);
     //texture_load(&tex2_emission, "res/img/monkey_emission.png");
     
     material_albedo_map_set(&material0, &tex1);

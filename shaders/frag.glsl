@@ -13,7 +13,6 @@ layout (location = 2) out vec4 o_albedo;
 layout (location = 3) out vec4 o_mrao;
 layout (location = 4) out vec4 o_emission;
 
-//uniform sampler2D u_sampler[10];
 uniform sampler2D u_albedo_map;
 uniform sampler2D u_normal_map;
 uniform sampler2D u_mrao_map;

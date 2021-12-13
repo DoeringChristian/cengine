@@ -98,6 +98,7 @@ int mesh_render(struct mesh *src, struct cvert *camera, struct shader *shader){
         return -1;
 
     GLCall(glEnable(GL_DEPTH_TEST));
+    GLCall(glEnable(GL_CULL_FACE));
 
     shader_bind(shader);
 
@@ -160,6 +161,7 @@ int mesh_render_depth(struct mesh *src, struct cvert *camera, struct shader *sha
         return 0;
 
     GLCall(glEnable(GL_DEPTH_TEST));
+    GLCall(glEnable(GL_CULL_FACE));
 
     shader_bind(shader);
 
@@ -365,9 +367,9 @@ int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst){
     if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
         glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
     if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
-        glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+        glbuf_get(&src->vbo, &dst[1], sizeof(struct vert) * tri.idxs[1], sizeof(struct vert));
     if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
-        glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
+        glbuf_get(&src->vbo, &dst[2], sizeof(struct vert) * tri.idxs[2], sizeof(struct vert));
     return 0;
 }
 int mesh_cull_from_normal(struct mesh *dst){
@@ -381,19 +383,22 @@ int mesh_cull_from_normal(struct mesh *dst){
         tmptri = mesh_tri_get(dst, i);
 
         glm_vec3_sub(verts[1].pos, verts[0].pos, a);
-        glm_vec3_sub(verts[2].pos, verts[0].pos, a);
+        glm_vec3_sub(verts[2].pos, verts[0].pos, b);
         glm_cross(b, a, norm_gen);
 
         glm_vec3_add(verts[0].normal, verts[1].normal, norm_sum);
         glm_vec3_add(norm_sum, verts[2].normal, norm_sum);
+        
+        float adotb = glm_vec3_dot(norm_gen, norm_sum);
 
-        if(glm_vec3_dot(norm_gen, norm_sum) < 0){
+        if(adotb > 0){
             int tmp = tmptri.idxs[1];
             tmptri.idxs[1] = tmptri.idxs[2];
             tmptri.idxs[2] = tmp;
             mesh_tri_set(dst, tmptri, i);
         }
     }
+    return 0;
 }
 int mesh_normal_from_cull(struct mesh *dst){
 #if 0

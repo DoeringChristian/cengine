@@ -4,9 +4,6 @@ int layer_init(struct layer *dst, int w, int h){
     return layer_init_n(dst, w, h, 1);
 }
 int layer_init_n(struct layer *dst, int w, int h, int num_textures){
-    return layer_init_nm(dst, w, h, num_textures, 0);
-}
-int layer_init_nm(struct layer *dst, int w, int h, int num_textures, GLsizei mmlvl){
     if(num_textures > 16)
         return -1;
     dst->w = w;
@@ -24,7 +21,7 @@ int layer_init_nm(struct layer *dst, int w, int h, int num_textures, GLsizei mml
     struct texture texture;
     for(size_t i = 0;i < num_textures;i++){
         // not shure weather to use f16 or f32
-        texture_init_rgbaf16_m(&texture, w, h, NULL, mmlvl);
+        texture_init_rgbaf16(&texture, w, h, NULL);
         //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.gl_tex, 0);
         darray_push_back(&dst->textures, texture);
     }
@@ -102,6 +99,7 @@ int layer_draw(struct layer *src, struct shader *shader){
         return -1;
 
     GLCall(glDisable(GL_DEPTH_TEST));
+    GLCall(glDisable(GL_CULL_FACE));
 
     shader_bind(shader);
 
@@ -115,6 +113,9 @@ int layer_draw(struct layer *src, struct shader *shader){
     return 0;
 }
 int layer_draw_n(struct layer *src, struct shader *shader){
+
+    GLCall(glDisable(GL_CULL_FACE));
+
     shader_bind(shader);
 
     for(size_t i = 0;i < darray_len(&src->textures);i++){
@@ -135,6 +136,7 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
         return -1;
 
     GLCall(glDisable(GL_DEPTH_TEST));
+    GLCall(glDisable(GL_CULL_FACE));
 
     shader_bind(shader);
 
@@ -175,6 +177,7 @@ int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct env
         return -1;
 
     GLCall(glDisable(GL_DEPTH_TEST));
+    GLCall(glDisable(GL_CULL_FACE));
 
     shader_bind(shader);
 

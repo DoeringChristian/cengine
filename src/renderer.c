@@ -160,55 +160,46 @@ int renderer_render(struct renderer *src){
 
 int renderer_render_bloom(struct renderer *src){
     const size_t bloom_passes = 0;
-    struct layer layer_bloom;
     //layer_init_n(&layer_bloom, src->w, src->h, 1);
-    layer_init_nm(&layer_bloom, src->w, src->h, 1, bloom_passes);
+    struct layer layers_bloom_v[bloom_passes];
+    struct layer layers_bloom_h[bloom_passes];
+    struct layer layer_clip;
 
-    for(size_t i = 0;i < bloom_passes;i++){
-        layer_bind_m(&layer_bloom, i);
-
-        layer_unbind(&layer_bloom);
-    }
-#if 1
-    struct layer layers_bloom[bloom_passes];
-    //struct layer layer_tmp;
-    //layer_init(&layer_tmp, src->w, src->h);
+    layer_init(&layer_clip, src->w, src->h);
     for(size_t i = 0;i < bloom_passes;i++){
         int resw = src->w - (i + 1) * (src->w-15)/bloom_passes;
         int resh = src->h - (i + 1) * (src->h-15)/bloom_passes;
-        layer_init(&layers_bloom[i], resw, resh);
+        layer_init(&layers_bloom_h[i], resw, resh);
+        layer_init(&layers_bloom_v[i], resw, resh);
     }
 
+    layer_bind(&layer_clip);
+    layer_draw(&src->light_out, src->shader_clip);
+    layer_unbind(&layer_clip);
     for(size_t i = 0;i < bloom_passes;i++){
-        if(i == 0){
-            layer_bind(&layers_bloom[0]);
-            layer_draw(&src->light_out, src->shader_clip);
-            layer_unbind(&layers_bloom[0]);
-        }
-        else{
-            layer_bind(&layers_bloom[i]);
-            layer_draw(&layers_bloom[i-1], src->shader_blurv);
-            layer_draw(&layers_bloom[i-1], src->shader_blurh);
-            layer_unbind(&layers_bloom[i]);
-        }
+        layer_bind(&layers_bloom_h[i]);
+        layer_draw(&layer_clip, src->shader_blurh);
+        layer_unbind(&layers_bloom_h[i]);
     }
-
+    for(size_t i = 0;i < bloom_passes;i++){
+        layer_bind(&layers_bloom_v[i]);
+        layer_draw(&layers_bloom_h[i], src->shader_blurv);
+        layer_unbind(&layers_bloom_v[i]);
+    }
     layer_bind(&src->layer_bloom);
     layer_draw(&src->light_out, src->shader_forward);
     for(size_t i = 0;i < bloom_passes;i++){
-        layer_draw(&layers_bloom[i], src->shader_blurh);
-        layer_draw(&layers_bloom[i], src->shader_blurv);
+        layer_draw(&layers_bloom_v[i], src->shader_forward);
     }
     layer_unbind(&src->layer_bloom);
 
-
-
-    //layer_free(&layer_tmp);
+    layer_free(&layer_clip);
     for(size_t i = 0;i < bloom_passes;i++){
-        layer_free(&layers_bloom[i]);
+        layer_free(&layers_bloom_h[i]);
+        layer_free(&layers_bloom_v[i]);
     }
-#endif
-    layer_free(&layer_bloom);
+    
+
     return 0;
 }
 
