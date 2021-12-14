@@ -42,7 +42,7 @@ int container_load_gltf(struct container *dst, const char *path){
             if(attr.type == cgltf_attribute_type_position){
                 cgltf_accessor *acc = attr.data;
 
-                pos_size = sizeof(float) * acc->count;
+                pos_size = sizeof(vec3) * acc->count;
                 pos = malloc(pos_size);
                 memcpy(pos, acc->buffer_view->buffer->data, pos_size);
             }
@@ -79,8 +79,9 @@ int container_load_gltf(struct container *dst, const char *path){
         struct vert *verts = malloc(vert_num * sizeof(struct vert));
 
         //printf("%i\n", gltf_mesh.primitives->indices->stride);
+        //printf("%zu\n", pos_size);
         for(size_t j = 0;j < vert_num;j++){
-            //printf("%f %f %f\n", pos[j * 3], pos[j * 3+1], pos[j * 3 +2]);
+            printf("%f %f %f\n", pos[j * 3], pos[j * 3 + 1], pos[j * 3 + 2]);
             if(j * (3 * sizeof(float)) < pos_size)
                 glm_vec3_copy(&pos[j * 3], verts[j].pos);
             if(j * (3 * sizeof(float)) < norm_size)
@@ -95,6 +96,32 @@ int container_load_gltf(struct container *dst, const char *path){
 
         mesh_vert_append(mesh, verts, vert_num);
 
+        cgltf_accessor *iacc = gltf_mesh.primitives->indices;
+        size_t idx_num;
+        GLint *idx;
+        if(iacc->component_type != cgltf_component_type_r_16u)
+            assert(0);
+
+        size_t tris_num = iacc->count / 3;
+        struct tri *tris = malloc(sizeof(struct tri) * tris_num);
+
+
+        for(size_t j = 0;j < tris_num;j++){
+            tris[j].idxs[0] = ((uint16_t *)iacc->buffer_view->buffer->data)[j*3 + 0];
+            tris[j].idxs[1] = ((uint16_t *)iacc->buffer_view->buffer->data)[j*3 + 1];
+            tris[j].idxs[2] = ((uint16_t *)iacc->buffer_view->buffer->data)[j*3 + 2];
+            printf("%zu\n", iacc->count);
+            printf("%i %i %i\n", tris[j].idxs[0], tris[j].idxs[1], tris[j].idxs[2]);
+#if 0
+            printf("%f %f %f\n", verts[tris[j].idxs[0]].pos[0], verts[tris[j].idxs[0]].pos[1], verts[tris[j].idxs[0]].pos[2]);
+            printf("%f %f %f\n", verts[tris[j].idxs[1]].pos[0], verts[tris[j].idxs[1]].pos[1], verts[tris[j].idxs[1]].pos[2]);
+            printf("%f %f %f\n", verts[tris[j].idxs[0]].pos[0], verts[tris[j].idxs[2]].pos[1], verts[tris[j].idxs[2]].pos[2]);
+#endif
+        }
+
+        mesh_tri_append(mesh, tris, tris_num);
+
+
         free(verts);
         free(pos);
         free(norm);
@@ -107,24 +134,6 @@ int container_load_gltf(struct container *dst, const char *path){
         tan = NULL;
         color = NULL;
         uv = NULL;
-
-        cgltf_accessor *iacc = gltf_mesh.primitives->indices;
-        size_t idx_num;
-        GLint *idx;
-        if(iacc->component_type != cgltf_component_type_r_16u)
-            assert(0);
-
-        size_t tris_num = iacc->count / 3;
-        struct tri *tris = malloc(sizeof(struct tri) * tris_num);
-
-        for(size_t j = 0;j < tris_num;j++){
-            tris[j].idxs[0] = ((uint16_t *)iacc->buffer_view->buffer->data)[j*3 + 0];
-            tris[j].idxs[1] = ((uint16_t *)iacc->buffer_view->buffer->data)[j*3 + 1];
-            tris[j].idxs[2] = ((uint16_t *)iacc->buffer_view->buffer->data)[j*3 + 2];
-        }
-
-        mesh_tri_append(mesh, tris, tris_num);
-
         free(tris);
         tris = NULL;
 

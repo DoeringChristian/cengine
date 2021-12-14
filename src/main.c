@@ -160,12 +160,12 @@ int main(){
     
     struct container c2;
     container_init(&c2);
-    container_load_gltf(&c2, "res/models/monkey.gltf");
+    container_load_gltf(&c2, "res/models/cube.gltf");
 
     //printf("%zu\n", darray_len(&c2.meshes));
 
     mesh_ivert_push_back(c2.meshes[0], iv3);
-    printf("%zu\n", glbuf_size(&c2.meshes[0]->vbo));
+    //printf("%zu\n", glbuf_size(&c2.meshes[0]->vbo));
     renderer_mesh_register(&win.renderer, c2.meshes[0]);
 
     
