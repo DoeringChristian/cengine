@@ -11,10 +11,12 @@ int material_init(struct material *dst){
     glm_vec4_copy(vec4(0.5, 0.5, 1, 1), dst->mrao);
     glm_vec4_copy(vec4(0, 0, 0, 0), dst->emission);
 
+    resource_handle_init(&dst->handle, NULL, NULL);
+
     return 0;
 }
 void material_free(struct material *dst){
-
+    resource_handle_free(&dst->handle);
 }
 
 void material_albedo_map_set(struct material *dst, struct texture *src){

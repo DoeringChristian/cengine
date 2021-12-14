@@ -13,6 +13,7 @@
 #include "camera.h"
 #include "light.h"
 #include "material.h"
+#include "resource_handle.h"
 
 #define MAX_TEXTURES 10
 #define MAX_LIGHTS 4
@@ -22,7 +23,7 @@
  */
 
 struct mesh{
-    char *name;
+    struct resource_handle handle;
 
     vec3 pos;
     versor rot;

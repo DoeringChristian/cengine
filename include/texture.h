@@ -10,6 +10,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include "gl_util.h"
+#include "resource_handle.h"
 
 #define TEXTURE_DEFAULT_LOD_BIAS -0.4
 
@@ -24,6 +25,7 @@ struct texture{
 
     // uniform name
     char *uname;
+    struct resource_handle handle;
 };
 
 int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat);

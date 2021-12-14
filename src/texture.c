@@ -9,6 +9,7 @@ int texture_init_f32_uname(struct texture *dst, int w, int h, float *src, const 
     return 0;
 }
 int texture_init(struct texture *dst, int w, int h, float *src, GLenum internalformat){
+    resource_handle_init(&dst->handle, NULL, NULL);
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
@@ -53,6 +54,7 @@ int texture_init_rgbaf16(struct texture *dst, int w, int h, float *src){
     return texture_init(dst, w, h, src, GL_RGBA16F);
 }
 int texture_init_cube(struct texture *dst, int w, int h, float *src, GLenum internalformat){
+    resource_handle_init(&dst->handle, NULL, NULL);
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
@@ -87,6 +89,7 @@ int texture_init_cube_f32(struct texture *dst, int w, int h, float *src){
     return texture_init_cube(dst, w, h, src, GL_RGBA32F);
 }
 int texture_init_depthcube(struct texture *dst, int w, int h, float *src, GLenum internalformat){
+    resource_handle_init(&dst->handle, NULL, NULL);
     dst->w = w;
     dst->h = h;
     dst->bpp = 4;
@@ -119,6 +122,7 @@ int texture_init_depthcube_f32(struct texture *dst, int w, int h, float *src){
 }
 
 int texture_load(struct texture *dst, const char *path){
+    resource_handle_init(&dst->handle, NULL, path);
     dst->type = GL_TEXTURE_2D;
     dst->internalformat = GL_UNSIGNED_BYTE;
     stbi_set_flip_vertically_on_load(1);
@@ -145,6 +149,7 @@ int texture_load(struct texture *dst, const char *path){
     return 0;
 }
 int texture_load_m(struct texture *dst, const char *path, float lod_bias){
+    resource_handle_init(&dst->handle, NULL, path);
     dst->type = GL_TEXTURE_2D;
     dst->internalformat = GL_UNSIGNED_BYTE;
     stbi_set_flip_vertically_on_load(1);
@@ -174,6 +179,7 @@ int texture_load_m(struct texture *dst, const char *path, float lod_bias){
     return 0;
 }
 int texture_load_hdr(struct texture *dst, const char *path){
+    resource_handle_init(&dst->handle, NULL, path);
     dst->type = GL_TEXTURE_2D;
     dst->internalformat = GL_RGB16F;
     dst->uname = NULL;
@@ -242,6 +248,7 @@ void texture_free(struct texture *dst){
     GLCall(glDeleteTextures(1, &dst->gl_tex));
     if(dst->uname != NULL)
         free(dst->uname);
+    resource_handle_free(&dst->handle);
 }
 
 void texture_bind(struct texture *dst, GLuint slot){
@@ -274,6 +281,7 @@ int texture_fill(struct texture *dst, float *color){
     return 0;
 }
 int texture_load_hdr_cube(struct texture *dst, const char *path, int w, int h){
+    resource_handle_init(&dst->handle, NULL, path);
     dst->w = w;
     dst->h = h;
     struct texture tmp_tex;

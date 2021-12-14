@@ -137,7 +137,7 @@ int main(){
 
     mesh_ivert_push_back(c1.meshes[0], iv2);
 
-    mesh_material_set(c1.meshes[0], c1.materials[0]);
+    //mesh_material_set(c1.meshes[0], c1.materials[0]);
 
     mesh_gen_tangent(c1.meshes[0]);
 

@@ -3,9 +3,12 @@
 
 #include "texture.h"
 #include "cglm/cglm.h"
+#include "resource_handle.h"
 
 // either as pointer in mesh or directly
 struct material{
+    struct resource_handle handle;
+
     vec4 albedo;
     vec4 mrao;
     vec4 emission;

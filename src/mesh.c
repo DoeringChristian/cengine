@@ -1,7 +1,7 @@
 #include "mesh.h"
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
-    dst->name = NULL;
+    resource_handle_init(&dst->handle, NULL, NULL);
     dst->has_shadow = 1;
     dst->material = NULL;
 
@@ -74,7 +74,7 @@ void mesh_free(struct mesh *dst){
     darray_free(&dst->verts);
     darray_free(&dst->iverts);
 #endif
-    free(dst->name);
+    resource_handle_free(&dst->handle);
 }
 
 int mesh_draw(struct mesh *src){
@@ -441,11 +441,7 @@ int mesh_gen_tangent(struct mesh *dst){
 }
 
 int mesh_name_set(struct mesh *dst, const char *name){
-    if(dst->name != NULL)
-        free(dst->name);
-    size_t name_size = strlen(name)+1;
-    dst->name = malloc(name_size);
-    memcpy(dst->name, name, name_size);
+    resource_handle_name_set(&dst->handle, name);
     return 0;
 }
 int mesh_material_set(struct mesh *dst, struct material *src){

@@ -22,4 +22,10 @@ int container_load(struct container *dst, const char *path);
 int container_unload(struct container *dst);
 void container_free(struct container *dst);
 
+struct mesh *container_mesh_search(struct container *src, const char *name);
+struct mesh *container_mesh_search_path(struct container *src, const char *path);
+
+struct material *container_material_search(struct container *src, const char *name);
+struct material *container_material_search_path(struct container *src, const char *path);
+
 #endif //CONTAINER_H

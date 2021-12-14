@@ -132,7 +132,9 @@ int container_load_mtl(struct container *dst, const char *path){
         if(sscanf(buf, "newmtl %500s", buf_mtl_name) == 1){
             mat_cur = malloc(sizeof(struct material));
             material_init(mat_cur);
+            resource_handle_name_set(&mat_cur->handle, buf_mtl_name);
             darray_push_back(&dst->materials, mat_cur);
+            memset(buf_mtl_name, 0, sizeof(buf_mtl_name));
         }
         else if(sscanf(buf, "Kd %f %f %f", &color_tmp[0], &color_tmp[1], &color_tmp[2]) == 3){
             if(mat_cur != NULL)
@@ -150,8 +152,10 @@ int container_load_mtl(struct container *dst, const char *path){
                 sprintf(tmp, "%s/%s", buf_dir, buf_mtl_name);
                 tex_cur = malloc(sizeof(struct texture));
                 texture_load(tex_cur, tmp);
+                resource_handle_path_set(&tex_cur->handle, buf_mtl_name);
                 darray_push_back(&dst->textures, tex_cur);
                 material_albedo_map_set(mat_cur, tex_cur);
+                memset(buf_mtl_name, 0, sizeof(buf_mtl_name));
                 tex_cur = NULL;
             }
         }
@@ -163,8 +167,10 @@ int container_load_mtl(struct container *dst, const char *path){
                 sprintf(tmp, "%s/%s", buf_dir, buf_mtl_name);
                 tex_cur = malloc(sizeof(struct texture));
                 texture_load(tex_cur, tmp);
+                resource_handle_path_set(&tex_cur->handle, buf_mtl_name);
                 darray_push_back(&dst->textures, tex_cur);
                 material_normal_map_set(mat_cur, tex_cur, 1);
+                memset(buf_mtl_name, 0, sizeof(buf_mtl_name));
                 tex_cur = NULL;
             }
         }
@@ -183,21 +189,24 @@ int container_load_obj(struct container *dst, const char *path){
 
     FILE *fp = fopen(path, "r");
 
-    char buf[500] = {0};
+    char buf_line[500] = {0};
     char buf_mtllib[500] = {0};
     char buf_usemtl[500] = {0};
     char buf_dir[256] = {0};
 
-    for(;readline(fp, buf, 500) > 0;){
-        if(sscanf(buf, "mtllib %500s", buf_mtllib) == 1){
+    for(;readline(fp, buf_line, 500) > 0;){
+        if(sscanf(buf_line, "mtllib %500s", buf_mtllib) == 1){
             char tmp[256] = {0};
             char *slash_last = strrchr(path, '/');
             memcpy(buf_dir, path, slash_last - path);
             sprintf(tmp, "%s/%s", buf_dir, buf_mtllib);
             container_load_mtl(dst, tmp);
         }
-        else if(sscanf(buf, "usemtl %500s", buf_usemtl) == 1){
-
+        else if(sscanf(buf_line, "usemtl %500s", buf_usemtl) == 1){
+            struct material *tmp_mtl;
+            if((tmp_mtl = container_material_search(dst, buf_usemtl)) != NULL){
+                mesh_material_set(tmp_mesh, tmp_mtl);
+            }
         }
         else{
 

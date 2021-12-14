@@ -44,3 +44,32 @@ void container_free(struct container *dst){
     darray_free(&dst->textures);
     darray_free(&dst->sub_containers);
 }
+struct mesh *container_mesh_search(struct container *src, const char *name){
+    for(size_t i = 0;i < darray_len(&src->meshes);i++){
+        if(resource_handle_name_comp(&src->meshes[i]->handle, name))
+            return src->meshes[i];
+    }
+    return NULL;
+}
+struct mesh *container_mesh_search_path(struct container *src, const char *path){
+    for(size_t i = 0;i < darray_len(&src->meshes);i++){
+        if(resource_handle_path_comp(&src->meshes[i]->handle, path))
+            return src->meshes[i];
+    }
+    return NULL;
+}
+
+struct material *container_material_search(struct container *src, const char *name){
+    for(size_t i = 0;i < darray_len(&src->materials);i++){
+        if(resource_handle_name_comp(&src->materials[i]->handle, name))
+            return src->materials[i];
+    }
+    return NULL;
+}
+struct material *container_material_search_path(struct container *src, const char *path){
+    for(size_t i = 0;i < darray_len(&src->materials);i++){
+        if(resource_handle_path_comp(&src->materials[i]->handle, path))
+            return src->materials[i];
+    }
+    return NULL;
+}
