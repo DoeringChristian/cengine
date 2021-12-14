@@ -1,6 +1,8 @@
 #include "mesh.h"
 
 int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len){
+    if(dst == NULL)
+        return -1;
     resource_handle_init(&dst->handle, NULL, NULL);
     dst->has_shadow = 1;
     dst->material = NULL;
@@ -60,11 +62,15 @@ int mesh_init(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri
 }
 #if 0
 int mesh_init_cmesh(struct mesh *dst, struct cmesh *src){
+    if(dst == NULL)
+        return -1;
     return mesh_init(dst, src->verts, darray_len(&src->verts), src->tris, darray_len(&src->tris));
 }
 #endif
 
 void mesh_free(struct mesh *dst){
+    if(dst == NULL)
+        return;
     glbuf_free(&dst->vbo);
     glbuf_free(&dst->ibo);
     glbuf_free(&dst->vboi);
@@ -78,6 +84,8 @@ void mesh_free(struct mesh *dst){
 }
 
 int mesh_draw(struct mesh *src){
+    if(src == NULL)
+        return -1;
     GLCall(glBindVertexArray(src->gl_vao));
 
     glbuf_bind(&src->ibo);
@@ -93,7 +101,9 @@ int mesh_draw(struct mesh *src){
     return 0;
 }
 
-int mesh_render(struct mesh *src, struct cvert *camera, struct shader *shader){
+int mesh_render(struct mesh *src, struct camera *camera, struct shader *shader){
+    if(src == NULL)
+        return -1;
     if(src->material == NULL)
         return -1;
 
@@ -156,7 +166,9 @@ int mesh_render(struct mesh *src, struct cvert *camera, struct shader *shader){
     return 0;
 }
 
-int mesh_render_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light){
+int mesh_render_depth(struct mesh *src, struct camera *camera, struct shader *shader, struct light *light){
+    if(src == NULL)
+        return -1;
     if(!src->has_shadow)
         return 0;
 
@@ -187,6 +199,8 @@ int mesh_render_depth(struct mesh *src, struct cvert *camera, struct shader *sha
 }
 
 int mesh_set_to(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len, struct ivert *iverts, size_t iverts_len){
+    if(dst == NULL)
+        return -1;
     if(verts != NULL){
         glbuf_resize(&dst->vbo, sizeof(struct vert) * verts_len);
         glbuf_set(&dst->vbo, verts, 0, sizeof(struct vert) * verts_len);
@@ -203,10 +217,14 @@ int mesh_set_to(struct mesh *dst, struct vert *verts, size_t verts_len, struct t
 }
 
 int mesh_vert_push_back(struct mesh *dst, struct vert src){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_append(&dst->vbo, &src, sizeof(struct vert));
 }
 int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     glbuf_insert(&dst->vbo, &src, sizeof(struct vert), i * sizeof(struct vert));
     struct tri *buf = malloc(glbuf_size(&dst->ibo));
@@ -227,30 +245,44 @@ int mesh_vert_push(struct mesh *dst, struct vert src, size_t i){
     return 0;
 }
 int mesh_vert_append(struct mesh *dst, struct vert *src, size_t n){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_append(&dst->vbo, src, n * sizeof(struct vert));
 }
 int mesh_vert_set(struct mesh *dst, struct vert src, size_t i){
+    if(dst == NULL)
+        return -1;
     return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), sizeof(struct vert));
 }
 int mesh_vert_setn(struct mesh *dst, struct vert *src, size_t n, size_t i){
+    if(dst == NULL)
+        return -1;
     return glbuf_set(&dst->vbo, &src, i * sizeof(struct vert), n * sizeof(struct vert));
 }
 int mesh_vert_set_tri(struct mesh *dst, struct vert *src, struct tri target){
+    if(dst == NULL)
+        return -1;
     mesh_vert_set(dst, src[0], target.idxs[0]);
     mesh_vert_set(dst, src[1], target.idxs[1]);
     mesh_vert_set(dst, src[2], target.idxs[2]);
     return 0;
 }
 struct vert mesh_vert_get(struct mesh *src, size_t i){
+    if(src == NULL)
+        return (struct vert){0};
     struct vert dst;
     glbuf_get(&src->vbo, &dst, i * sizeof(struct vert), sizeof(struct vert));
     return dst;
 }
 size_t mesh_vert_count(struct mesh *src){
+    if(src == NULL)
+        return -1;
     return glbuf_size(&src->vbo) / sizeof(struct vert);
 }
 int mesh_append(struct mesh *dst, const struct mesh *src){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
 
     struct vert src_vert;
@@ -303,14 +335,20 @@ int mesh_append(struct mesh *dst, const struct mesh *src){
 }
 
 int mesh_tri_push_back(struct mesh *dst, struct tri src){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_append(&dst->ibo, &src, sizeof(struct tri));
 }
 int mesh_tri_append(struct mesh *dst, struct tri *src, size_t n){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_append(&dst->ibo, src, sizeof(struct tri) * n);
 }
 int mesh_tri_set(struct mesh *dst, struct tri src, size_t i){
+    if(dst == NULL)
+        return -1;
     if(i < glbuf_size(&dst->ibo) / sizeof(struct tri))
         glbuf_set(&dst->ibo, &src, sizeof(struct tri) * i, sizeof(struct tri));
     else
@@ -318,6 +356,8 @@ int mesh_tri_set(struct mesh *dst, struct tri src, size_t i){
     return 0;
 }
 int mesh_tri_get_verts(struct mesh *src, struct tri tri, struct vert *dst){
+    if(dst == NULL)
+        return -1;
     if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
         glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
     if(tri.idxs[1] < glbuf_size(&src->vbo) / sizeof(struct vert))
@@ -328,41 +368,61 @@ int mesh_tri_get_verts(struct mesh *src, struct tri tri, struct vert *dst){
 }
 
 void mesh_texture_albedo_set(struct mesh *dst, struct texture *src){
+    if(dst == NULL)
+        return;
     dst->tex_albedo = src;
 }
 void mesh_texture_normal_set(struct mesh *dst, struct texture *src){
+    if(dst == NULL)
+        return;
     dst->tex_normal = src;
 }
 void mesh_texture_spec_set(struct mesh *dst, struct texture *src){
+    if(dst == NULL)
+        return;
     dst->tex_spec = src;
 }
 int mesh_ivert_push_back(struct mesh *dst, struct ivert src){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_append(&dst->vboi, &src, sizeof(struct ivert));
 }
 int mesh_ivert_set(struct mesh *dst, struct ivert src, int i){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_set(&dst->vboi, &src, sizeof(struct ivert) * i, sizeof(struct ivert));
 }
 struct ivert mesh_ivert_get(struct mesh *src, int i){
+    if(src == NULL)
+        return (struct ivert){0};
     struct ivert dst;
     GLCall(glBindVertexArray(src->gl_vao));
     glbuf_get(&src->vboi, &dst, sizeof(struct ivert) * i, sizeof(struct ivert));
     return dst;
 }
 int mesh_iverts_clear(struct mesh *dst){
+    if(dst == NULL)
+        return -1;
     GLCall(glBindVertexArray(dst->gl_vao));
     return glbuf_resize(&dst->vboi, 0);
 }
 struct tri mesh_tri_get(struct mesh *src, size_t i){
+    if(src == NULL)
+        return (struct tri){0};
     struct tri dst;
     glbuf_get(&src->ibo, &dst, sizeof(struct tri) * i, sizeof(struct tri));
     return dst;
 }
 size_t mesh_tri_count(struct mesh *src){
+    if(src == NULL)
+        return 0;
     return glbuf_size(&src->ibo) / sizeof(struct tri);
 }
 int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst){
+    if(src == NULL)
+        return -1;
     struct tri tri = mesh_tri_get(src, i);
     if(tri.idxs[0] < glbuf_size(&src->vbo) / sizeof(struct vert))
         glbuf_get(&src->vbo, &dst[0], sizeof(struct vert) * tri.idxs[0], sizeof(struct vert));
@@ -373,6 +433,8 @@ int mesh_tri_get_verts_i(struct mesh *src, size_t i, struct vert *dst){
     return 0;
 }
 int mesh_cull_from_normal(struct mesh *dst){
+    if(dst == NULL)
+        return -1;
     vec3 a, b;
     vec3 norm_sum;
     vec3 norm_gen;
@@ -403,6 +465,8 @@ int mesh_cull_from_normal(struct mesh *dst){
 int mesh_normal_from_cull(struct mesh *dst){
 }
 int mesh_gen_tangent(struct mesh *dst){
+    if(dst == NULL)
+        return -1;
     struct tri tmptri;
     struct vert tmpverts[3];
     for(size_t i = 0;i < mesh_tri_count(dst);i++){
@@ -441,10 +505,14 @@ int mesh_gen_tangent(struct mesh *dst){
 }
 
 int mesh_name_set(struct mesh *dst, const char *name){
+    if(dst == NULL)
+        return -1;
     resource_handle_name_set(&dst->handle, name);
     return 0;
 }
 int mesh_material_set(struct mesh *dst, struct material *src){
+    if(dst == NULL)
+        return -1;
     dst->material = src;
     return 0;
 }
@@ -533,4 +601,14 @@ int mesh3_draw(struct mesh3 *dst){
     GLCall(glBindVertexArray(0));
 
     return 0;
+}
+struct ivert ivert(vec3 pos, float angle, vec3 axis, vec3 scale, vec2 tex_offset){
+    struct ivert dst;
+
+    glm_translate_make(dst.trans, pos);
+    glm_rotate(dst.trans, angle, axis);
+    glm_scale(dst.trans, scale);
+    glm_vec2_copy(tex_offset, dst.tex_offset);
+
+    return dst;
 }

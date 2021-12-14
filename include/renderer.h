@@ -18,7 +18,7 @@ struct renderer{
     darray(struct mesh *) meshes;
     darray(struct light *) lights;
 
-    struct cvert camera;
+    struct camera camera;
 
     // shaders
     struct shader *shader;

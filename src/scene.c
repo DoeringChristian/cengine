@@ -18,13 +18,13 @@ int scene_mesh_push_back(struct scene *dst, struct mesh *src){
     return 0;
 }
 
-int scene_draw(struct scene *dst, struct cvert *camera, struct shader *shader){
+int scene_draw(struct scene *dst, struct camera *camera, struct shader *shader){
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
         mesh_render(dst->meshes[i], camera, shader);
     }
     return 0;
 }
-int scene_draw_shadow_depth(struct scene *dst, struct cvert *camera, struct shader *shader, struct light *light){
+int scene_draw_shadow_depth(struct scene *dst, struct camera *camera, struct shader *shader, struct light *light){
     for(size_t i = 0;i < darray_len(&dst->meshes);i++){
         mesh_render_depth(dst->meshes[i], camera, shader, light);
     }

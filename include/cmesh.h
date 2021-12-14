@@ -7,7 +7,7 @@
 #include "cglm/cglm.h"
 
 /*
- * cmesh is a mesh that lives in ram
+ * cmesh is a mesh that lives in ram and in vram
  */
 
 struct cmesh{

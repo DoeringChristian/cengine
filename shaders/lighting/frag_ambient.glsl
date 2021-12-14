@@ -69,7 +69,7 @@ void main (void){
     // TODO: need to transform u_ref
 
     // debug
-    //o_color = vec4(diffuse, 1);
+    //o_color = vec4(kD * specular, 1);
     //o_color = vec4(V, 1);
     //o_color = vec4(V, 1);
 

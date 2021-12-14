@@ -51,9 +51,9 @@ void mesh_free(struct mesh *dst);
 
 // functions for pulling and pushing ram based vertices from and to gpu
 int mesh_draw(struct mesh *src);
-int mesh_render(struct mesh *src, struct cvert *camera, struct shader *shader);
+int mesh_render(struct mesh *src, struct camera *camera, struct shader *shader);
 // draw shadow cube map
-int mesh_render_depth(struct mesh *src, struct cvert *camera, struct shader *shader, struct light *light);
+int mesh_render_depth(struct mesh *src, struct camera *camera, struct shader *shader, struct light *light);
 
 int mesh_set_to(struct mesh *dst, struct vert *verts, size_t verts_len, struct tri *tris, size_t tris_len, struct ivert *iverts, size_t ivert_len);
 
@@ -115,6 +115,9 @@ int mesh3_init(struct mesh3 *dst, struct vert3 *verts, size_t verts_len, int *id
 void mesh3_free(struct mesh3 *dst);
 
 int mesh3_draw(struct mesh3 *dst);
+
+
+struct ivert ivert(vec3 pos, float angle, vec3 axis, vec3 scale, vec2 tex_offset);
 
 
 #endif //MESH_H

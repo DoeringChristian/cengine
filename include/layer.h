@@ -48,8 +48,8 @@ int layer_unbind(struct layer *dst);
 
 int layer_draw(struct layer *dst, struct shader *shader);
 int layer_draw_n(struct layer *dst, struct shader *shader);
-int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct envmap *env, struct cvert *camera);
-int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct envmap *env, struct cvert *camera);
+int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct envmap *env, struct camera *camera);
+int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct envmap *env, struct camera *camera);
 int layer_draw_tex(struct layer *dst, struct shader *shader, struct texture *tex);
 
 //int layer_blend(struct layer *dst, struct layer *src1, struct layer *src2, struct shader *bshader);

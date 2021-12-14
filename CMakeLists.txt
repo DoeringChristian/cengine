@@ -8,7 +8,7 @@ include("cmake/FileEmbed.cmake")
 project(${PROJECT_NAME})
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_FLAGS "-g -Og")
+set(CMAKE_C_FLAGS "-g -O0")
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -28,6 +28,7 @@ include_directories("lib/darray/")
 include_directories("lib/cgltf/")
 #include_directories("lib/mathc/")
 
+#add_library(${PROJECT_NAME} ${SRC_FILES})
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 FileEmbedSetup()
@@ -42,3 +43,5 @@ target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} m)
 target_link_libraries(${PROJECT_NAME} cglm_headers)
+
+#add_subdirectory(test)

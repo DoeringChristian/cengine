@@ -1,14 +1,14 @@
 #include "camera.h"
 
-struct cvert cvert(int w, int h, float fov){
-    struct cvert dst;
+struct camera camera(int w, int h, float fov){
+    struct camera dst;
     dst.far = 100;
     glm_perspective(fov, (float)w/(float)h, 0.1, dst.far, dst.proj);
     glm_mat4_identity(dst.view);
     return dst;
 }
 
-int cvert_init(struct cvert *dst, int w, int h, float fov){
+int camera_init(struct camera *dst, int w, int h, float fov){
     dst->far = 100;
     glm_perspective(fov, (float)w / (float)h, 0.1, dst->far, dst->proj);
     glm_mat4_identity(dst->view);
@@ -21,18 +21,18 @@ int cvert_init(struct cvert *dst, int w, int h, float fov){
 #endif
     return 0;
 }
-void camera_free(struct cvert *dst){
+void camera_free(struct camera *dst){
 
 }
 
-void cvert_translate(struct cvert *dst, vec3 pos){
+void camera_translate(struct camera *dst, vec3 pos){
     glm_translate(dst->view, pos);
 }
-void cvert_rotate(struct cvert *dst, vec3 axis, float angle){
+void camera_rotate(struct camera *dst, vec3 axis, float angle){
     glm_rotate(dst->view, angle, axis);
 }
-int cverts_init_cube(struct cvert dst[6], vec3 pos, float far){
-    cvert_init(&dst[0], 1, 1, glm_rad(90));
+int camera_init_cube(struct camera dst[6], vec3 pos, float far){
+    camera_init(&dst[0], 1, 1, glm_rad(90));
     glm_perspective(glm_rad(90), 1, 0.1, 100, dst[0].proj);
     glm_perspective(glm_rad(90), 1, 0.1, 100, dst[1].proj);
     glm_perspective(glm_rad(90), 1, 0.1, 100, dst[2].proj);

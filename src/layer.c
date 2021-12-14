@@ -131,7 +131,7 @@ int layer_draw_n(struct layer *src, struct shader *shader){
     shader_unbind(shader);
     return 0;
 }
-int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct envmap *env, struct cvert *camera){
+int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *shadow_depth, struct light *light, struct envmap *env, struct camera *camera){
     if(darray_len(&src->textures) < 5)
         return -1;
 
@@ -172,7 +172,7 @@ int layer_draw_gbuf(struct layer *src, struct shader *shader, struct texture *sh
     shader_unbind(shader);
     return 0;
 }
-int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct envmap *env, struct cvert *camera){
+int layer_draw_gbuf_ambient(struct layer *src, struct shader *shader, struct envmap *env, struct camera *camera){
     if(darray_len(&src->textures) < 5)
         return -1;
 

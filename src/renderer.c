@@ -41,7 +41,7 @@ int renderer_init(struct renderer *dst, int w, int h){
     envmap_init(&dst->environment, 512);
 
     // initializing camera
-    cvert_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
+    camera_init(&dst->camera, w, h, 60.0/180.0 * M_PI);
 
     return 0;
 }
@@ -202,8 +202,8 @@ int renderer_render_bloom(struct renderer *src){
 }
 
 int renderer_render_point_shadow(struct renderer *src, struct light *light){
-    struct cvert cm_cameras[6];
-    cverts_init_cube(cm_cameras, light->pos, light->shadow_len);
+    struct camera cm_cameras[6];
+    camera_init_cube(cm_cameras, light->pos, light->shadow_len);
 
     // calculate view projection of light
     for(size_t i = 0;i < 6;i++){

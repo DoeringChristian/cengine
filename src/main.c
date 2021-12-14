@@ -14,6 +14,160 @@
 #include "material.h"
 #include "container.h"
 
+struct container c1;
+int time;
+
+int update(struct renderer *renderer, void *data){
+
+    struct mesh *suzanne = container_mesh_search(&c1, "Suzanne");
+
+    int time_tmp = SDL_GetTicks();
+    //printf("FrameTime: %i ms FPS: %f\n", time_tmp - time, 1000/((float) time_tmp - (float) time));
+    time = time_tmp;
+
+
+    int mx, my;
+    mat4 cr;
+    SDL_PumpEvents();
+    SDL_GetMouseState(&mx, &my);
+
+    glm_mat4_identity(cr);
+    glm_translate(cr, vec3(0, 0, -1));
+
+    glm_rotate(cr, (float)mx / 100, vec3(0, 1, 0));
+    glm_rotate(cr, -(float)my / 100, vec3(1, 0, 0));
+
+    glm_translate(cr, vec3(0, 0, 0.6));
+    glm_mat4_copy(cr, renderer->camera.view);
+
+
+    return 0;
+}
+
+int main(){
+    struct window win;
+    window_init(&win, 0, 0, 1000, 1000, "test");
+
+
+    struct mesh mesh;
+    mesh_init_cube(&mesh);
+
+    struct ivert iv = {
+        .trans = {
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0
+        }
+        ,0
+    };
+    glm_translate_make(iv.trans, vec3(0, 0, -0.6));
+    glm_rotate(iv.trans, -1, vec3(1, 0, 0));
+    glm_scale(iv.trans, vec3(0.2, 0.2, 0.2));
+
+    mesh_ivert_push_back(&mesh, ivert(
+                vec3(0, 0, -0.6), 
+                -1, vec3(1, 0, 0), 
+                vec3(0.2, 0.2, 0.2), 
+                vec2(0, 0)));
+
+    //renderer_mesh_register(&win.renderer, &mesh);
+
+    struct material material0 = {0};
+
+
+    struct texture tex1, tex1_normal, tex1_mrao;
+    texture_load_m(&tex1, "res/img/wood_table/wood_table_001_diff_4k.jpg", -0.4);
+    texture_load_m(&tex1_normal, "res/img/wood_table/wood_table_001_nor_gl_4k.jpg", -0.4);
+    texture_load_m(&tex1_mrao, "res/img/wood_table/wood_table_001_mra_4k.jpg", -0.4);
+
+    
+
+    material_albedo_map_set(&material0, &tex1);
+    material_normal_map_set(&material0, &tex1_normal, 0.01);
+    material_mrao_map_set(&material0, &tex1_normal);
+
+    mesh_material_set(&mesh, &material0);
+
+    mesh_cull_from_normal(&mesh);
+    mesh_gen_tangent(&mesh);
+
+
+
+
+
+
+    container_init(&c1);
+    container_load_obj(&c1, "res/models/monkey.obj");
+
+    struct mesh *suzanne = container_mesh_search(&c1, "Suzanne");
+
+    mesh_ivert_push_back(suzanne, 
+            ivert(vec3(0, 0, -0.6),
+                -1, vec3(1, 0, 0), 
+                vec3(0.2, 0.2, 0.2),
+                vec2(0, 0)));
+
+    struct texture tex2_mrao;
+    texture_load_m(&tex2_mrao, "res/models/rustediron2_mrao.png", -0.4);
+    material_mrao_map_set(suzanne->material, &tex2_mrao);
+
+    mesh_gen_tangent(suzanne);
+
+    renderer_mesh_register(&win.renderer, suzanne);
+
+    struct texture hdri;
+    texture_load_hdr(&hdri, "res/img/lush_dirt_path_4k.hdr");
+
+    envmap_hdr_set(&win.renderer.environment, &hdri);
+
+
+    camera_translate(&win.renderer.camera, vec3(-0.5, -0.5, -1));
+    camera_rotate(&win.renderer.camera, vec3(1, 0, 0), 0.1);
+    camera_rotate(&win.renderer.camera, vec3(0, 1, 0), -0.5);
+
+    struct light l1;
+    light_init(&l1, vec3(0, 0, 0), vec4(1, 1, 1, 1), LIGHT_POINT);
+    renderer_light_register(&win.renderer, &l1);
+    
+    window_set_update(&win, update, NULL);
+
+    window_main(&win);
+
+    window_free(&win);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
+
 struct light light0, light1;
 struct mesh mesh;
 struct mesh monkey_mesh;
@@ -91,7 +245,11 @@ int main(){
     glm_rotate(iv.trans, -1, vec3(1, 0, 0));
     glm_scale(iv.trans, vec3(0.2, 0.2, 0.2));
 
-    mesh_ivert_push_back(&mesh, iv);
+    mesh_ivert_push_back(&mesh, ivert(
+                vec3(0, 0, -0.6), 
+                -1, vec3(1, 0, 0), 
+                vec3(0.2, 0.2, 0.2), 
+                vec2(0, 0)));
     //glm_scale(iv.trans, vec3(3, 3, 3));
     mesh_ivert_push_back(&monkey_mesh, iv);
     glm_translate(iv.trans, vec3(0, 0, 10));
@@ -109,9 +267,9 @@ int main(){
 
     mesh_ivert_push_back(&mesh, iv);
 
-    cvert_translate(&win.renderer.camera, vec3(-0.5, -0.5, -1));
-    cvert_rotate(&win.renderer.camera, vec3(1, 0, 0), 0.1);
-    cvert_rotate(&win.renderer.camera, vec3(0, 1, 0), -0.5);
+    camera_translate(&win.renderer.camera, vec3(-0.5, -0.5, -1));
+    camera_rotate(&win.renderer.camera, vec3(1, 0, 0), 0.1);
+    camera_rotate(&win.renderer.camera, vec3(0, 1, 0), -0.5);
 
     // -----------------------------------------------------------------------------
     // test for container
@@ -145,6 +303,7 @@ int main(){
 
     // -----------------------------------------------------------------------------
     // Container load gltf test
+#if 0
     struct ivert iv3 = {
         .trans = {
             0, 0, 0, 0,
@@ -167,6 +326,7 @@ int main(){
     mesh_ivert_push_back(c2.meshes[0], iv3);
     //printf("%zu\n", glbuf_size(&c2.meshes[0]->vbo));
     renderer_mesh_register(&win.renderer, c2.meshes[0]);
+#endif
 
     
 
@@ -197,7 +357,7 @@ int main(){
     glm_vec4_copy(vec4(1, 1, 1, 0.0), material1.emission);
 
     mesh_material_set(c1.meshes[0], &material1);
-    mesh_material_set(c2.meshes[0], &material0);
+    //mesh_material_set(c2.meshes[0], &material0);
 
 
     //mesh_texture_push(&mesh, tex1);
@@ -235,3 +395,4 @@ int main(){
     window_free(&win);
 }
 
+#endif

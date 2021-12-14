@@ -22,6 +22,8 @@ static ssize_t readline(FILE *fp, char *buf, size_t buf_size){
 
 int mesh_load_obj(struct mesh *dst, const char *path){
     FILE *fp = fopen(path, "r");
+    if(fp == NULL)
+        assert(0);
 
     darray(struct vert) verts;
     darray(struct tri) tris;
@@ -151,7 +153,7 @@ int container_load_mtl(struct container *dst, const char *path){
                 memcpy(buf_dir, path, slash_last - path);
                 sprintf(tmp, "%s/%s", buf_dir, buf_mtl_name);
                 tex_cur = malloc(sizeof(struct texture));
-                texture_load(tex_cur, tmp);
+                texture_load_m(tex_cur, tmp, -0.4);
                 resource_handle_path_set(&tex_cur->handle, buf_mtl_name);
                 darray_push_back(&dst->textures, tex_cur);
                 material_albedo_map_set(mat_cur, tex_cur);
@@ -166,7 +168,7 @@ int container_load_mtl(struct container *dst, const char *path){
                 memcpy(buf_dir, path, slash_last - path);
                 sprintf(tmp, "%s/%s", buf_dir, buf_mtl_name);
                 tex_cur = malloc(sizeof(struct texture));
-                texture_load(tex_cur, tmp);
+                texture_load_m(tex_cur, tmp, -0.4);
                 resource_handle_path_set(&tex_cur->handle, buf_mtl_name);
                 darray_push_back(&dst->textures, tex_cur);
                 material_normal_map_set(mat_cur, tex_cur, 1);

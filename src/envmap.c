@@ -54,7 +54,7 @@ void envmap_free(struct envmap *dst){
     GLCall(glDeleteRenderbuffers(1, &dst->gl_rbo));
 }
 
-int envmap_draw(struct envmap *src, struct shader *shader, struct cvert *camera){
+int envmap_draw(struct envmap *src, struct shader *shader, struct camera *camera){
     shader_bind(shader);
 
     GLCall(glDisable(GL_DEPTH_TEST));
@@ -81,8 +81,8 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
     GLCall(glClearColor(0, 0, 0, 0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-    struct cvert cm_cameras[6];
-    cverts_init_cube(cm_cameras, vec3(0, 0, 0), 10);
+    struct camera cm_cameras[6];
+    camera_init_cube(cm_cameras, vec3(0, 0, 0), 10);
 
     // -----------------------------------------------------------------------------
     // Calculate projection to cubemap of hdri
@@ -167,6 +167,9 @@ int envmap_hdr_set(struct envmap *dst, struct texture *src){
     }
     shader_unbind(dst->shader_ref);
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
+    GLCall(glBindTexture(dst->irr.type, dst->irr.gl_tex));
+    GLCall(glGenerateMipmap(dst->irr.type));
 
     // -----------------------------------------------------------------------------
     // Calculate the brdf integral LUT.

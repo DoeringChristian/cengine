@@ -5,18 +5,18 @@
 #include "cglm/cglm.h"
 #include "gl_util.h"
 
-struct cvert{
+struct camera{
     mat4 proj;
     mat4 view;
     float far;
 };
 
-struct cvert cvert(int w, int h, float fov);
-int cvert_init(struct cvert *dst, int w, int h, float fov);
-int cverts_init_cube(struct cvert dst[6], vec3 pos, float far);
-void camera_free(struct cvert *dst);
+struct camera camera(int w, int h, float fov);
+int camera_init(struct camera *dst, int w, int h, float fov);
+int camera_init_cube(struct camera dst[6], vec3 pos, float far);
+void camera_free(struct camera *dst);
 
-void cvert_translate(struct cvert *dst, vec3 pos);
-void cvert_rotate(struct cvert *dst, vec3 axis, float angle);
+void camera_translate(struct camera *dst, vec3 pos);
+void camera_rotate(struct camera *dst, vec3 axis, float angle);
 
 #endif //CAMERA_H

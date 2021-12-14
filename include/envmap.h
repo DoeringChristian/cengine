@@ -26,7 +26,7 @@ struct envmap{
 int envmap_init(struct envmap *dst, int w);
 void envmap_free(struct envmap *dst);
 
-int envmap_draw(struct envmap *dst, struct shader *shader, struct cvert *camera);
+int envmap_draw(struct envmap *dst, struct shader *shader, struct camera *camera);
 
 int envmap_draw_cube();
 
