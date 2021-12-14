@@ -1,6 +1,6 @@
 {
     "asset" : {
-        "generator" : "Khronos glTF Blender I/O v1.6.16",
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
         "version" : "2.0"
     },
     "scene" : 0,
@@ -8,41 +8,11 @@
         {
             "name" : "Scene",
             "nodes" : [
-                0,
-                1,
-                2
+                0
             ]
         }
     ],
     "nodes" : [
-        {
-            "name" : "Light",
-            "rotation" : [
-                0.16907575726509094,
-                0.7558803558349609,
-                -0.27217137813568115,
-                0.570947527885437
-            ],
-            "translation" : [
-                4.076245307922363,
-                5.903861999511719,
-                -1.0054539442062378
-            ]
-        },
-        {
-            "name" : "Camera",
-            "rotation" : [
-                0.483536034822464,
-                0.33687159419059753,
-                -0.20870360732078552,
-                0.7804827094078064
-            ],
-            "translation" : [
-                7.358891487121582,
-                4.958309173583984,
-                6.925790786743164
-            ]
-        },
         {
             "mesh" : 0,
             "name" : "Suzanne"
@@ -52,12 +22,16 @@
         {
             "doubleSided" : true,
             "name" : "Material.001",
+            "normalTexture" : {
+                "index" : 0
+            },
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
-                    "index" : 0
+                    "index" : 1
                 },
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
+                "metallicRoughnessTexture" : {
+                    "index" : 2
+                }
             }
         }
     ],
@@ -81,71 +55,89 @@
         {
             "sampler" : 0,
             "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
         }
     ],
     "images" : [
         {
-            "mimeType" : "image/jpeg",
-            "name" : "test01",
-            "uri" : "test01.jpg"
+            "mimeType" : "image/png",
+            "name" : "rustediron2_normal",
+            "uri" : "rustediron2_normal.png"
+        },
+        {
+            "mimeType" : "image/png",
+            "name" : "rustediron2_basecolor_linear",
+            "uri" : "rustediron2_basecolor_linear.png"
+        },
+        {
+            "mimeType" : "image/png",
+            "name" : "rustediron2_mrao",
+            "uri" : "rustediron2_mrao.png"
         }
     ],
     "accessors" : [
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 556,
+            "count" : 9871,
             "max" : [
-                1.3671875,
-                0.984375,
-                0.8515625
+                1.328185796737671,
+                0.9392362236976624,
+                0.8224414587020874
             ],
             "min" : [
-                -1.3671875,
-                -0.984375,
-                -0.8515625
+                -1.328185796737671,
+                -0.971822202205658,
+                -0.7782661318778992
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 556,
+            "count" : 9871,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 556,
+            "count" : 9871,
             "type" : "VEC2"
         },
         {
             "bufferView" : 3,
             "componentType" : 5123,
-            "count" : 2904,
+            "count" : 47232,
             "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 6672,
+            "byteLength" : 118452,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 6672,
-            "byteOffset" : 6672
+            "byteLength" : 118452,
+            "byteOffset" : 118452
         },
         {
             "buffer" : 0,
-            "byteLength" : 4448,
-            "byteOffset" : 13344
+            "byteLength" : 78968,
+            "byteOffset" : 236904
         },
         {
             "buffer" : 0,
-            "byteLength" : 5808,
-            "byteOffset" : 17792
+            "byteLength" : 94464,
+            "byteOffset" : 315872
         }
     ],
     "samplers" : [
@@ -156,7 +148,7 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 23600,
+            "byteLength" : 410336,
             "uri" : "monkey.bin"
         }
     ]

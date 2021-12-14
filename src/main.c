@@ -10,6 +10,7 @@
 #include "cglm/cglm.h"
 #include "gl_util.h"
 #include "loader_obj.h"
+#include "loader_gltf.h"
 #include "material.h"
 #include "container.h"
 
@@ -68,7 +69,7 @@ int main(){
     mesh_cull_from_normal(&cube_mesh);
 
     mesh_gen_tangent(&mesh);
-    mesh_gen_tangent(&monkey_mesh);
+    //mesh_gen_tangent(&monkey_mesh);
 
     //monkey_mesh.has_shadow = 0;
 
@@ -131,7 +132,7 @@ int main(){
     struct container c1;
     container_init(&c1);
     container_load_obj(&c1, "res/models/monkey.obj");
-    printf("%zu\n", darray_len(&c1.materials));
+    //printf("%zu\n", darray_len(&c1.materials));
 
     renderer_mesh_register(&win.renderer, c1.meshes[0]);
 
@@ -140,6 +141,32 @@ int main(){
     //mesh_material_set(c1.meshes[0], c1.materials[0]);
 
     mesh_gen_tangent(c1.meshes[0]);
+
+
+    // -----------------------------------------------------------------------------
+    // Container load gltf test
+    struct ivert iv3 = {
+        .trans = {
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0
+        }
+        ,0
+    };
+    glm_translate_make(iv2.trans, vec3(0, 0, -0.6));
+    glm_rotate(iv2.trans, -1, vec3(1, 0, 0));
+    glm_scale(iv2.trans, vec3(0.2, 0.2, 0.2));
+    
+    struct container c2;
+    container_init(&c2);
+    container_load_gltf(&c2, "res/models/monkey.gltf");
+
+    //printf("%zu\n", darray_len(&c2.meshes));
+
+    mesh_ivert_push_back(c2.meshes[0], iv3);
+    printf("%zu\n", glbuf_size(&c2.meshes[0]->vbo));
+    renderer_mesh_register(&win.renderer, c2.meshes[0]);
 
     
 
@@ -164,11 +191,13 @@ int main(){
 
     material_albedo_map_set(&material1, &tex2);
     material_mrao_map_set(&material1, &tex2_mrao);
-    //mesh_material_set(c1.meshes[0], c1.materials[0]);
-    //material_normal_map_set(&material1, &tex2_normal, 1.0);
+    material_normal_map_set(&material1, &tex2_normal, 1.0);
     //material_emission_map_set(&material1, &tex2_emission);
     glm_vec4_copy(vec4(0, 1, 1, 0), material1.mrao);
     glm_vec4_copy(vec4(1, 1, 1, 0.0), material1.emission);
+
+    mesh_material_set(c1.meshes[0], &material1);
+    mesh_material_set(c2.meshes[0], &material0);
 
 
     //mesh_texture_push(&mesh, tex1);

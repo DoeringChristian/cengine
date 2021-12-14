@@ -6,7 +6,6 @@ int container_init(struct container *dst){
     darray_init(&dst->lights, 0);
     darray_init(&dst->materials, 0);
     darray_init(&dst->textures, 0);
-    darray_init(&dst->sub_containers, 0);
     return 0;
 }
 
@@ -32,18 +31,23 @@ void container_free(struct container *dst){
         texture_free(dst->textures[i]);
         free(dst->meshes[i]);
     }
-    for (int i = 0; i < darray_len(&dst->sub_containers); i++) {
-        container_free(dst->sub_containers[i]);
-        free(dst->sub_containers[i]);
-    }
 
     darray_free(&dst->meshes);
     darray_free(&dst->cmeshes);
     darray_free(&dst->lights);
     darray_free(&dst->materials);
     darray_free(&dst->textures);
-    darray_free(&dst->sub_containers);
 }
+
+int container_merge(struct container *dst, struct container *src){
+    darray_append(&dst->meshes, src->meshes, darray_len(&src->meshes));
+    darray_append(&dst->cmeshes, src->cmeshes, darray_len(&src->cmeshes));
+    darray_append(&dst->textures, src->textures, darray_len(&src->textures));
+    darray_append(&dst->materials, src->materials, darray_len(&src->materials));
+    darray_append(&dst->lights, src->lights, darray_len(&src->lights));
+    return 0;
+}
+
 struct mesh *container_mesh_search(struct container *src, const char *name){
     for(size_t i = 0;i < darray_len(&src->meshes);i++){
         if(resource_handle_name_comp(&src->meshes[i]->handle, name))

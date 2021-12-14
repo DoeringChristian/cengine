@@ -13,7 +13,6 @@ struct container{
     darray(struct texture*) textures;
     darray(struct material*) materials;
     darray(struct light*) lights;
-    darray(struct container*) sub_containers;
 };
 
 int container_init(struct container *dst);
@@ -21,6 +20,8 @@ int container_load(struct container *dst, const char *path);
 
 int container_unload(struct container *dst);
 void container_free(struct container *dst);
+
+int container_merge(struct container *dst, struct container *src);
 
 struct mesh *container_mesh_search(struct container *src, const char *name);
 struct mesh *container_mesh_search_path(struct container *src, const char *path);
