@@ -69,6 +69,7 @@ void main (void){
     // TODO: need to transform u_ref
 
     // debug
+    //o_color = vec4(texture(u_albedo, frag_uv).a, texture(u_albedo, frag_uv).a);
     //o_color = vec4(kD * specular, 1);
     //o_color = vec4(V, 1);
     //o_color = vec4(V, 1);

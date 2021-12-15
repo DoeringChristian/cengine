@@ -13,8 +13,10 @@
 #include "loader_gltf.h"
 #include "material.h"
 #include "container.h"
+#include "instancer.h"
 
 struct container c1;
+struct instancer inst;
 int time;
 
 int update(struct renderer *renderer, void *data){
@@ -40,6 +42,7 @@ int update(struct renderer *renderer, void *data){
     glm_translate(cr, vec3(0, 0, 0.6));
     glm_mat4_copy(cr, renderer->camera.view);
 
+    instancer_update(&inst);
 
     return 0;
 }
@@ -47,6 +50,8 @@ int update(struct renderer *renderer, void *data){
 int main(){
     struct window win;
     window_init(&win, 0, 0, 1000, 1000, "test");
+
+    instancer_init(&inst);
 
 
     struct mesh mesh;
@@ -102,11 +107,16 @@ int main(){
 
     struct mesh *suzanne = container_mesh_search(&c1, "Suzanne");
 
+#if 0
     mesh_ivert_push_back(suzanne, 
             ivert(vec3(0, 0, -0.6),
                 -1, vec3(1, 0, 0), 
                 vec3(0.2, 0.2, 0.2),
                 vec2(0, 0)));
+#endif
+    struct instance ins0;
+    instance_init(&ins0, suzanne, vec3(0, 0, -0.6), -1, vec3(1, 0, 0), vec3(0.2, 0.2, 0.2));
+    instancer_instance_push(&inst, &ins0);
 
     struct texture tex2_mrao;
     texture_load_m(&tex2_mrao, "res/models/rustediron2_mrao.png", -0.4);
@@ -133,6 +143,11 @@ int main(){
     window_set_update(&win, update, NULL);
 
     window_main(&win);
+
+    container_free(&c1);
+    texture_free(&hdri);
+    texture_free(&tex2_mrao);
+    material_free(&material0);
 
     window_free(&win);
     return 0;

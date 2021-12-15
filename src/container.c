@@ -17,19 +17,19 @@ void container_free(struct container *dst){
     }
     for (int i = 0; i < darray_len(&dst->cmeshes); i++) {
         cmesh_free(dst->cmeshes[i]);
-        free(dst->meshes[i]);
+        free(dst->cmeshes[i]);
     }
     for (int i = 0; i < darray_len(&dst->lights); i++) {
         //light_free(dst->lights[i]);
-        free(dst->meshes[i]);
+        free(dst->lights[i]);
     }
     for (int i = 0; i < darray_len(&dst->materials); i++) {
         material_free(dst->materials[i]);
-        free(dst->meshes[i]);
+        free(dst->materials[i]);
     }
     for (int i = 0; i < darray_len(&dst->textures); i++) {
         texture_free(dst->textures[i]);
-        free(dst->meshes[i]);
+        free(dst->textures[i]);
     }
 
     darray_free(&dst->meshes);
